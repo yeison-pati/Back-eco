@@ -7,16 +7,22 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "pago")
 public class Pago {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	private long idTransaccion;
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Fecha fechaPago;
-	private EstadoPago estadoPago;
-	private MetodoPago metodoPago;
-	private float montoPagado;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idPago;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    private Fecha fechaPago;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoPago estadoPago;
+
+    @Enumerated(EnumType.STRING)
+    private MetodoPago metodoPago;
+
+    private float montoPagado;
 }
+

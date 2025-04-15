@@ -4,6 +4,7 @@ public enum EstadoOrden {
 
     pendiente,
     comfirmada,
-    cancelada;
+    cancelada,
+    reembolsada
 
 }

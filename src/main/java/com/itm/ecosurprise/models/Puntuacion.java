@@ -1,17 +1,23 @@
 package com.itm.ecosurprise.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
+@Table(name = "puntuacion")
 public class Puntuacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long idPuntuacion;
+
+    @OneToOne
+    private Usuario usuario;
+
+    @ManyToOne(optional = false)
+    private Producto producto;
+    
     private int puntos;
 }
+

@@ -5,12 +5,17 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "sedes")
 public class Sede {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	@OneToOne(cascade = CascadeType.ALL)
+	private long idSede;
+
+	@OneToOne
 	private Direccion direccion;
 	private String horario;
+
+	@ManyToOne
+	private Comerciante comerciante;
 
 }

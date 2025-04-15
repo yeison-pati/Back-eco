@@ -1,13 +1,11 @@
 package com.itm.ecosurprise.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "reporte")
 public class Reporte {
 
     @Id
@@ -15,5 +13,5 @@ public class Reporte {
     private long id;
     private long idUsuario;
     private String descripcion;
-
 }
+

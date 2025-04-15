@@ -8,21 +8,31 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "orden")
 public class Orden {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	private long idConsumidor;
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Fecha fechaOrden;
-	private double montoTotal;
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Direccion direccionEntrega;
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Producto> productos;
-	private EstadoOrden estadoOrden;
-	@OneToOne
-	private Pago pago;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idOrden;
 
+    @OneToOne
+    private Consumidor consumidor;
+
+    @OneToOne
+    private Fecha fechaOrden;
+
+    private double montoTotal;
+
+    @OneToOne
+    private Direccion direccionEntrega;
+
+    @OneToMany
+    private List<OrdenProducto> productos;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoOrden estadoOrden;
+
+    @OneToOne
+    private Pago pago;
 }
+

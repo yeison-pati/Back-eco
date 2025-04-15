@@ -13,14 +13,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "telefonos")
-public class Telefono {
+@Table(name = "usuarioDireccion")
+public class UsuarioDireccion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int indicativo;
-    private long numero;
+    private Long idUsuarioDireccion;
 
     @ManyToOne
     private Usuario usuario;
+
+    @ManyToOne
+    private Direccion direccion;
+
 }

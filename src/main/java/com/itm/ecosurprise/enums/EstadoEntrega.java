@@ -2,7 +2,7 @@ package com.itm.ecosurprise.enums;
 
 public enum EstadoEntrega {
 
-    enPreparacion,
+    preparacion,
     enviada,
     entregada,
     cancelada;

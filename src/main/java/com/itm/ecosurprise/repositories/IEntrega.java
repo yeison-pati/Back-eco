@@ -2,6 +2,7 @@ package com.itm.ecosurprise.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RiderRepository extends JpaRepository {
+import com.itm.ecosurprise.models.Entrega;
 
+public interface IEntrega extends JpaRepository<Entrega, Long> {
 }

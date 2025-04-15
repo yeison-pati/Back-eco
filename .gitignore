@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar archivos de entorno
+.env
+.gitignore
+
+# Asegurarse de incluir application.properties
+!src/main/resources/application.properties

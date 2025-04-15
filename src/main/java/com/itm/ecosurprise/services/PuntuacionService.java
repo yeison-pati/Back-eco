@@ -1,5 +1,5 @@
 package com.itm.ecosurprise.services;
 
-public class ComerceService {
+public class PuntuacionService {
 
 }

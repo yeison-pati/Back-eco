@@ -1,5 +1,5 @@
 package com.itm.ecosurprise.services;
 
-public class RiderServices {
+public class EntregaDireccionService {
 
 }
