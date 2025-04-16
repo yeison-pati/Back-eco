@@ -2,11 +2,13 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.repositories.IComerciante;
 
+@Service
 public class ComercianteService {
 
 
@@ -21,8 +23,13 @@ public String saludar(){
 }
 
 public Producto crearProducto(Long idComerciante, Producto producto){
-    producto.
+    producto.setIdComerciante(this.obtenerXID(idComerciante).getIdUsuario());
+    // Asignar el comerciante al producto
     return productoService.guardaProducto(producto);
+}
+
+public Comerciante crearComerciante(Comerciante comerciante){
+    return comercianteRepository.save(comerciante);
 }
 
 

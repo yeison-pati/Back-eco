@@ -3,10 +3,12 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.repositories.IProducto;
 
+@Service
 public class ProductoService {
 
     @Autowired
