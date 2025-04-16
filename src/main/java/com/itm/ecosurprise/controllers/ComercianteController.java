@@ -24,7 +24,7 @@ public Comerciante crearComerciante(Comerciante comerciante) {
 }
 
 @PostMapping("/crearProducto")
-public Producto crearProducto(Long idComerciante, Producto producto) {
+public Producto crearProducto(Comerciante idComerciante, Producto producto) {
     return comercianteService.crearProducto(idComerciante, producto);
 
 }

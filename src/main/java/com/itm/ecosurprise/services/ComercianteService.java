@@ -22,19 +22,20 @@ public String saludar(){
     return "Hola desde el servicio de Comerciante";
 }
 
-public Producto crearProducto(Long idComerciante, Producto producto){
-    producto.setIdComerciante(this.obtenerXID(idComerciante).getIdUsuario());
-    // Asignar el comerciante al producto
+public Producto crearProducto(Comerciante idComerciante, Producto producto){
+    producto.setComerciante(idComerciante);
     return productoService.guardaProducto(producto);
 }
 
 public Comerciante crearComerciante(Comerciante comerciante){
+
     return comercianteRepository.save(comerciante);
 }
 
 
 
 public List<Comerciante> obtenerComeriantes(){
+
     return comercianteRepository.findAll();
 }
 

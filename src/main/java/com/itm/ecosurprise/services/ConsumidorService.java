@@ -45,7 +45,6 @@ public class ConsumidorService {
         consumidorexistente.setNombre(consumidor.getNombre());
         consumidorexistente.setCorreo(consumidor.getCorreo());
         consumidorexistente.setContrasena(consumidor.getContrasena());
-        consumidorexistente.setCelulares(consumidor.getCelulares());
         consumidorexistente.setDirecciones(consumidor.getDirecciones());
         consumidorexistente.setRol(consumidor.getRol());
         consumidorexistente.setPuntos(consumidor.getPuntos());

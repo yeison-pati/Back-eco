@@ -17,7 +17,7 @@ import lombok.Data;
 public class Telefono {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int idTelefono;
     private int indicativo;
     private long numero;
 

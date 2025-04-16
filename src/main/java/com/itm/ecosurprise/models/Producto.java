@@ -12,7 +12,7 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int idProducto;
     @OneToOne
     private Comerciante Comerciante;
     private String nombre;
