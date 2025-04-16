@@ -10,8 +10,9 @@ public class Reporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long idUsuario;
+    private int id;
+    @OneToOne
+    private Usuario Usuario;
     private String descripcion;
 }
 

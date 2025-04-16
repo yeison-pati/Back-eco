@@ -18,7 +18,7 @@ public class UsuarioDireccion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuarioDireccion;
+    private int idUsuarioDireccion;
 
     @ManyToOne
     private Usuario usuario;

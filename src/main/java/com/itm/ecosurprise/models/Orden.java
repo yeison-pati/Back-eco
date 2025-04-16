@@ -13,7 +13,7 @@ public class Orden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idOrden;
+    private int idOrden;
 
     @OneToOne
     private Consumidor consumidor;
@@ -21,7 +21,7 @@ public class Orden {
     @OneToOne
     private Fecha fechaOrden;
 
-    private double montoTotal;
+    private float montoTotal;
 
     @OneToOne
     private Direccion direccionEntrega;
@@ -29,8 +29,7 @@ public class Orden {
     @OneToMany
     private List<OrdenProducto> productos;
 
-    @Enumerated(EnumType.STRING)
-    private EstadoOrden estadoOrden;
+    private String estadoOrden;
 
     @OneToOne
     private Pago pago;

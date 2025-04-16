@@ -9,7 +9,7 @@ import lombok.Data;
 public class Sede {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idSede;
+	private int idSede;
 
 	@OneToOne
 	private Direccion direccion;

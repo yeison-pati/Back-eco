@@ -12,16 +12,14 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long idComerciante;
+    private int id;
+    @OneToOne
+    private Comerciante Comerciante;
     private String nombre;
     private String descripcion;
     private double precio;
 
     @OneToMany
     private List<Puntuacion> puntuaciones;
-
-    @ManyToOne
-    private Orden orden;
 }
 
