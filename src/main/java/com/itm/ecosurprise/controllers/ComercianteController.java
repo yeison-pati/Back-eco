@@ -21,7 +21,7 @@ public Comerciante crearComerciante(@RequestBody Comerciante comerciante) {
     
 }
 
-@PostMapping("/{id}/crearProducto")
+@PostMapping("/{idComerciante}/crearProducto")
 public Producto crearProducto(@PathVariable  Comerciante idComerciante, @RequestBody  Producto producto) {
     return comercianteService.crearProducto(idComerciante, producto);
 
