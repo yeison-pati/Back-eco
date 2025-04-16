@@ -10,6 +10,7 @@ public class Reporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idReporte")
     private int idReporte;
     @OneToOne
     private Usuario Usuario;

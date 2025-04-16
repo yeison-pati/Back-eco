@@ -12,6 +12,7 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idProducto")
     private int idProducto;
     @OneToOne
     private Comerciante Comerciante;
