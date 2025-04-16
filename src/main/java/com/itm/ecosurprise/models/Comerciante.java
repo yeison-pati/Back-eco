@@ -21,7 +21,8 @@ public class Comerciante extends Usuario {
 
 	private int nit;
 	private int rut;
-	
+	@OneToMany
+	private List<Producto> productos;
 	@OneToMany
 	private List<Sede> sedes;
 }
