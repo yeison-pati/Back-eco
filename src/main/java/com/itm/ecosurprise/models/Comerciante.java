@@ -19,8 +19,8 @@ import jakarta.persistence.Table;
 @Table(name = "comerciantes")
 public class Comerciante extends Usuario {
 
-	private int NIT;
-	private int RUT;
+	private int nit;
+	private int rut;
 	
 	@OneToMany
 	private List<Sede> sedes;
