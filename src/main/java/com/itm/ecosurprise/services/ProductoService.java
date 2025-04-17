@@ -18,7 +18,7 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    public Producto obtenerXID(Long id) {
+    public Producto obtenerXID(int id) {
         return productoRepository.findById(id).orElse(null);
     }
 
@@ -31,7 +31,7 @@ public class ProductoService {
         productoRepository.save(producto);
     }
 
-    public void eliminarProducto(Long id) {
+    public void eliminarProducto(int id) {
         productoRepository.deleteById(id);
     }
 

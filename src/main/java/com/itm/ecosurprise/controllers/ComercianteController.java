@@ -18,11 +18,10 @@ private ComercianteService comercianteService;
 @PostMapping("/crearComerciante")
 public Comerciante crearComerciante(@RequestBody Comerciante comerciante) {
     return comercianteService.crearComerciante(comerciante);
-    
 }
 
 @PostMapping("/{idComerciante}/crearProducto")
-public Producto crearProducto(@PathVariable  Comerciante idComerciante, @RequestBody  Producto producto) {
+public Producto crearProducto(@PathVariable  int idComerciante, @RequestBody  Producto producto) {
     return comercianteService.crearProducto(idComerciante, producto);
 
 }

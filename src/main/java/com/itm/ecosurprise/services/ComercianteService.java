@@ -22,10 +22,14 @@ public String saludar(){
     return "Hola desde el servicio de Comerciante";
 }
 
-public Producto crearProducto(Comerciante idComerciante, Producto producto){
-    producto.setComerciante(idComerciante);
-    return productoService.guardaProducto(producto);
-}
+    public Producto crearProducto(int idComerciante, Producto producto){
+        // Busca el Comerciante por su ID
+        Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idComerciante));
+
+        producto.setComerciante(comerciante);
+        return productoService.guardaProducto(producto);
+    }
 
 public Comerciante crearComerciante(Comerciante comerciante){
 
@@ -39,7 +43,7 @@ public List<Comerciante> obtenerComeriantes(){
     return comercianteRepository.findAll();
 }
 
-public Comerciante obtenerXID(Long id){
+public Comerciante obtenerXID(int id){
     return comercianteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + id));
 }
