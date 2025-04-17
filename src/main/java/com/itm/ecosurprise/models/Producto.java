@@ -15,6 +15,7 @@ public class Producto {
     @Column(name = "idProducto")
     private int idProducto;
     @ManyToOne
+    @JoinColumn(name = "idComerciante")
     private Comerciante Comerciante;
     private String nombre;
     private String descripcion;
