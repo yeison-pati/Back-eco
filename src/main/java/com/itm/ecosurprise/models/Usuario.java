@@ -23,19 +23,18 @@ import com.itm.ecosurprise.enums.Rol;
 public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private int idUsuario;
     private String nombre;
     private String correo;
     private String contrasena;
 
-    @OneToMany
-    private List<Telefono> celulares = new ArrayList<>();
+    @OneToOne
+    private Telefono telefono;
 
     @OneToMany
     private List<UsuarioDireccion> direcciones = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
+    private  String rol;
 
 }
 

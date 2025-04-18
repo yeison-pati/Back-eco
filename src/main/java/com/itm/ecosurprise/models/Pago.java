@@ -12,17 +12,12 @@ public class Pago {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idPago;
+    private int idPago;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne
     private Fecha fechaPago;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoPago estadoPago;
-
-    @Enumerated(EnumType.STRING)
-    private MetodoPago metodoPago;
-
+    private String estadoPago;
+    private String metodoPago;
     private float montoPagado;
 }
 

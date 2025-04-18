@@ -17,10 +17,11 @@ import lombok.Data;
 public class Telefono {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "idTelefono")
+    private int idTelefono;
     private int indicativo;
     private long numero;
 
-    @ManyToOne
+    @OneToOne
     private Usuario usuario;
 }

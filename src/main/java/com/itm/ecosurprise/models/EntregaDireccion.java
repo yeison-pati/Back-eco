@@ -12,13 +12,13 @@ public class EntregaDireccion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEntregaDireccion;
+    private int idEntregaDireccion;
 
     @ManyToOne
     private Entrega entrega;
 
-    @ManyToOne
+    @OneToOne
     private Direccion direccion;
 
-    private TipoDireccion tipo;
+    private String tipo;
 }

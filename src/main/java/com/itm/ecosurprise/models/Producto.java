@@ -12,16 +12,16 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long idComerciante;
+    @Column(name = "idProducto")
+    private int idProducto;
+    @ManyToOne
+    @JoinColumn(name = "idComerciante")
+    private Comerciante Comerciante;
     private String nombre;
     private String descripcion;
     private double precio;
 
     @OneToMany
     private List<Puntuacion> puntuaciones;
-
-    @ManyToOne
-    private Orden orden;
 }
 

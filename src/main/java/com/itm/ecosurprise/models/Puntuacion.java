@@ -10,14 +10,13 @@ public class Puntuacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idPuntuacion;
+    private int idPuntuacion;
 
     @OneToOne
     private Usuario usuario;
 
-    @ManyToOne(optional = false)
+    @OneToOne
     private Producto producto;
     
     private int puntos;
 }
-

@@ -1,9 +1,7 @@
 package com.itm.ecosurprise.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Consumidor;
@@ -18,13 +16,12 @@ public class ComercianteController {
 private ComercianteService comercianteService;
 
 @PostMapping("/crearComerciante")
-public Comerciante crearComerciante(Comerciante comerciante) {
+public Comerciante crearComerciante(@RequestBody Comerciante comerciante) {
     return comercianteService.crearComerciante(comerciante);
-    
 }
 
-@PostMapping("/crearProducto")
-public Producto crearProducto(Long idComerciante, Producto producto) {
+@PostMapping("/{idComerciante}/crearProducto")
+public Producto crearProducto(@PathVariable  int idComerciante, @RequestBody  Producto producto) {
     return comercianteService.crearProducto(idComerciante, producto);
 
 }

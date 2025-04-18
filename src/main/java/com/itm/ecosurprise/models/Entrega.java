@@ -25,7 +25,7 @@ public class Entrega {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idEntrega;
+	private int idEntrega;
 
 	@OneToOne
 	private Orden orden;
@@ -41,7 +41,6 @@ public class Entrega {
 	@OneToMany
 	private List<EntregaDireccion> direcciones;
 
-	@Enumerated(EnumType.STRING)
-	private EstadoEntrega estadoEntrega;
+	private String estadoEntrega;
 
 }

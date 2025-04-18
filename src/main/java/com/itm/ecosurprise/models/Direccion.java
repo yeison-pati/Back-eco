@@ -18,20 +18,9 @@ public class Direccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idDireccion")
-    private long idDireccion;
-
-    @Column(name = "pais", nullable = false)
-    private String pais;
-
-    @Column(name = "departamento", nullable = false)
+    private int idDireccion;
     private String departamento;
-
-    @Column( name = "calle", nullable = false)
     private String calle;
-
-    @Column( name = "numero", nullable = false)
     private String numero;
-
-    @Column( name = "complemento", nullable = false)
     private String complemento;
 }

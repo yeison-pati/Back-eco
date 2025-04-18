@@ -10,7 +10,7 @@ public class OrdenProducto {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private long idOrdenProducto;
+    private int idOrdenProducto;
 
     @ManyToOne
     private Orden orden;

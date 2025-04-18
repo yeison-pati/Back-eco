@@ -14,6 +14,5 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "consumidores")
 public class Consumidor extends Usuario {
-    
     private int puntos;
 }

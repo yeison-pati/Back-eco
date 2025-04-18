@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.itm.ecosurprise.models.Comerciante;
 
 @Repository
-public interface IComerciante extends JpaRepository<Comerciante, Long> {
+public interface IComerciante extends JpaRepository<Comerciante, Integer> {
 
 }
