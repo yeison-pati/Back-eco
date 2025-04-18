@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.services;
-import java.util.List;
 
-import com.itm.ecosurprise.models.Consumidor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +18,9 @@ private IComerciante comercianteRepository;
 private ProductoService productoService;
 
 
-public String saludar(){
-    return "Hola desde el servicio de Comerciante";
-}
+    public String saludar(){
+        return "Hola desde el servicio de Comerciante";
+    }
 
     public ResponseEntity<?> crearProducto(int idComerciante, Producto producto) {
         try {
@@ -38,11 +36,16 @@ public String saludar(){
 
     public ResponseEntity<?> crearComerciante(Comerciante comerciante){
         try {
+            // Asegurar que la relación es bidireccional
+            if (comerciante.getTelefono() != null) {
+                comerciante.getTelefono().setUsuario(comerciante);
+            }
             return ResponseEntity.ok(comercianteRepository.save(comerciante));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    
 
     public ResponseEntity<?>  obtenerComeriantes(){
         try {

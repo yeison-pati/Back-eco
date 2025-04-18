@@ -21,7 +21,7 @@ public class EcoSurpriseApplication {
 					indicativo:"",
 					numero: "",
 					usuario: ""
-				}
+				},
 	"rol": "COMERCIANTE",
 	"nit": 84383748,
 	"rut": 2121515,
@@ -34,7 +34,7 @@ public class EcoSurpriseApplication {
 							comerciante:""
 						},
 				horario:""
-			}]
+			}],
 	"productos": [{
 					"nombre": "garbanzos",
 					"descripcion": "50g",
@@ -43,26 +43,36 @@ public class EcoSurpriseApplication {
 					comerciante:""
 			}]
 
+{
+  "nombre": "Pepito",
+  "correo": "pepito@gmail.com",
+  "contrasena": "1234",
+  "telefono": {
+    "indicativo": "",
+    "numero": ""
+  },
+  "rol": "COMERCIANTE",
+  "nit": 84383748,
+  "rut": 2121515,
+  "sedes": [
+    {
+      "direccion": {
+        "departamento": "",
+        "calle": "",
+        "numero": "",
+        "complemento": ""
+      },
+      "horario": ""
+    }
+  ],
+  "productos": [
+    {
+      "nombre": "garbanzos",
+      "descripcion": "50g",
+      "precio": 10000,
+      "puntuaciones": null
+    }
+  ]
+}
 
-
-
-	"nombre": "Pepito",
-	"correo": "pepito@gmail.com",
-	"contrasena": "1234",
-	"telefono": {
-					indicativo:"",
-					numero: ""
-				}
-	"rol": "COMERCIANTE",
-	"nit": 84383748,
-	"rut": 2121515,
-	"sedes": [{
-				direccion:{
-							departamento:"",
-							calle:"",
-							numero: "",
-							complemento:""
-						},
-				horario:""
-			}]
 }*/

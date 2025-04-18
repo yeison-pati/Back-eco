@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.itm.ecosurprise.models.Comerciante;
-import com.itm.ecosurprise.models.Consumidor;
 import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.services.ComercianteService;
 

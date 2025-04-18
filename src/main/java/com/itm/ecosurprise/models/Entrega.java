@@ -36,8 +36,8 @@ public class Entrega {
 
 	private int numeroEntrega;
 
-	@OneToMany
-	@JsonManagedReference
+	@OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL)
+	@JsonManagedReference // Entrega gestiona la lista de EntregaDireccion
 	private List<EntregaDireccion> direcciones;
 
 	private String estadoEntrega;

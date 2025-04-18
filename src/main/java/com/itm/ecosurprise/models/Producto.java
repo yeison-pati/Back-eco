@@ -19,15 +19,14 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "idComerciante")
-    @JsonBackReference
-    private Comerciante Comerciante;
+    @JsonBackReference // Comerciante gestiona la lista de Productos
+    private Comerciante comerciante;
 
     private String nombre;
     private String descripcion;
     private double precio;
 
-    @OneToMany
-    @JsonManagedReference
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @JsonManagedReference // Producto gestiona la lista de Puntuacion
     private List<Puntuacion> puntuaciones;
 }
-

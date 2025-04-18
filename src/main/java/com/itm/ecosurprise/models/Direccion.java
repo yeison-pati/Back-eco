@@ -1,5 +1,7 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 /*
@@ -19,6 +21,12 @@ public class Direccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idDireccion")
     private int idDireccion;
+
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    @JsonBackReference // Usuario tiene la referencia gestionada
+    private Usuario usuario;
+
     private String departamento;
     private String calle;
     private String numero;

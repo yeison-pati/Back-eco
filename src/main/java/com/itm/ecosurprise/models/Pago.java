@@ -1,11 +1,8 @@
 package com.itm.ecosurprise.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.itm.ecosurprise.enums.EstadoPago;
-import com.itm.ecosurprise.enums.MetodoPago;
 import jakarta.persistence.*;
 import lombok.Data;
-
 @Data
 @Entity
 @Table(name = "pago")
@@ -17,7 +14,7 @@ public class Pago {
 
     @OneToOne
     @JoinColumn(name = "idOrden")
-    @JsonBackReference
+    @JsonBackReference // Orden gestiona el Pago
     private Orden orden;
 
     @OneToOne

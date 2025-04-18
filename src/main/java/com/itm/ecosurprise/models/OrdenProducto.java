@@ -1,5 +1,7 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,9 +16,11 @@ public class OrdenProducto {
 
     @ManyToOne
     @JoinColumn(name = "idOrden")
+    @JsonBackReference // Orden gestiona la lista de OrdenProducto
     private Orden orden;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
     private Producto producto;
 
 }

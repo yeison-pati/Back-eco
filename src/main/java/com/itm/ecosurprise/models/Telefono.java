@@ -12,19 +12,19 @@ import lombok.Data;
  * @Column indica el nombre de la columna en la base de datos y si es nullable o unique
  */
 
-@Data
-@Entity
-@Table(name = "telefonos")
-public class Telefono {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTelefono")
-    private int idTelefono;
-    private int indicativo;
-    private int numero;
-
-    @OneToOne
-    @JoinColumn(name = "idUsuario")
-    @JsonBackReference
-    private Usuario usuario;
-}
+ @Data
+ @Entity
+ @Table(name = "telefonos")
+ public class Telefono {
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @Column(name = "idTelefono")
+     private int idTelefono;
+     private int indicativo;
+     private int numero;
+ 
+     @OneToOne
+     @JoinColumn(name = "idUsuario")
+     @JsonBackReference // Usuario es la referencia *back* desde Telefono
+     private Usuario usuario;
+ }

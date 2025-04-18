@@ -15,14 +15,14 @@ public class Sede {
 	private int idSede;
 
 	@OneToOne
-	@JsonManagedReference
+	@JsonManagedReference // Sede gestiona la Direccion
 	private Direccion direccion;
 
 	private String horario;
 
 	@ManyToOne
 	@JoinColumn(name = "idUsuario")
-	@JsonBackReference
+	@JsonBackReference // Comerciante gestiona la lista de Sedes
 	private Comerciante comerciante;
 
 }

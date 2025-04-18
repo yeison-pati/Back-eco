@@ -1,6 +1,8 @@
 package com.itm.ecosurprise.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,11 +25,11 @@ public class UsuarioDireccion {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @JsonBackReference
+    @JsonBackReference // Usuario gestiona la lista de UsuarioDireccion
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "idDireccion")
+    @OneToOne
+    @JsonManagedReference // UsuarioDireccion gestiona la Direccion
     private Direccion direccion;
 
 }

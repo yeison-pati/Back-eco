@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
-
 @Data
 @Entity
 @Table(name = "orden")
@@ -19,7 +18,7 @@ public class Orden {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @JsonBackReference
+    @JsonBackReference // Consumidor gestiona la lista de Orden
     private Consumidor consumidor;
 
     @OneToOne
@@ -30,14 +29,13 @@ public class Orden {
     @OneToOne
     private Direccion direccionEntrega;
 
-    @OneToMany
-    @JsonManagedReference
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
+    @JsonManagedReference // Orden gestiona la lista de OrdenProducto
     private List<OrdenProducto> productos;
 
     private String estadoOrden;
 
-    @OneToOne
-    @JsonManagedReference
+    @OneToOne(mappedBy = "orden", cascade = CascadeType.ALL)
+    @JsonManagedReference // Orden gestiona el Pago
     private Pago pago;
 }
-
