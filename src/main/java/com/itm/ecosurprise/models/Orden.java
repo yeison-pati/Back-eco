@@ -1,5 +1,7 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.itm.ecosurprise.enums.EstadoOrden;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,7 +17,9 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idOrden;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    @JsonBackReference
     private Consumidor consumidor;
 
     @OneToOne
@@ -27,11 +31,13 @@ public class Orden {
     private Direccion direccionEntrega;
 
     @OneToMany
+    @JsonManagedReference
     private List<OrdenProducto> productos;
 
     private String estadoOrden;
 
     @OneToOne
+    @JsonManagedReference
     private Pago pago;
 }
 

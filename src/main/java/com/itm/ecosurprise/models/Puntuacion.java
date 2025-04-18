@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,7 +16,9 @@ public class Puntuacion {
     @OneToOne
     private Usuario usuario;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    @JsonBackReference
     private Producto producto;
     
     private int puntos;

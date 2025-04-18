@@ -7,8 +7,6 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.itm.ecosurprise.enums.Rol;
-
 
 /*
  * @Data genera metodos y contructores
@@ -32,6 +30,10 @@ public abstract class Usuario {
     @OneToOne
     @JsonManagedReference
     private Telefono telefono;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<UsuarioDireccion> direcciones = new ArrayList<>();
 
     private  String rol;
 

@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,9 +22,12 @@ public class UsuarioDireccion {
     private int idUsuarioDireccion;
 
     @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
+    @JoinColumn(name = "idDireccion")
     private Direccion direccion;
 
 }

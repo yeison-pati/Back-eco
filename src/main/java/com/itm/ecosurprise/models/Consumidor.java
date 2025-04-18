@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,7 +19,10 @@ import java.util.List;
 @Entity
 @Table(name = "consumidores")
 public class Consumidor extends Usuario {
-    @OneToMany
-    private List<UsuarioDireccion> direcciones = new ArrayList<>();
     private int puntos;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<UsuarioDireccion> direcciones = new ArrayList<>();
+
 }

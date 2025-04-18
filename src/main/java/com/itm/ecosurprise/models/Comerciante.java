@@ -22,9 +22,11 @@ public class Comerciante extends Usuario {
 
 	private int nit;
 	private int rut;
+
 	@OneToMany
 	@JsonManagedReference
 	private List<Producto> productos;
+
 	@OneToMany
 	@JsonManagedReference
 	private List<Sede> sedes;

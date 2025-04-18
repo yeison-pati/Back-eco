@@ -13,6 +13,7 @@ public class OrdenProducto {
     private int idOrdenProducto;
 
     @ManyToOne
+    @JoinColumn(name = "idOrden")
     private Orden orden;
 
     @OneToOne

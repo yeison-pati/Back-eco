@@ -24,6 +24,7 @@ public class Telefono {
     private int numero;
 
     @OneToOne
+    @JoinColumn(name = "idUsuario")
     @JsonBackReference
     private Usuario usuario;
 }

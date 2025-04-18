@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.itm.ecosurprise.enums.EstadoEntrega;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,14 +32,12 @@ public class Entrega {
 	private Orden orden;
 
 	@OneToOne
-	private Comerciante comerciante;
-
-	@OneToOne
 	private Repartidor repartidor;
 
 	private int numeroEntrega;
 
 	@OneToMany
+	@JsonManagedReference
 	private List<EntregaDireccion> direcciones;
 
 	private String estadoEntrega;

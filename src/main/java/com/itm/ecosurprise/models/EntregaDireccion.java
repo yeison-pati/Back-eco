@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import com.itm.ecosurprise.enums.TipoDireccion;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +13,7 @@ public class EntregaDireccion {
     private int idEntregaDireccion;
 
     @ManyToOne
+    @JoinColumn(name = "idEntrega")
     private Entrega entrega;
 
     @OneToOne
