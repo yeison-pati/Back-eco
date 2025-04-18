@@ -28,7 +28,7 @@ public class ConsumidorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getConsumidor(@PathVariable Long id) {
+    public ResponseEntity<?> getConsumidor(@PathVariable int id) {
         try {
             Consumidor consumidor = consumidorService.getConsumidor(id);
             return ResponseEntity.ok(consumidor);
@@ -43,12 +43,12 @@ public class ConsumidorController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public String eliminarConsumidor(@PathVariable Long id) {
+    public String eliminarConsumidor(@PathVariable int id) {
         return consumidorService.eliminarConsumidor(id);
     }
 
     @PutMapping("/actualizar/{id}")
-    public String actualizarConsumidor(@PathVariable Long id, @RequestBody Consumidor consumidor) {
+    public String actualizarConsumidor(@PathVariable int id, @RequestBody Consumidor consumidor) {
         return consumidorService.actualizarConsumidor(id, consumidor);
     }
 }

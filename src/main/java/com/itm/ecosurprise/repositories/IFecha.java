@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.itm.ecosurprise.models.Fecha;
 
-public interface IFecha extends JpaRepository<Fecha, Long>{
+public interface IFecha extends JpaRepository<Fecha, Integer>{
 
 }

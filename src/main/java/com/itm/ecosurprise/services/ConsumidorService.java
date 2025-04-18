@@ -19,7 +19,7 @@ public class ConsumidorService {
 
 
 
-    public Consumidor getConsumidor(Long id){
+    public Consumidor getConsumidor(int id){
         return consumidorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
     }
@@ -32,14 +32,14 @@ public class ConsumidorService {
 
 
 
-    public String eliminarConsumidor(Long id) {
+    public String eliminarConsumidor(int id) {
         consumidorRepository.deleteById(id);
         return "Consumidor eliminado con éxito";
     }
 
 
 
-    public String actualizarConsumidor(Long id, Consumidor consumidor) {
+    public String actualizarConsumidor(int id, Consumidor consumidor) {
         Consumidor consumidorexistente = consumidorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
         consumidorexistente.setNombre(consumidor.getNombre());

@@ -3,6 +3,8 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Producto;
@@ -14,25 +16,48 @@ public class ProductoService {
     @Autowired
     private IProducto productoRepository;
 
-    public List<Producto> obtenerTodos() {
-        return productoRepository.findAll();
+    public ResponseEntity<?> obtenerProductos() {
+        try {
+            return ResponseEntity.ok(productoRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
-    public Producto obtenerXID(int id) {
-        return productoRepository.findById(id).orElse(null);
+    public ResponseEntity<?> obtenerXID(int id) {
+        try {
+            return ResponseEntity.ok(productoRepository.findById(id).orElse(null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    public Producto guardaProducto(Producto producto) {
-        return productoRepository.save(producto);
+    public ResponseEntity<?> crearProducto(Producto producto) {
+        try {
+            return ResponseEntity.ok(productoRepository.save(producto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    public void actualizarProducto(Producto producto) {
-        
-        productoRepository.save(producto);
+    public ResponseEntity<?> actualizarProducto(Producto producto) {
+
+        try {
+            return ResponseEntity.ok(productoRepository.save(producto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
-    public void eliminarProducto(int id) {
-        productoRepository.deleteById(id);
+    public ResponseEntity<?> eliminarProducto(int id) {
+        try {
+            productoRepository.deleteById(id);
+            return ResponseEntity.ok("Producto eliminado con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

@@ -1,5 +1,8 @@
 package com.itm.ecosurprise.repositories;
 
-public interface IUsuarioDireccion {
+import com.itm.ecosurprise.models.UsuarioDireccion;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IUsuarioDireccion extends JpaRepository<UsuarioDireccion, Integer> {
 
 }
