@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,8 +21,9 @@ public class Telefono {
     @Column(name = "idTelefono")
     private int idTelefono;
     private int indicativo;
-    private long numero;
+    private int numero;
 
     @OneToOne
+    @JsonBackReference
     private Usuario usuario;
 }

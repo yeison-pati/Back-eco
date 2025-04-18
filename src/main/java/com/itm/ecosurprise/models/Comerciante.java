@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class Comerciante extends Usuario {
 	private int nit;
 	private int rut;
 	@OneToMany
+	@JsonManagedReference
 	private List<Producto> productos;
 	@OneToMany
+	@JsonManagedReference
 	private List<Sede> sedes;
 }

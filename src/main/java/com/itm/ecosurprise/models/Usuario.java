@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,10 +30,8 @@ public abstract class Usuario {
     private String contrasena;
 
     @OneToOne
+    @JsonManagedReference
     private Telefono telefono;
-
-    @OneToMany
-    private List<UsuarioDireccion> direcciones = new ArrayList<>();
 
     private  String rol;
 

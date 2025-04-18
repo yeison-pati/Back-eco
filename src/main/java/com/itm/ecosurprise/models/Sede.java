@@ -1,5 +1,7 @@
 package com.itm.ecosurprise.models;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +18,7 @@ public class Sede {
 	private String horario;
 
 	@ManyToOne
+	@JsonBackReference
 	private Comerciante comerciante;
 
 }
