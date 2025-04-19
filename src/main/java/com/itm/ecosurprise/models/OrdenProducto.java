@@ -1,6 +1,6 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,11 +16,16 @@ public class OrdenProducto {
 
     @ManyToOne
     @JoinColumn(name = "idOrden")
-    @JsonBackReference // Orden gestiona la lista de OrdenProducto
+    @JsonIgnoreProperties(value = {
+		"fechaOrden", "direccionEntrega", "productos", "estadoOrden", "pago"
+    })
     private Orden orden;
 
     @ManyToOne
     @JoinColumn(name = "idProducto")
+    @JsonIgnoreProperties(value = {
+        "comerciante", "descripcion", "puntuaciones"
+    })
     private Producto producto;
 
 }

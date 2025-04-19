@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +14,6 @@ public class EntregaDireccion {
 
     @ManyToOne
     @JoinColumn(name = "idEntrega")
-    @JsonBackReference // Entrega tiene la referencia gestionada
     private Entrega entrega;
 
     @OneToOne

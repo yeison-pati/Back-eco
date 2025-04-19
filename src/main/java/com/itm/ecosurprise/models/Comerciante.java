@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -9,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Table;
 
@@ -25,10 +25,14 @@ public class Comerciante extends Usuario {
 	private int rut;
 
 	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
-	@JsonManagedReference // Comerciante gestiona la lista de Productos
+	@JsonIgnoreProperties(value = {
+		"comerciante", "puntuaciones"
+	  })
 	private List<Producto> productos;
 
 	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
-	@JsonManagedReference // Comerciante gestiona la lista de Sedes
+	@JsonIgnoreProperties(value = {
+		"comerciante"
+	  })
 	private List<Sede> sedes;
 }

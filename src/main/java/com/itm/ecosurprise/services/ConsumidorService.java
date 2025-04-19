@@ -1,58 +1,90 @@
 package com.itm.ecosurprise.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Consumidor;
+import com.itm.ecosurprise.models.Direccion;
+import com.itm.ecosurprise.models.Telefono;
+import com.itm.ecosurprise.models.UsuarioDireccion;
 import com.itm.ecosurprise.repositories.IConsumidor;
+import com.itm.ecosurprise.repositories.IUsuarioDireccion;
 
 @Service
 public class ConsumidorService {
 
     @Autowired
     private IConsumidor consumidorRepository;
+    @Autowired
+    private TelefonoService telefonoService;
+    @Autowired
+    private DireccionService direccionService;
+    @Autowired
+    private UsuarioDireccionService usuarioDireccionService;
+    @Autowired
+    private IUsuarioDireccion usuarioDireccionRepository;
+
+    public ResponseEntity<?> crear(Consumidor consumidor) {
+        try {
+            return ResponseEntity.ok(consumidorRepository.save(consumidor));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerTodos() {
+        try {
+            return ResponseEntity.ok(consumidorRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerXID(int id){
+        try {
+            return ResponseEntity.ok(consumidorRepository.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> eliminar(int id) {
+        try {
+            consumidorRepository.deleteById(id);
+            return ResponseEntity.ok("Comerciante eliminado con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
     
-    public String saludar(){
-        return "Hola desde el servicio de Consumidor";
-    }
-
-
-
-    public Consumidor getConsumidor(int id){
-        return consumidorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
-    }
-
-
-
-    public Consumidor saveConsumidor(Consumidor consumidor) {
-        return consumidorRepository.save(consumidor);
-    }
-
-
-
-    public String eliminarConsumidor(int id) {
-        consumidorRepository.deleteById(id);
-        return "Consumidor eliminado con éxito";
-    }
-
-
-
-    public String actualizarConsumidor(int id, Consumidor consumidor) {
-        Consumidor consumidorexistente = consumidorRepository.findById(id)
+    public ResponseEntity<?> actualizar(int id, Consumidor consumidor) {
+        try {
+            Consumidor consumidorexistente = consumidorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
         consumidorexistente.setNombre(consumidor.getNombre());
-        consumidorexistente.setCorreo(consumidor.getCorreo());
-        consumidorexistente.setContrasena(consumidor.getContrasena());
-        consumidorexistente.setDirecciones(consumidor.getDirecciones());
-        consumidorexistente.setRol(consumidor.getRol());
-        consumidorexistente.setPuntos(consumidor.getPuntos());
-
-        
-        consumidorRepository.save(consumidorexistente);
-
-        return "Consumidor actualizado con éxito";
+        return ResponseEntity.ok(consumidorRepository.save(consumidorexistente));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
+
+    public ResponseEntity<?> crearTelefono(int idConsumidor, Telefono telefono) {
+        return ResponseEntity.ok(telefonoService.crear(idConsumidor, telefono));
+    }
+
+    public ResponseEntity<?> crearOrden(int idComerciante, Telefono telefono) {
+        return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
+    }
+
+    public ResponseEntity<?> crearDireccion(int idConsumidor, Direccion direccion) {
+        UsuarioDireccion usuarioDireccion = usuarioDireccionService.crear(idConsumidor);
+        usuarioDireccion.setDireccion(direccionService.crear(direccion));
+        return ResponseEntity.ok(usuarioDireccionRepository.save(usuarioDireccion));
+    }
+
 
 }

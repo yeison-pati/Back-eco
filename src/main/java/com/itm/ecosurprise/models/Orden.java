@@ -1,12 +1,11 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.itm.ecosurprise.enums.EstadoOrden;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Data
 @Entity
 @Table(name = "orden")
@@ -18,7 +17,9 @@ public class Orden {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @JsonBackReference // Consumidor gestiona la lista de Orden
+    @JsonIgnoreProperties(value = {
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+	  })
     private Consumidor consumidor;
 
     @OneToOne
@@ -30,12 +31,16 @@ public class Orden {
     private Direccion direccionEntrega;
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
-    @JsonManagedReference // Orden gestiona la lista de OrdenProducto
+    @JsonIgnoreProperties(value = {
+		"comerciante", "descripcion", "puntuaciones"
+	  })
     private List<OrdenProducto> productos;
 
     private String estadoOrden;
 
     @OneToOne(mappedBy = "orden", cascade = CascadeType.ALL)
-    @JsonManagedReference // Orden gestiona el Pago
+    @JsonIgnoreProperties(value = {
+		"orden"
+	  })
     private Pago pago;
 }

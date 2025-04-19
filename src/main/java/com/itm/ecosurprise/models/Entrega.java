@@ -1,11 +1,11 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.itm.ecosurprise.enums.EstadoEntrega;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /*
  * @Data genera metodos y contructores
  * @Entity indica que es una entidad de la base de datos
@@ -29,6 +29,9 @@ public class Entrega {
 	private int idEntrega;
 
 	@OneToOne
+	@JsonIgnoreProperties(value = {
+		"direccionEntrega","pago"
+	  })
 	private Orden orden;
 
 	@OneToOne
@@ -37,7 +40,6 @@ public class Entrega {
 	private int numeroEntrega;
 
 	@OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL)
-	@JsonManagedReference // Entrega gestiona la lista de EntregaDireccion
 	private List<EntregaDireccion> direcciones;
 
 	private String estadoEntrega;

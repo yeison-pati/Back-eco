@@ -1,6 +1,7 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 @Data
@@ -14,7 +15,9 @@ public class Pago {
 
     @OneToOne
     @JoinColumn(name = "idOrden")
-    @JsonBackReference // Orden gestiona el Pago
+    @JsonIgnoreProperties(value = {
+		"direccionEntrega", "productos", "estadoOrden", "pago"
+	  })
     private Orden orden;
 
     @OneToOne

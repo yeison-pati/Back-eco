@@ -1,7 +1,6 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,12 +16,16 @@ public class Puntuacion {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    @JsonManagedReference // Un Usuario *da* puntuaciones
+    @JsonIgnoreProperties(value = {
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+	  })
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "idProducto")
-    @JsonBackReference // Producto es la referencia *back* desde Puntuacion
+    @JsonIgnoreProperties(value = {
+		"descripcion", "precio", "puntuaciones"
+	  })
     private Producto producto;
 
     private int puntos;

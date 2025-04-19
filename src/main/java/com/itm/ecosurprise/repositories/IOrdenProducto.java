@@ -1,6 +1,5 @@
 package com.itm.ecosurprise.repositories;
 
-import com.itm.ecosurprise.models.Orden;
 import com.itm.ecosurprise.models.OrdenProducto;
 import org.springframework.data.jpa.repository.JpaRepository;
 

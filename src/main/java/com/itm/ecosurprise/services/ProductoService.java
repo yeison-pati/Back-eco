@@ -3,11 +3,11 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Producto;
+import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.IProducto;
 
 @Service
@@ -15,49 +15,44 @@ public class ProductoService {
 
     @Autowired
     private IProducto productoRepository;
+    @Autowired
+    private IComerciante comercianteRepository;
 
-    public ResponseEntity<?> obtenerProductos() {
-        try {
-            return ResponseEntity.ok(productoRepository.findAll());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public List<Producto> obtenerTodos() {
+        return productoRepository.findAll();
+    }
+
+    public Producto obtenerXID(int idProducto) {
+        return productoRepository.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idProducto));
+    }
+
+    public Producto crear(int idComerciante, Producto producto) {
+        Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idComerciante));
+        producto.setComerciante(comerciante);
+        return productoRepository.save(producto);
+    }
+
+    public Producto actualizar(Producto producto) {
+
+        Producto productoExistente = productoRepository.findById(producto.getIdProducto())
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + producto.getIdProducto()));
+        productoExistente.setNombre(producto.getNombre());
+        productoExistente.setDescripcion(producto.getDescripcion());
+        productoExistente.setPrecio(producto.getPrecio());
+        Comerciante comerciante = comercianteRepository.findById(producto.getComerciante().getIdUsuario())
+                .orElseThrow(() -> new RuntimeException(
+                        "Comerciante no encontrado con ID: " + producto.getComerciante().getIdUsuario()));
+        productoExistente.setComerciante(comerciante);
+        productoExistente.setPuntuaciones(producto.getPuntuaciones());
+        return productoRepository.save(producto);
 
     }
 
-    public ResponseEntity<?> obtenerXID(int id) {
-        try {
-            return ResponseEntity.ok(productoRepository.findById(id).orElse(null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> crearProducto(Producto producto) {
-        try {
-            return ResponseEntity.ok(productoRepository.save(producto));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> actualizarProducto(Producto producto) {
-
-        try {
-            return ResponseEntity.ok(productoRepository.save(producto));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-
-    }
-
-    public ResponseEntity<?> eliminarProducto(int id) {
-        try {
-            productoRepository.deleteById(id);
-            return ResponseEntity.ok("Producto eliminado con éxito");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public String eliminar(int id) {
+        productoRepository.deleteById(id);
+        return "Producto eliminado con éxito";
     }
 
 }

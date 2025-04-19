@@ -1,6 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +23,6 @@ import lombok.Data;
      private String contrasena;
  
      @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-     @JsonManagedReference // Usuario gestiona el Telefono
      private Telefono telefono;
  
      private  String rol;
