@@ -28,57 +28,27 @@ public class TelefonoService {
     }
 
     public Telefono crear(int idUsuario, Telefono telefono) {
-            Usuario usuario = usuarioRepository.findById(idUsuario)
-                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idUsuario));
-            telefono.setUsuario(usuario);
-            return telefonoRepository.save(telefono);
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idUsuario));
+        telefono.setUsuario(usuario);
+        return telefonoRepository.save(telefono);
     }
 
     public Telefono actualizar(Telefono telefono) {
-            return telefonoRepository.save(telefono);
+        return telefonoRepository.save(telefono);
     }
 
     public String eliminar(int id) {
-            telefonoRepository.deleteById(id);
-            return "Telefono eliminado con éxito";
+        telefonoRepository.deleteById(id);
+        return "Telefono eliminado con éxito";
     }
+
+    /* Ejemplo: Uso de dto
+    public Carrito obtenerCarrito(int id) {
+        Telefono telefono = telefonoRepository.findById(id);
+        Carrito carrito = new Carrito();
+        carrito.setNumero(telefono.getNumero());
+        return carrito;
+    }*/
 
 }
-
-/*
- * 
-    @Autowired
-    private ITelefono telefonoRepository;
-    @Autowired
-    private IComerciante comercianteRepository;
-
-
-    public Telefono crear(int idComerciante, Telefono producto) {
-        Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idComerciante));
-        producto.setComerciante(comerciante);
-        return productoRepository.save(producto);
-    }
-
-    public Producto actualizar(Producto producto) {
-
-        Producto productoExistente = productoRepository.findById(producto.getIdProducto())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + producto.getIdProducto()));
-        productoExistente.setNombre(producto.getNombre());
-        productoExistente.setDescripcion(producto.getDescripcion());
-        productoExistente.setPrecio(producto.getPrecio());
-        Comerciante comerciante = comercianteRepository.findById(producto.getComerciante().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException(
-                        "Comerciante no encontrado con ID: " + producto.getComerciante().getIdUsuario()));
-        productoExistente.setComerciante(comerciante);
-        productoExistente.setPuntuaciones(producto.getPuntuaciones());
-        return productoRepository.save(producto);
-
-    }
-
-    public ResponseEntity<?> eliminar(int id) {
-        productoRepository.deleteById(id);
-        return ResponseEntity.ok("Producto eliminado con éxito");
-    }
-
- */

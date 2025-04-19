@@ -20,6 +20,8 @@ public class ConsumidorService {
     @Autowired
     private TelefonoService telefonoService;
     @Autowired
+    private ProductoService productoService;
+    @Autowired
     private DireccionService direccionService;
     @Autowired
     private UsuarioDireccionService usuarioDireccionService;
@@ -73,17 +75,48 @@ public class ConsumidorService {
 
 
     public ResponseEntity<?> crearTelefono(int idConsumidor, Telefono telefono) {
-        return ResponseEntity.ok(telefonoService.crear(idConsumidor, telefono));
+        try {
+            return ResponseEntity.ok(telefonoService.crear(idConsumidor, telefono));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> crearOrden(int idComerciante, Telefono telefono) {
-        return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
+
+        try {
+            return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
     public ResponseEntity<?> crearDireccion(int idConsumidor, Direccion direccion) {
-        UsuarioDireccion usuarioDireccion = usuarioDireccionService.crear(idConsumidor);
-        usuarioDireccion.setDireccion(direccionService.crear(direccion));
-        return ResponseEntity.ok(usuarioDireccionRepository.save(usuarioDireccion));
+        try {
+            UsuarioDireccion usuarioDireccion = usuarioDireccionService.crear(idConsumidor);
+            usuarioDireccion.setDireccion(direccionService.crear(direccion));
+            return ResponseEntity.ok(usuarioDireccionRepository.save(usuarioDireccion));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+
+    public ResponseEntity<?> obtenerProductos(){
+        try{
+            return ResponseEntity.ok(productoService.obtenerTodos());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    public  ResponseEntity<?> obtenerProducto(int idProducto){
+        try{
+            return ResponseEntity.ok(productoService.obtenerXID(idProducto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 

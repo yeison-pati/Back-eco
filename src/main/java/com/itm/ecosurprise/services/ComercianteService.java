@@ -12,6 +12,9 @@ import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.ISede;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Service
 public class ComercianteService {
@@ -75,7 +78,11 @@ public class ComercianteService {
 
 
     public ResponseEntity<?> crearProducto(int idComerciante, Producto producto) {
-            return ResponseEntity.ok(productoService.crear(idComerciante, producto));
+            try {
+                return ResponseEntity.ok(productoService.crear(idComerciante, producto));
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
     }
 
     public ResponseEntity<?> crearTelefono(int idComerciante, Telefono telefono) {
@@ -83,17 +90,51 @@ public class ComercianteService {
     }
 
     public ResponseEntity<?> crearSede(int idComerciante, Sede sede) {
-        return ResponseEntity.ok(sedeService.crear(idComerciante, sede));
+        try {
+            return ResponseEntity.ok(sedeService.crear(idComerciante, sede));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> crearDireccion(int idComerciante, int idSede, Direccion direccion) {
-        Comerciante comerciante = comercianteRepository.findById(idComerciante)
+
+        try {
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             Sede sede = comerciante.getSedes().stream()
                     .filter(s -> s.getIdSede() == idSede)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
             sede.setDireccion(direccionService.crear(direccion));
-        return ResponseEntity.ok(sedeRepository.save(sede));
+            return ResponseEntity.ok( sedeRepository.save(sede));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+    public ResponseEntity<?> obtenerProductos(int idComerciante){
+        try{
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+            List<Producto> productos = comerciante.getProductos();
+            return ResponseEntity.ok(productos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    public  ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto){
+        try{
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+            Producto producto = comerciante.getProductos().stream()
+                    .filter(p-> p.getIdProducto() == idProducto)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("error al cargar el producto"));
+            return ResponseEntity.ok(producto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

@@ -52,4 +52,14 @@ public class ComercianteController {
     public ResponseEntity<?> obtenerXID(@PathVariable int idComerciante) {
         return comercianteService.obtenerXID(idComerciante);
     }
+
+    @GetMapping("/{idComerciante}/productos/obtener/todos")
+    public ResponseEntity<?> obtenerProductos(@PathVariable int idComerciante) {
+        return comercianteService.obtenerProductos(idComerciante);
+    }
+
+    @GetMapping("/{idComerciante}/productos/obtener/{idProducto}")
+    public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante,@PathVariable int idProducto) {
+        return comercianteService.obtenerProducto(idComerciante, idProducto);
+    }
 }
