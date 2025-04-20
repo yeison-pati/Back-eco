@@ -6,6 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 @Data
 @Entity
 @Table(name = "orden")
@@ -25,7 +27,7 @@ public class Orden {
     @OneToOne
     private Fecha fechaOrden;
 
-    private float montoTotal;
+    private int montoTotal;
 
     @OneToOne
     private Direccion direccionEntrega;

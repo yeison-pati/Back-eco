@@ -3,6 +3,8 @@ package com.itm.ecosurprise.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -26,5 +28,6 @@ public class Consumidor extends Usuario {
     private List<UsuarioDireccion> direcciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "consumidor", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Orden> ordenes = new ArrayList<>();
 }

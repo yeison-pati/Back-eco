@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Consumidor;
 import com.itm.ecosurprise.models.Direccion;
+import com.itm.ecosurprise.models.Orden;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.models.UsuarioDireccion;
 import com.itm.ecosurprise.repositories.IConsumidor;
@@ -15,6 +16,8 @@ import com.itm.ecosurprise.repositories.IUsuarioDireccion;
 @Service
 public class ConsumidorService {
 
+    @Autowired
+    private IUsuarioDireccion usuarioDireccionRepository;
     @Autowired
     private IConsumidor consumidorRepository;
     @Autowired
@@ -26,7 +29,10 @@ public class ConsumidorService {
     @Autowired
     private UsuarioDireccionService usuarioDireccionService;
     @Autowired
-    private IUsuarioDireccion usuarioDireccionRepository;
+    private OrdenService ordenService;
+    @Autowired
+    private CarritoService carritoService;
+    
 
     public ResponseEntity<?> crear(Consumidor consumidor) {
         try {
@@ -44,9 +50,10 @@ public class ConsumidorService {
         }
     }
 
-    public ResponseEntity<?> obtenerXID(int id){
+    public ResponseEntity<?> obtenerXID(int idConsumidor){
         try {
-            return ResponseEntity.ok(consumidorRepository.findById(id));
+            return ResponseEntity.ok(consumidorRepository.findById(idConsumidor)
+            .orElseThrow(()-> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor )));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }
@@ -103,21 +110,57 @@ public class ConsumidorService {
 
     }
 
-    public ResponseEntity<?> obtenerProductos(){
+    public ResponseEntity<?> obtenerProductos(int idConsumidor){
         try{
+            consumidorRepository.findById(idConsumidor)
+            .orElseThrow(()-> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor));
             return ResponseEntity.ok(productoService.obtenerTodos());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    public  ResponseEntity<?> obtenerProducto(int idProducto){
+    public  ResponseEntity<?> obtenerProducto(int idConsumidor, int idProducto){
         try{
+            consumidorRepository.findById(idConsumidor)
+            .orElseThrow(()-> new RuntimeException("consumidor no encontrado con ID: "+idConsumidor));
             return ResponseEntity.ok(productoService.obtenerXID(idProducto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    public ResponseEntity<?> agregarAlCarrito(int idConsumidor, int idProducto) {
+        try {
+            return ResponseEntity.ok(carritoService.agregarProducto(idConsumidor, idProducto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> verCarrito(int idConsumidor) {
+        try {
+            return ResponseEntity.ok(carritoService.obtenerProductos(idConsumidor));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> limpiarCarrito(int idConsumidor) {
+        try {
+            return ResponseEntity.ok(carritoService.limpiarCarrito(idConsumidor));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    
+
+    public ResponseEntity<?> crearOrden(int idConsumidor, Orden orden){
+        try {
+            return ResponseEntity.ok(ordenService.crear(idConsumidor, orden));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 }

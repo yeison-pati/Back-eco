@@ -26,7 +26,7 @@ public class Producto {
 
     private String nombre;
     private String descripcion;
-    private double precio;
+    private int precio;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {

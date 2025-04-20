@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 @Data
 @Entity
 @Table(name = "pago")
@@ -24,6 +25,6 @@ public class Pago {
     private Fecha fechaPago;
     private String estadoPago;
     private String metodoPago;
-    private float montoPagado;
+    private int montoPagado;
 }
 

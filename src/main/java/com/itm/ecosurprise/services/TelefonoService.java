@@ -29,7 +29,11 @@ public class TelefonoService {
 
     public Telefono crear(int idUsuario, Telefono telefono) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idUsuario));
+                .orElseThrow(() -> new RuntimeException("usuario no encontrado con ID: " + idUsuario));
+        if (usuario.getTelefono() != null) {
+            throw new RuntimeException("El "+usuario.getRol()+" ya tiene un telefono asignado.");
+            
+        }
         telefono.setUsuario(usuario);
         return telefonoRepository.save(telefono);
     }

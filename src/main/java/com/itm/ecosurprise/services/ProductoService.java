@@ -54,5 +54,4 @@ public class ProductoService {
         productoRepository.deleteById(id);
         return "Producto eliminado con éxito";
     }
-
 }

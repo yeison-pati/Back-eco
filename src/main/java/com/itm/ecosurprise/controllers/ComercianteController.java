@@ -12,7 +12,7 @@ import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
 
 @RestController
-@RequestMapping("/api/comerciante")
+@RequestMapping("/api/comerciantes")
 public class ComercianteController {
 
     @Autowired
@@ -33,32 +33,32 @@ public class ComercianteController {
         return comercianteService.crearSede(idComerciante, sede);
     }
 
-    @PostMapping("/{idComerciante}/crearProducto")
-    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestBody Producto producto) {
-        return comercianteService.crearProducto(idComerciante, producto);
-    }
-
     @PostMapping("/{idComerciante}/sede/{idSede}/crearDireccion")
     public ResponseEntity<?> crearDireccion(@PathVariable int idComerciante, @PathVariable int idSede, @RequestBody Direccion direccion) {
         return comercianteService.crearDireccion(idComerciante, idSede, direccion);
     }
 
-    @GetMapping("/obtener/todos")
+    @PostMapping("/{idComerciante}/crearProducto")
+    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestBody Producto producto) {
+        return comercianteService.crearProducto(idComerciante, producto);
+    }
+
+    @GetMapping("/todos")
     public ResponseEntity<?> obtenerTodos() {
         return comercianteService.obtenerTodos();
     }
 
-    @GetMapping("/obtener/{idComerciante}")
+    @GetMapping("/{idComerciante}")
     public ResponseEntity<?> obtenerXID(@PathVariable int idComerciante) {
         return comercianteService.obtenerXID(idComerciante);
     }
 
-    @GetMapping("/{idComerciante}/productos/obtener/todos")
+    @GetMapping("/{idComerciante}/productos/todos")
     public ResponseEntity<?> obtenerProductos(@PathVariable int idComerciante) {
         return comercianteService.obtenerProductos(idComerciante);
     }
 
-    @GetMapping("/{idComerciante}/productos/obtener/{idProducto}")
+    @GetMapping("/{idComerciante}/productos/{idProducto}")
     public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante,@PathVariable int idProducto) {
         return comercianteService.obtenerProducto(idComerciante, idProducto);
     }

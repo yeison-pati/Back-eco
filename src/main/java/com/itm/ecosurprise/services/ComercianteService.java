@@ -12,7 +12,6 @@ import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.ISede;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -50,7 +49,8 @@ public class ComercianteService {
 
     public ResponseEntity<?> obtenerXID(int id) {
         try {
-            return ResponseEntity.ok(comercianteRepository.findById(id));
+            return ResponseEntity.ok(comercianteRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + id)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -68,7 +68,7 @@ public class ComercianteService {
     public ResponseEntity<?> actualizar(int id, Comerciante comerciante) {
         try {
             Comerciante comercianteExistente = comercianteRepository.findById(id)
-                            .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             comercianteExistente.setNombre(comerciante.getNombre());
             return ResponseEntity.ok(comercianteRepository.save(comercianteExistente));
         } catch (Exception e) {
@@ -76,17 +76,20 @@ public class ComercianteService {
         }
     }
 
-
     public ResponseEntity<?> crearProducto(int idComerciante, Producto producto) {
-            try {
-                return ResponseEntity.ok(productoService.crear(idComerciante, producto));
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
+        try {
+            return ResponseEntity.ok(productoService.crear(idComerciante, producto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> crearTelefono(int idComerciante, Telefono telefono) {
-        return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
+        try {
+            return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> crearSede(int idComerciante, Sede sede) {
@@ -107,14 +110,15 @@ public class ComercianteService {
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
             sede.setDireccion(direccionService.crear(direccion));
-            return ResponseEntity.ok( sedeRepository.save(sede));
+            return ResponseEntity.ok(sedeRepository.save(sede));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }
-    public ResponseEntity<?> obtenerProductos(int idComerciante){
-        try{
+
+    public ResponseEntity<?> obtenerProductos(int idComerciante) {
+        try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             List<Producto> productos = comerciante.getProductos();
@@ -124,12 +128,12 @@ public class ComercianteService {
         }
     }
 
-    public  ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto){
-        try{
+    public ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto) {
+        try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             Producto producto = comerciante.getProductos().stream()
-                    .filter(p-> p.getIdProducto() == idProducto)
+                    .filter(p -> p.getIdProducto() == idProducto)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("error al cargar el producto"));
             return ResponseEntity.ok(producto);

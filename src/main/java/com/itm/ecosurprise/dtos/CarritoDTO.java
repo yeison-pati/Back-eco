@@ -1,6 +1,5 @@
 package com.itm.ecosurprise.dtos;
 
-import com.itm.ecosurprise.models.Producto;
 import lombok.Data;
 
 import java.util.ArrayList;
