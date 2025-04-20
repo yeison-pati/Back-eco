@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import com.itm.ecosurprise.enums.TipoDireccion;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,13 +10,14 @@ public class EntregaDireccion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEntregaDireccion;
+    private int idEntregaDireccion;
 
     @ManyToOne
+    @JoinColumn(name = "idEntrega")
     private Entrega entrega;
 
-    @ManyToOne
+    @OneToOne
     private Direccion direccion;
 
-    private TipoDireccion tipo;
+    private String tipo;
 }

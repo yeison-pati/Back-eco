@@ -1,54 +1,80 @@
 package com.itm.ecosurprise.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itm.ecosurprise.models.Consumidor;
+import com.itm.ecosurprise.models.Direccion;
+import com.itm.ecosurprise.models.Orden;
+import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ConsumidorService;
 
 @RestController
-@RequestMapping("/api/consumidor")
+@RequestMapping("/api/consumidores")
 public class ConsumidorController {
 
     @Autowired
     private ConsumidorService consumidorService;
 
-    @RequestMapping("/saludo")
-    public String saludar() {
-        return consumidorService.saludar();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getConsumidor(@PathVariable Long id) {
-        try {
-            Consumidor consumidor = consumidorService.getConsumidor(id);
-            return ResponseEntity.ok(consumidor);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
     @PostMapping("/crear")
-    public Consumidor saveConsumidor(@RequestBody Consumidor consumidor) {
-        return consumidorService.saveConsumidor(consumidor);
+    public ResponseEntity<?> crearComerciante(@RequestBody Consumidor consumidor) {
+        return consumidorService.crear(consumidor);
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public String eliminarConsumidor(@PathVariable Long id) {
-        return consumidorService.eliminarConsumidor(id);
+    @PostMapping("/{idConsumidor}/crearTelefono")
+    public ResponseEntity<?> crearTelefono(@PathVariable int idConsumidor, @RequestBody Telefono telefono) {
+        return consumidorService.crearTelefono(idConsumidor, telefono);
     }
 
-    @PutMapping("/actualizar/{id}")
-    public String actualizarConsumidor(@PathVariable Long id, @RequestBody Consumidor consumidor) {
-        return consumidorService.actualizarConsumidor(id, consumidor);
+    @PostMapping("/{idConsumidor}/crearDireccion")
+    public ResponseEntity<?> crearDireccion(@PathVariable int idConsumidor, @RequestBody Direccion direccion) {
+        return consumidorService.crearDireccion(idConsumidor, direccion);
+    }
+
+    @GetMapping("/todos")
+    public ResponseEntity<?> obtenerTodos() {
+        return consumidorService.obtenerTodos();
+    }
+
+    @GetMapping("/{idConsumidor}")
+    public ResponseEntity<?> obtenerXID(@PathVariable int idConsumidor) {
+        return consumidorService.obtenerXID(idConsumidor);
+    }
+
+    @GetMapping("/{idConsumidor}/productos/todos")
+    public ResponseEntity<?> obtenerProductos(@PathVariable int idConsumidor) {
+        return consumidorService.obtenerProductos(idConsumidor);
+    }
+
+    @GetMapping("/{idConsumidor}/productos/{idProducto}")
+    public ResponseEntity<?> obtenerProducto(@PathVariable int idConsumidor,@PathVariable int idProducto) {
+        return consumidorService.obtenerProducto(idConsumidor, idProducto);
+    }
+
+    //agregar al carrito
+    @PostMapping("/{idConsumidor}/productos/{idProducto}/agregar")
+    public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor,@PathVariable int idProducto) {
+        return consumidorService.agregarAlCarrito(idConsumidor, idProducto);
+    }
+
+    @GetMapping("/{idConsumidor}/carrito")
+    public ResponseEntity<?> verCarrito(@PathVariable int idConsumidor) {
+        return consumidorService.verCarrito(idConsumidor);
+    }
+
+    @GetMapping("/{idConsumidor}/carrito/limpiar")
+    public ResponseEntity<?> limpiarCarrito(@PathVariable int idConsumidor) {
+        return consumidorService.limpiarCarrito(idConsumidor);
+    }
+
+    @PostMapping("/{idConsumidor}/carrito/ordenar")
+    public ResponseEntity<?> crearOrden(@PathVariable int idConsumidor, @RequestBody Orden orden){
+        return consumidorService.crearOrden(idConsumidor, orden);
     }
 }

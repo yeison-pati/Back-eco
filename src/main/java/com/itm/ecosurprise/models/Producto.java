@@ -2,6 +2,8 @@ package com.itm.ecosurprise.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,16 +14,23 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long idComerciante;
-    private String nombre;
-    private String descripcion;
-    private double precio;
-
-    @OneToMany
-    private List<Puntuacion> puntuaciones;
+    @Column(name = "idProducto")
+    private int idProducto;
 
     @ManyToOne
-    private Orden orden;
-}
+    @JoinColumn(name = "idUsuario")
+    @JsonIgnoreProperties(value = {
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+	  })
+    private Comerciante comerciante;
 
+    private String nombre;
+    private String descripcion;
+    private int precio;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {
+        "usuario", "producto"
+    })
+    private List<Puntuacion> puntuaciones;
+}

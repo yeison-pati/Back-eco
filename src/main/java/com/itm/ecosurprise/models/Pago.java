@@ -1,7 +1,7 @@
 package com.itm.ecosurprise.models;
 
-import com.itm.ecosurprise.enums.EstadoPago;
-import com.itm.ecosurprise.enums.MetodoPago;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,17 +12,19 @@ public class Pago {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idPago;
+    private int idPago;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne
+    @JoinColumn(name = "idOrden")
+    @JsonIgnoreProperties(value = {
+		"direccionEntrega", "productos", "estadoOrden", "pago"
+	  })
+    private Orden orden;
+
+    @OneToOne
     private Fecha fechaPago;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoPago estadoPago;
-
-    @Enumerated(EnumType.STRING)
-    private MetodoPago metodoPago;
-
-    private float montoPagado;
+    private String estadoPago;
+    private String metodoPago;
+    private int montoPagado;
 }
 

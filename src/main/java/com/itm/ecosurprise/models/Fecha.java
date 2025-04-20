@@ -14,7 +14,7 @@ public class Fecha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idFecha;
+    private int idFecha;
     private int anio;
     private int mes;
     private int dia;

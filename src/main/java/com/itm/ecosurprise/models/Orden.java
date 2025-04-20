@@ -1,10 +1,12 @@
 package com.itm.ecosurprise.models;
 
-import com.itm.ecosurprise.enums.EstadoOrden;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Data
 @Entity
@@ -13,26 +15,34 @@ public class Orden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idOrden;
+    private int idOrden;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    @JsonIgnoreProperties(value = {
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+	  })
     private Consumidor consumidor;
 
     @OneToOne
     private Fecha fechaOrden;
 
-    private double montoTotal;
+    private int montoTotal;
 
     @OneToOne
     private Direccion direccionEntrega;
 
-    @OneToMany
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {
+		"comerciante", "descripcion", "puntuaciones"
+	  })
     private List<OrdenProducto> productos;
 
-    @Enumerated(EnumType.STRING)
-    private EstadoOrden estadoOrden;
+    private String estadoOrden;
 
-    @OneToOne
+    @OneToOne(mappedBy = "orden", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {
+		"orden"
+	  })
     private Pago pago;
 }
-

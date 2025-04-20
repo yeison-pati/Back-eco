@@ -1,10 +1,11 @@
 package com.itm.ecosurprise.models;
 
-import com.itm.ecosurprise.enums.EstadoEntrega;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /*
  * @Data genera metodos y contructores
  * @Entity indica que es una entidad de la base de datos
@@ -25,23 +26,22 @@ public class Entrega {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idEntrega;
+	private int idEntrega;
 
 	@OneToOne
+	@JsonIgnoreProperties(value = {
+		"direccionEntrega","pago"
+	  })
 	private Orden orden;
-
-	@OneToOne
-	private Comerciante comerciante;
 
 	@OneToOne
 	private Repartidor repartidor;
 
 	private int numeroEntrega;
 
-	@OneToMany
+	@OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL)
 	private List<EntregaDireccion> direcciones;
 
-	@Enumerated(EnumType.STRING)
-	private EstadoEntrega estadoEntrega;
+	private String estadoEntrega;
 
 }

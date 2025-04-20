@@ -1,5 +1,7 @@
 package com.itm.ecosurprise.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,12 +12,20 @@ public class OrdenProducto {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private long idOrdenProducto;
+    private int idOrdenProducto;
 
     @ManyToOne
+    @JoinColumn(name = "idOrden")
+    @JsonIgnoreProperties(value = {
+		"fechaOrden", "direccionEntrega", "productos", "estadoOrden", "pago"
+    })
     private Orden orden;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    @JsonIgnoreProperties(value = {
+        "comerciante", "descripcion", "puntuaciones"
+    })
     private Producto producto;
 
 }

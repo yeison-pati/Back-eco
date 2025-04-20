@@ -18,20 +18,15 @@ public class Direccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idDireccion")
-    private long idDireccion;
+    private int idDireccion;
 
-    @Column(name = "pais", nullable = false)
-    private String pais;
-
-    @Column(name = "departamento", nullable = false)
+    private String nombre;
+    /*@OneToOne
+    @JoinColumn(name = "idUsuarioDireccion")
+    private UsuarioDireccion usuarioDireccion;
+    */
     private String departamento;
-
-    @Column( name = "calle", nullable = false)
     private String calle;
-
-    @Column( name = "numero", nullable = false)
     private String numero;
-
-    @Column( name = "complemento", nullable = false)
     private String complemento;
 }
