@@ -64,7 +64,7 @@ public class ProductoService {
             String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
 
             // Ruta local donde se guardará
-            String carpeta = "src/main/resources/static/products/";
+            String carpeta = "src/main/resources/static/productos/";
             File directorio = new File(carpeta);
             if (!directorio.exists()) directorio.mkdirs();
 

@@ -20,6 +20,8 @@ public class Producto {
     private String nombre;
     private int precio;
     private int stock;
+
+    private String tipo;
     private String descripcion;
 
 
