@@ -24,12 +24,14 @@ public class Orden {
 	  })
     private Consumidor consumidor;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idFecha")
     private Fecha fechaOrden;
 
     private int montoTotal;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "idDireccion")
     private Direccion direccionEntrega;
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)

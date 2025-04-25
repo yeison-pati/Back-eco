@@ -21,7 +21,7 @@ import lombok.Data;
      @JoinColumn(name = "idUsuario")
      @JsonIgnoreProperties(value = {
 		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos",
-    "sedes", "direcciones", "puntos", "ordenes"
+    "sedes", "direcciones", "puntos", "ordenes", "imagen", "tipo"
 	  })
      private Usuario usuario;
  }

@@ -1,41 +1,55 @@
 package com.itm.ecosurprise.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.models.Consumidor;
-import com.itm.ecosurprise.models.Direccion;
-import com.itm.ecosurprise.models.Orden;
-import com.itm.ecosurprise.models.Telefono;
-import com.itm.ecosurprise.models.UsuarioDireccion;
 import com.itm.ecosurprise.repositories.IConsumidor;
-import com.itm.ecosurprise.repositories.IUsuarioDireccion;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class ConsumidorService {
-
-    @Autowired
-    private IUsuarioDireccion usuarioDireccionRepository;
     @Autowired
     private IConsumidor consumidorRepository;
     @Autowired
-    private TelefonoService telefonoService;
-    @Autowired
-    private ProductoService productoService;
-    @Autowired
-    private DireccionService direccionService;
-    @Autowired
-    private UsuarioDireccionService usuarioDireccionService;
-    @Autowired
-    private OrdenService ordenService;
-    @Autowired
-    private CarritoService carritoService;
-    
+    private HttpServletRequest request;
 
-    public ResponseEntity<?> crear(Consumidor consumidor) {
+
+    public ResponseEntity<?> crear(Consumidor consumidor, MultipartFile imagen) {
         try {
+
+            if (imagen != null && !imagen.isEmpty()) {
+                // Generar nombre único para la imagen
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
+
+                // Ruta local donde se guardará
+                String carpeta = "src/main/resources/static/comerciantes/";
+                File directorio = new File(carpeta);
+                if (!directorio.exists()) directorio.mkdirs();
+
+                // Guardar archivo en disco
+                Path ruta = Paths.get(carpeta + nombreArchivo);
+                Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+
+                // Construir URL pública de acceso
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlImagen = urlBase + "/comerciantes/" + nombreArchivo;
+
+                // Guardar solo la ruta o URL
+                consumidor.setImagen(urlImagen);
+            } else {
+                throw new RuntimeException("Imagen vacía");
+            }
             return ResponseEntity.ok(consumidorRepository.save(consumidor));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e.getMessage());
@@ -81,86 +95,23 @@ public class ConsumidorService {
     }
 
 
-    public ResponseEntity<?> crearTelefono(int idConsumidor, Telefono telefono) {
-        try {
-            return ResponseEntity.ok(telefonoService.crear(idConsumidor, telefono));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> crearOrden(int idComerciante, Telefono telefono) {
-
-        try {
-            return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-
-    }
-
-    public ResponseEntity<?> crearDireccion(int idConsumidor, Direccion direccion) {
-        try {
-            UsuarioDireccion usuarioDireccion = usuarioDireccionService.crear(idConsumidor);
-            usuarioDireccion.setDireccion(direccionService.crear(direccion));
-            return ResponseEntity.ok(usuarioDireccionRepository.save(usuarioDireccion));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-
-    }
-
-    public ResponseEntity<?> obtenerProductos(int idConsumidor){
-        try{
-            consumidorRepository.findById(idConsumidor)
-            .orElseThrow(()-> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor));
-            return ResponseEntity.ok(productoService.obtenerTodos());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public  ResponseEntity<?> obtenerProducto(int idConsumidor, int idProducto){
-        try{
-            consumidorRepository.findById(idConsumidor)
-            .orElseThrow(()-> new RuntimeException("consumidor no encontrado con ID: "+idConsumidor));
-            return ResponseEntity.ok(productoService.obtenerXID(idProducto));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> agregarAlCarrito(int idConsumidor, int idProducto) {
-        try {
-            return ResponseEntity.ok(carritoService.agregarProducto(idConsumidor, idProducto));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> verCarrito(int idConsumidor) {
-        try {
-            return ResponseEntity.ok(carritoService.obtenerProductos(idConsumidor));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> limpiarCarrito(int idConsumidor) {
-        try {
-            return ResponseEntity.ok(carritoService.limpiarCarrito(idConsumidor));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-    
-
-    public ResponseEntity<?> crearOrden(int idConsumidor, Orden orden){
-        try {
-            return ResponseEntity.ok(ordenService.crear(idConsumidor, orden));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
 }
+/*
+ * public String actualizarFoto(int idConsumidor, MultipartFile file) {
+        try {
+            Consumidor consumidor = consumidorRepository.findById(idConsumidor)
+                .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor));
+
+            // Convertir la imagen a byte[]
+            byte[] fotoBytes = file.getBytes();
+            consumidor.setImagen(fotoBytes);
+
+            // Guardar el consumidor con la nueva foto
+            consumidorRepository.save(consumidor);
+
+            return "Foto actualizada con éxito";
+        } catch (Exception e) {
+            return "Error al cargar la imagen";
+        }
+    }
+ */

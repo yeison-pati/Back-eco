@@ -23,6 +23,7 @@ public class Comerciante extends Usuario {
 
 	private int nit;
 	private int rut;
+	private String tipo;
 
 	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = {

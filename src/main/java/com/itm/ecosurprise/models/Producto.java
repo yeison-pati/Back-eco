@@ -16,6 +16,12 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProducto")
     private int idProducto;
+    private String imagen;
+    private String nombre;
+    private int precio;
+    private int stock;
+    private String descripcion;
+
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
@@ -23,10 +29,6 @@ public class Producto {
 		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
 	  })
     private Comerciante comerciante;
-
-    private String nombre;
-    private String descripcion;
-    private int precio;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {

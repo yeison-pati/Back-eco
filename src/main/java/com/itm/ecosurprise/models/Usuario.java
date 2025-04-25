@@ -15,16 +15,17 @@ import lombok.Data;
  @Entity
  @Inheritance(strategy = InheritanceType.JOINED)
  public abstract class Usuario {
-     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private int idUsuario;
-     private String nombre;
-     private String correo;
-     private String contrasena;
- 
-     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-     private Telefono telefono;
- 
-     private  String rol;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idUsuario;
+    private String imagen;
+    private String nombre;
+    private String correo;
+    private String contrasena;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Telefono telefono;
+
+    private  String rol;
  
  }

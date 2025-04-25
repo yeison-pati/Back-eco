@@ -1,8 +1,10 @@
 package com.itm.ecosurprise.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Direccion;
@@ -18,9 +20,11 @@ public class ComercianteController {
     @Autowired
     private ComercianteService comercianteService;
 
-    @PostMapping("/crear")
-    public ResponseEntity<?> crearComerciante(@RequestBody Comerciante comerciante) {
-        return comercianteService.crear(comerciante);
+    @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> crearComerciante(@RequestPart("comerciante") Comerciante comerciante,
+                                              @RequestParam("imagen") MultipartFile imagen)
+    {
+        return comercianteService.crear(comerciante, imagen);
     }
 
     @PostMapping("/{idComerciante}/crearTelefono")
@@ -38,9 +42,10 @@ public class ComercianteController {
         return comercianteService.crearDireccion(idComerciante, idSede, direccion);
     }
 
-    @PostMapping("/{idComerciante}/crearProducto")
-    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestBody Producto producto) {
-        return comercianteService.crearProducto(idComerciante, producto);
+    @PostMapping(value = "/{idComerciante}/crearProducto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestPart("producto") Producto producto,
+     @RequestParam("imagen") MultipartFile imagen) {
+        return comercianteService.crearProducto(idComerciante, producto, imagen);
     }
 
     @GetMapping("/todos")

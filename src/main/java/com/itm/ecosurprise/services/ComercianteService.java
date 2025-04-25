@@ -1,9 +1,11 @@
 package com.itm.ecosurprise.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Direccion;
@@ -13,7 +15,13 @@ import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.ISede;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ComercianteService {
@@ -30,10 +38,38 @@ public class ComercianteService {
     private SedeService sedeService;
     @Autowired
     private ISede sedeRepository;
+    @Autowired
+    private HttpServletRequest request;
 
-    public ResponseEntity<?> crear(Comerciante comerciante) {
+    public ResponseEntity<?> crear(Comerciante comerciante, MultipartFile imagen) {
         try {
-            return ResponseEntity.ok(comercianteRepository.save(comerciante));
+
+            if (imagen != null && !imagen.isEmpty()) {
+                // Generar nombre único para la imagen
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
+
+                // Ruta local donde se guardará
+                String carpeta = "src/main/resources/static/comerciantes/";
+                File directorio = new File(carpeta);
+                if (!directorio.exists()) directorio.mkdirs();
+
+                // Guardar archivo en disco
+                Path ruta = Paths.get(carpeta + nombreArchivo);
+                Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+
+                // Construir URL pública de acceso
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlImagen = urlBase + "/comerciantes/" + nombreArchivo;
+
+                // Guardar solo la ruta o URL
+                comerciante.setImagen(urlImagen);
+            } else {
+                throw new RuntimeException("Imagen vacía");
+            }
+
+            Comerciante nuevoComerciante = comercianteRepository.save(comerciante);
+            return ResponseEntity.ok(nuevoComerciante);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -76,9 +112,9 @@ public class ComercianteService {
         }
     }
 
-    public ResponseEntity<?> crearProducto(int idComerciante, Producto producto) {
+    public ResponseEntity<?> crearProducto(int idComerciante, Producto producto, MultipartFile imagen) {
         try {
-            return ResponseEntity.ok(productoService.crear(idComerciante, producto));
+            return ResponseEntity.ok(productoService.crear(idComerciante, producto, imagen));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

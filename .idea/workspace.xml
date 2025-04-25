@@ -5,80 +5,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebfd9596-f3bc-4a13-905c-323ebd333ba9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/CarritoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.template" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Comerciante.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Comerciante.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Orden.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Orden.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Producto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Telefono.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Telefono.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/UsuarioDireccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/UsuarioDireccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/CarritoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/CarritoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenProductoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ProductoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/TelefonoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/TelefonoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/UsuarioDireccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/UsuarioDireccionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/EcoSurpriseApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/EcoSurpriseApplication.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoEntrega.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoEntrega.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoOrden.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoOrden.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoPago.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoPago.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/MetodoPago.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/MetodoPago.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/Rol.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/Rol.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/TipoDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/TipoDireccion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Comerciante.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Comerciante.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Consumidor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Consumidor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Direccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Direccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Entrega.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Entrega.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/EntregaDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/EntregaDireccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Fecha.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Fecha.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Orden.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Orden.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/OrdenProducto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/OrdenProducto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Pago.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Pago.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Producto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Producto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Puntuacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Puntuacion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Repartidor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Repartidor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Reporte.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Reporte.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Sede.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Sede.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Telefono.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Telefono.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Usuario.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/UsuarioDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/UsuarioDireccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IComerciante.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IComerciante.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IConsumidor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IConsumidor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IDireccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IEntrega.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IEntrega.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IEntregaDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IEntregaDireccion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IFecha.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IFecha.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IOrden.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IOrden.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IOrdenProducto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IOrdenProducto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IPago.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IPago.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IProducto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IProducto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IPuntuacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IPuntuacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IRepartidor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IRepartidor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IReporte.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IReporte.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/ISede.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/ISede.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/ITelefono.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/ITelefono.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuarioDireccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuarioDireccion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ComercianteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ComercianteService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ConsumidorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ConsumidorService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/DireccionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/DireccionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/EntregaDireccionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/EntregaDireccionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/EntregaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/EntregaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/FechaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/FechaService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenProductoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenProductoService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/PagoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/PagoService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ProductoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ProductoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/PuntuacionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/PuntuacionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/RepartidorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/RepartidorService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ReporteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ReporteService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/SedeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/SedeService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/TelefonoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/TelefonoService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/UsuarioDireccionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/UsuarioDireccionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/itm/ecosurprise/EcoSurpriseApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/itm/ecosurprise/EcoSurpriseApplicationTests.class" afterDir="false" />
     </list>
     <list id="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" name="Changes by User" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/TelefonoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/TelefonoService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,23 +64,22 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java">
+    <file path="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java">
       <ranges>
-        <range start1="21" end1="21" start2="21" end2="23" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
-        <range start1="75" end1="76" start2="77" end2="82" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="79" end1="80" start2="85" end2="92" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="83" end1="86" start2="95" end2="103" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="87" end1="87" start2="104" end2="120" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java">
-      <ranges>
-        <range start1="14" end1="14" start2="14" end2="17" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
-        <range start1="77" end1="78" start2="80" end2="85" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="85" end1="86" start2="92" end2="97" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="89" end1="90" start2="100" end2="103" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="96" end1="97" start2="109" end2="114" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
-        <range start1="98" end1="98" start2="115" end2="139" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
+        <range start1="3" end1="3" start2="3" end2="4" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
+        <range start1="4" end1="10" start2="5" end2="7" changelist="ebfd9596-f3bc-4a13-905c-323ebd333ba9" />
+        <range start1="15" end1="15" start2="12" end2="13" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="16" end1="16" start2="14" end2="18" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="23" end1="23" start2="25" end2="35" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="24" end1="27" start2="36" end2="40" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="31" end1="32" start2="44" end2="45" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="36" end1="37" start2="49" end2="50" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="51" end1="52" start2="64" end2="65" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="56" end1="57" start2="69" end2="70" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="62" end1="63" start2="75" end2="76" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="67" end1="68" start2="80" end2="81" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="72" end1="73" start2="85" end2="86" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
+        <range start1="77" end1="78" start2="90" end2="91" changelist="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" />
       </ranges>
     </file>
   </component>
@@ -123,10 +90,13 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2vvTSKYEgcEbTd2nnAvmW4R7sCC" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -140,14 +110,28 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.EcoSurpriseApplication.executor": "Run",
-    "git-widget-placeholder": "isa",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/User/Documents/ITM/ECOSURPRISE/Back-eco/src/main/resources/static/productos",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Documents\ITM\ECOSURPRISE\Back-eco\src\main\resources\static\productos" />
+      <recent name="C:\Users\User\Documents\ITM\ECOSURPRISE\Back-eco\src\main\resources\static\comerciantes" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Documents\ITM\ECOSURPRISE\Back-eco\src\main\resources\static\comerciantes" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="EcoSurpriseApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
@@ -174,6 +158,9 @@
       <option name="presentableId" value="Default" />
       <updated>1745024548101</updated>
       <workItem from="1745024552410" duration="7957000" />
+      <workItem from="1745524296142" duration="4883000" />
+      <workItem from="1745552267101" duration="346000" />
+      <workItem from="1745595034263" duration="12581000" />
     </task>
     <servers />
   </component>

@@ -27,7 +27,7 @@ public class UsuarioDireccion {
     @JoinColumn(name = "idUsuario")
     @JsonIgnoreProperties(value = {
 		"correo", "contrasena", "telefono", "rol", "nit", "rut",
-    "productos", "sedes", "direcciones", "puntos", "ordenes"
+    "productos", "sedes", "direcciones", "puntos", "ordenes", "imagen", "tipo"
 	  })
     private Usuario usuario;
 

@@ -3,6 +3,8 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Telefono;
@@ -27,15 +29,19 @@ public class TelefonoService {
                 .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idTelefono));
     }
 
-    public Telefono crear(int idUsuario, Telefono telefono) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("usuario no encontrado con ID: " + idUsuario));
-        if (usuario.getTelefono() != null) {
-            throw new RuntimeException("El "+usuario.getRol()+" ya tiene un telefono asignado.");
-            
+    public ResponseEntity<?> crear(int idUsuario, Telefono telefono) {
+
+        try {
+            Usuario usuario = usuarioRepository.findById(idUsuario)
+                    .orElseThrow(() -> new RuntimeException("error al obtener usuario"));
+            if (usuario.getTelefono() != null) {
+                throw new RuntimeException("El " + usuario.getRol() + " ya tiene un telefono asignado.");
+            }
+            telefono.setUsuario(usuario);
+            return ResponseEntity.ok(telefonoRepository.save(telefono));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        telefono.setUsuario(usuario);
-        return telefonoRepository.save(telefono);
     }
 
     public Telefono actualizar(Telefono telefono) {
@@ -47,12 +53,14 @@ public class TelefonoService {
         return "Telefono eliminado con éxito";
     }
 
-    /* Ejemplo: Uso de dto
-    public Carrito obtenerCarrito(int id) {
-        Telefono telefono = telefonoRepository.findById(id);
-        Carrito carrito = new Carrito();
-        carrito.setNumero(telefono.getNumero());
-        return carrito;
-    }*/
+    /*
+     * Ejemplo: Uso de dto
+     * public Carrito obtenerCarrito(int id) {
+     * Telefono telefono = telefonoRepository.findById(id);
+     * Carrito carrito = new Carrito();
+     * carrito.setNumero(telefono.getNumero());
+     * return carrito;
+     * }
+     */
 
 }
