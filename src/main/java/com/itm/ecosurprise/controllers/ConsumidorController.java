@@ -81,6 +81,11 @@ public class ConsumidorController {
     public ResponseEntity<?> verCarrito(@PathVariable int idConsumidor) {
         return carritoService.obtenerProductos(idConsumidor);
     }
+    
+    @GetMapping("/{idConsumidor}/carrito/{productoId}/eliminar")
+    public ResponseEntity<?> eliminarProductoCarrito(@PathVariable int idConsumidor, @PathVariable int productoId) {
+        return carritoService.eliminarProducto(idConsumidor, productoId);
+    }
 
     @GetMapping("/{idConsumidor}/carrito/limpiar")
     public ResponseEntity<?> limpiarCarrito(@PathVariable int idConsumidor) {

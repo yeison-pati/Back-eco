@@ -66,6 +66,22 @@ public class CarritoService {
                 }
         }
 
+        public ResponseEntity<?> eliminarProducto(int idConsumidor, int idProducto) {
+                try {
+                        consumidorRepository.findById(idConsumidor)
+                                        .orElseThrow(() -> new RuntimeException(
+                                                        "Consumidor no encontrado con ID: " + idConsumidor));
+                        CarritoDTO carrito = obtenerCarrito(idConsumidor);
+                        ProductoDTO productoAEliminar = carrito.getProductos().stream()
+                                        .filter(producto -> producto.getId() == idProducto).findFirst()
+                                        .orElseThrow(() -> new RuntimeException("Producto no encontrado en el carrito"));
+                        carrito.getProductos().remove(productoAEliminar);
+                        return ResponseEntity.ok(carrito);
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+                }
+        }
+
         public ResponseEntity<?> limpiarCarrito(int idConsumidor) {
                 try {
                         consumidorRepository.findById(idConsumidor)
