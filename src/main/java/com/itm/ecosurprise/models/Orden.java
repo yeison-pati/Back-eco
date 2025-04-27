@@ -40,7 +40,7 @@ public class Orden {
 	  })
     private List<OrdenProducto> productos;
 
-    private String estadoOrden;
+    private String estadoOrden = "pendiente";
 
     @OneToOne(mappedBy = "orden", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {

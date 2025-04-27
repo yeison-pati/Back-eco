@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.itm.ecosurprise.classes.EstadoOrdenFactory;
 import com.itm.ecosurprise.dtos.CarritoDTO;
 import com.itm.ecosurprise.enums.EstadoOrden;
 import com.itm.ecosurprise.models.Consumidor;
@@ -49,7 +50,27 @@ public class OrdenService {
     }
 
     public ResponseEntity<?> crear(int idConsumidor, Orden orden) {
+
+            
         try {
+            // obtener carrito del usuario
+        CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
+        if (carrito.getProductos().isEmpty()) {
+            throw new RuntimeException("El carrito está vacío. No se pueden agregar productos a la orden.");
+        }
+        carrito.getProductos().stream()
+                                  .forEach(productoDTO -> {
+                                    Producto producto = productoRepository.findById(productoDTO.getId())
+                                            .orElseThrow(() -> new RuntimeException(
+                                                    "Producto no encontrado con ID"));
+                                    producto.setStock(producto.getStock() - productoDTO.getCantidad());
+                                    if(producto.getStock() < 0) {
+                                        throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
+                                    }
+                                });
+
+
+
             Consumidor consumidor = consumidorRepository.findById(idConsumidor)
                     .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor));
             orden.setConsumidor(consumidor);
@@ -62,8 +83,9 @@ public class OrdenService {
             orden.setMontoTotal(monto);
 
             // asignar un estado inicial
-            orden.setEstadoOrden((EstadoOrden.pendiente).toString());
+            orden.setEstadoOrden(EstadoOrden.pendiente.name());
 
+            EstadoOrdenFactory.getEstado(orden);
             /*
              * asignar la direccion trayendo de la bd la direccion segun el id
              * en la peticion (orden que recibi como parametro con una direccion)
@@ -90,12 +112,6 @@ public class OrdenService {
 
             ordenExistente = ordenRepository.save(ordenExistente);
 
-            // obtener carrito del usuario
-            CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
-            if (carrito.getProductos().isEmpty()) {
-                throw new RuntimeException("El carrito está vacío. No se pueden agregar productos a la orden.");
-            }
-
             // traer productos de la bd, segun el id en el carrito y asignar en la orden de
             // la bd
             List<OrdenProducto> productos = (carrito.getProductos().stream()
@@ -103,6 +119,11 @@ public class OrdenService {
                         Producto producto = productoRepository.findById(productoDTO.getId())
                                 .orElseThrow(() -> new RuntimeException(
                                         "Producto no encontrado con ID: " + productoDTO.getId()));
+                        producto.setStock(producto.getStock() - productoDTO.getCantidad());
+                        if(producto.getStock() < 0) {
+                            throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
+                            
+                        }
                         OrdenProducto ordenProducto = new OrdenProducto();
                         ordenProducto.setOrden(obtenerXID(orden.getIdOrden()));
                         ordenProducto.setProducto(producto);

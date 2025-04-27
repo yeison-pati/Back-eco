@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itm.ecosurprise.dtos.ProductoDTO;
 import com.itm.ecosurprise.models.Consumidor;
 import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Orden;
@@ -72,8 +73,8 @@ public class ConsumidorController {
 
     //agregar al carrito
     @PostMapping("/{idConsumidor}/productos/{idProducto}/agregar")
-    public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor,@PathVariable int idProducto) {
-        return carritoService.agregarProducto(idConsumidor, idProducto);
+    public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor,@PathVariable int idProducto, @RequestBody ProductoDTO productoCantidad) {
+        return carritoService.agregarProducto(idConsumidor, idProducto, productoCantidad);
     }
 
     @GetMapping("/{idConsumidor}/carrito")
