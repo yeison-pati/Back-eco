@@ -31,10 +31,10 @@ public class CarritoService {
                 return carritos.computeIfAbsent(idConsumidor, id -> new CarritoDTO());
         }
 
-        public ResponseEntity<?> agregarProducto(int idConsumidor, int idProducto, ProductoDTO productoCantidad){
+        public ResponseEntity<?> agregarProducto(int idConsumidor, int idProducto, int productoCantidad){
                 try {
                         
-                        if (productoCantidad.getCantidad() <= 0 || productoCantidad.getCantidad() != NumberUtils.parseNumber(String.valueOf(productoCantidad.getCantidad()), Integer.class)) {
+                        if (productoCantidad <= 0 || productoCantidad != NumberUtils.parseNumber(String.valueOf(productoCantidad), Integer.class)) {
                                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cantidad no válida");
                         }
                         consumidorRepository.findById(idConsumidor)
@@ -49,7 +49,7 @@ public class CarritoService {
                                 
                                 carrito.getProductos().stream()
                                                 .filter(producto -> producto.getId() == productoExistente.getIdProducto())
-                                                .forEach(producto -> producto.setCantidad(producto.getCantidad() + productoCantidad.getCantidad()));
+                                                .forEach(producto -> producto.setCantidad(producto.getCantidad() + productoCantidad));
                                 return ResponseEntity.ok("Cantidad actualizado en el carrito con éxito");
                                 
                         }
@@ -58,7 +58,7 @@ public class CarritoService {
                         productoDTO.setId(productoExistente.getIdProducto());
                         productoDTO.setNombre(productoExistente.getNombre());
                         productoDTO.setPrecio(productoExistente.getPrecio());
-                        productoDTO.setCantidad(productoCantidad.getCantidad());
+                        productoDTO.setCantidad(productoCantidad);
                         carrito.getProductos().add(productoDTO);
                         return ResponseEntity.ok("Producto agregado al carrito con éxito");
                 } catch (Exception e) {
@@ -76,11 +76,33 @@ public class CarritoService {
                                         .filter(producto -> producto.getId() == idProducto).findFirst()
                                         .orElseThrow(() -> new RuntimeException("Producto no encontrado en el carrito"));
                         carrito.getProductos().remove(productoAEliminar);
+                        carrito.setTotal(calcularTotal(idConsumidor));
                         return ResponseEntity.ok(carrito);
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
                 }
         }
+
+        public ResponseEntity<?> cambiarCantidadProducto(int idConsumidor, int idProducto, int cantidad) {
+                try {
+                        if (cantidad <= 0 || cantidad != NumberUtils.parseNumber(String.valueOf(cantidad), Integer.class)) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cantidad no válida");
+                        }
+                        consumidorRepository.findById(idConsumidor)
+                                        .orElseThrow(() -> new RuntimeException(
+                                                        "Consumidor no encontrado con ID: " + idConsumidor));
+                        CarritoDTO carrito = obtenerCarrito(idConsumidor);
+                        ProductoDTO productoAActualizar = carrito.getProductos().stream()
+                                        .filter(producto -> producto.getId() == idProducto).findFirst()
+                                        .orElseThrow(() -> new RuntimeException("Producto no encontrado en el carrito"));
+                        productoAActualizar.setCantidad(cantidad);
+                        carrito.setTotal(calcularTotal(idConsumidor));
+                        return ResponseEntity.ok(carrito);
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+                }
+        }
+
 
         public ResponseEntity<?> limpiarCarrito(int idConsumidor) {
                 try {

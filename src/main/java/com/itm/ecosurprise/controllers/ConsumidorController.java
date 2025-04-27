@@ -74,7 +74,7 @@ public class ConsumidorController {
     //agregar al carrito
     @PostMapping("/{idConsumidor}/productos/{idProducto}/agregar")
     public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor,@PathVariable int idProducto, @RequestBody ProductoDTO productoCantidad) {
-        return carritoService.agregarProducto(idConsumidor, idProducto, productoCantidad);
+        return carritoService.agregarProducto(idConsumidor, idProducto, productoCantidad.getCantidad());
     }
 
     @GetMapping("/{idConsumidor}/carrito")
@@ -85,6 +85,11 @@ public class ConsumidorController {
     @GetMapping("/{idConsumidor}/carrito/{productoId}/eliminar")
     public ResponseEntity<?> eliminarProductoCarrito(@PathVariable int idConsumidor, @PathVariable int productoId) {
         return carritoService.eliminarProducto(idConsumidor, productoId);
+    }
+
+    @GetMapping("/{idConsumidor}/carrito/{idProducto}/cambiarCantidad")
+    public ResponseEntity<?> cambiarCatidadProducto(@PathVariable int idConsumidor,@PathVariable int idProducto, @RequestBody ProductoDTO productoCantidad) {
+        return carritoService.cambiarCantidadProducto(idConsumidor, idProducto, productoCantidad.getCantidad());
     }
 
     @GetMapping("/{idConsumidor}/carrito/limpiar")
