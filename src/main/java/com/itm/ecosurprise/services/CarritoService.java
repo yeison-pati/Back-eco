@@ -56,6 +56,7 @@ public class CarritoService {
 
                         ProductoDTO productoDTO = new ProductoDTO();
                         productoDTO.setId(productoExistente.getIdProducto());
+                        productoDTO.setImagen(productoExistente.getImagen());
                         productoDTO.setNombre(productoExistente.getNombre());
                         productoDTO.setPrecio(productoExistente.getPrecio());
                         productoDTO.setCantidad(productoCantidad);

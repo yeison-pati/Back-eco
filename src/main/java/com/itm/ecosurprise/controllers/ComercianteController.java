@@ -12,6 +12,7 @@ import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
+import com.itm.ecosurprise.services.OrdenService;
 
 @RestController
 @RequestMapping("/api/comerciantes")
@@ -19,6 +20,8 @@ public class ComercianteController {
 
     @Autowired
     private ComercianteService comercianteService;
+    @Autowired
+    private OrdenService ordenService;
 
     @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> crearComerciante(@RequestPart("comerciante") Comerciante comerciante,
@@ -67,4 +70,16 @@ public class ComercianteController {
     public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante,@PathVariable int idProducto) {
         return comercianteService.obtenerProducto(idComerciante, idProducto);
     }
+
+    @GetMapping("/{idComerciante}/ordenes/todos")
+    public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
+        return ordenService.obtenerTodos(idComerciante);
+    }
+
+    @GetMapping("/{idComerciante}/ordenes/{idOrden}")
+    public ResponseEntity<?> obtenerOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
+
+        return ordenService.obtenerOrden(idComerciante, idOrden);
+    }
+
 }

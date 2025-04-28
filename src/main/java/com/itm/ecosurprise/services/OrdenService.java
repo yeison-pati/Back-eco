@@ -18,6 +18,7 @@ import com.itm.ecosurprise.models.OrdenProducto;
 import com.itm.ecosurprise.models.Pago;
 import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.models.UsuarioDireccion;
+import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.IConsumidor;
 import com.itm.ecosurprise.repositories.IOrden;
 import com.itm.ecosurprise.repositories.IProducto;
@@ -30,6 +31,8 @@ public class OrdenService {
     @Autowired
     private IConsumidor consumidorRepository;
     @Autowired
+    private IComerciante comercianteRepository;
+    @Autowired
     private FechaService fechaService;
     @Autowired
     private CarritoService carritoService;
@@ -40,13 +43,32 @@ public class OrdenService {
     @Autowired
     private OrdenProductoService ordenProductoService;
 
-    public List<Orden> obtenerTodos() {
-        return ordenRepository.findAll();
+
+    public ResponseEntity<?> obtenerOrden(int idComerciante, int idOrden) {
+        try {
+            if(ordenRepository.existsById(idComerciante)==false) {
+                throw new RuntimeException("Comerciante no encontrado");
+            }
+            return ResponseEntity.ok(obtenerXID(idOrden));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerTodos(int idComerciante) {
+
+        try {
+            comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+            return ResponseEntity.ok(ordenRepository.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } 
     }
 
     public Orden obtenerXID(int idOrden) {
-        return ordenRepository.findById(idOrden)
-                .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
+            return ordenRepository.findById(idOrden)
+                    .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
     }
 
     public ResponseEntity<?> crear(int idConsumidor, Orden orden) {
