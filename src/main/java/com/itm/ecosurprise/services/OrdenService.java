@@ -43,10 +43,15 @@ public class OrdenService {
     @Autowired
     private OrdenProductoService ordenProductoService;
 
-
+    /**
+     * Obtiene una orden específica dada la ID del comerciante y la ID de la orden.
+     * @param idComerciante ID del comerciante asociado.
+     * @param idOrden ID de la orden a obtener.
+     * @return ResponseEntity con la orden solicitada o un mensaje de error.
+     */
     public ResponseEntity<?> obtenerOrden(int idComerciante, int idOrden) {
         try {
-            if(ordenRepository.existsById(idComerciante)==false) {
+            if (!ordenRepository.existsById(idComerciante)) {
                 throw new RuntimeException("Comerciante no encontrado");
             }
             return ResponseEntity.ok(obtenerXID(idOrden));
@@ -55,63 +60,74 @@ public class OrdenService {
         }
     }
 
+    /**
+     * Obtiene todas las órdenes asociadas a un comerciante específico.
+     * @param idComerciante ID del comerciante.
+     * @return ResponseEntity con la lista de órdenes o un mensaje de error.
+     */
     public ResponseEntity<?> obtenerTodos(int idComerciante) {
-
         try {
             comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             return ResponseEntity.ok(ordenRepository.findAll());
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e.getMessage());
-        } 
-    }
-
-    public Orden obtenerXID(int idOrden) {
-            return ordenRepository.findById(idOrden)
-                    .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
-    }
-
-    public ResponseEntity<?> crear(int idConsumidor, Orden orden) {
-
-            
-        try {
-            // obtener carrito del usuario
-        CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
-        if (carrito.getProductos().isEmpty()) {
-            throw new RuntimeException("El carrito está vacío. No se pueden agregar productos a la orden.");
         }
-        carrito.getProductos().stream()
-                                  .forEach(productoDTO -> {
-                                    Producto producto = productoRepository.findById(productoDTO.getId())
-                                            .orElseThrow(() -> new RuntimeException(
-                                                    "Producto no encontrado con ID"));
-                                    producto.setStock(producto.getStock() - productoDTO.getCantidad());
-                                    if(producto.getStock() < 0) {
-                                        throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
-                                    }
-                                });
+    }
 
+    /**
+     * Obtiene una orden específica mediante su ID.
+     * @param idOrden ID de la orden.
+     * @return La orden encontrada.
+     */
+    public Orden obtenerXID(int idOrden) {
+        return ordenRepository.findById(idOrden)
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
+    }
 
+    /**
+     * Crea una nueva orden, valida el carrito de compras del consumidor, asigna fecha, 
+     * calcula el total, asigna estado de la orden, y guarda la orden junto con los productos.
+     * @param idConsumidor ID del consumidor que realiza la orden.
+     * @param orden Objeto de la orden que contiene los detalles de la compra.
+     * @return ResponseEntity con la orden creada o un mensaje de error.
+     */
+    public ResponseEntity<?> crear(int idConsumidor, Orden orden) {
+        try {
+            // Obtener carrito del consumidor
+            CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
+            if (carrito.getProductos().isEmpty()) {
+                throw new RuntimeException("El carrito está vacío. No se pueden agregar productos a la orden.");
+            }
 
+            // Validar stock de los productos
+            carrito.getProductos().forEach(productoDTO -> {
+                Producto producto = productoRepository.findById(productoDTO.getId())
+                        .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID"));
+                producto.setStock(producto.getStock() - productoDTO.getCantidad());
+                if (producto.getStock() < 0) {
+                    throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
+                }
+            });
+
+            // Obtener el consumidor
             Consumidor consumidor = consumidorRepository.findById(idConsumidor)
                     .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor));
             orden.setConsumidor(consumidor);
 
-            // crear y asignar fecha (del body)
+            // Crear y asignar fecha de la orden
             Fecha fecha = fechaService.crear(orden.getFechaOrden());
             orden.setFechaOrden(fecha);
-            // sumar valor de los productos
+
+            // Calcular monto total
             int monto = carritoService.calcularTotal(idConsumidor);
             orden.setMontoTotal(monto);
 
-            // asignar un estado inicial
+            // Asignar estado inicial a la orden
             orden.setEstadoOrden(EstadoOrden.pendiente.name());
-
             EstadoOrdenFactory.getEstado(orden);
-            /*
-             * asignar la direccion trayendo de la bd la direccion segun el id
-             * en la peticion (orden que recibi como parametro con una direccion)
-             */
+
+            // Asignar dirección de entrega
             Direccion direccion = consumidor.getDirecciones().stream()
                     .map(UsuarioDireccion::getDireccion)
                     .filter(d -> d.getIdDireccion() == orden.getDireccionEntrega().getIdDireccion())
@@ -120,38 +136,35 @@ public class OrdenService {
                             "Dirección no encontrada con ID: " + orden.getDireccionEntrega().getIdDireccion()));
             orden.setDireccionEntrega(direccion);
 
+            // Guardar la orden y crear el pago
             Orden ordenExistente = obtenerXID(ordenRepository.save(orden).getIdOrden());
-
-            // crear y asignar pago
             Pago nuevoPago = new Pago();
             nuevoPago.setMetodoPago(orden.getPago().getMetodoPago());
             nuevoPago.setEstadoPago(orden.getPago().getEstadoPago());
             nuevoPago.setFechaPago(fecha);
             nuevoPago.setMontoPagado(monto);
             nuevoPago.setOrden(ordenExistente);
-
             ordenExistente.setPago(pagoService.crear(nuevoPago));
 
+            // Guardar la orden con el pago asignado
             ordenExistente = ordenRepository.save(ordenExistente);
 
-            // traer productos de la bd, segun el id en el carrito y asignar en la orden de
-            // la bd
-            List<OrdenProducto> productos = (carrito.getProductos().stream()
+            // Asociar los productos con la orden
+            List<OrdenProducto> productos = carrito.getProductos().stream()
                     .map(productoDTO -> {
                         Producto producto = productoRepository.findById(productoDTO.getId())
                                 .orElseThrow(() -> new RuntimeException(
                                         "Producto no encontrado con ID: " + productoDTO.getId()));
                         producto.setStock(producto.getStock() - productoDTO.getCantidad());
-                        if(producto.getStock() < 0) {
+                        if (producto.getStock() < 0) {
                             throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
-                            
                         }
                         OrdenProducto ordenProducto = new OrdenProducto();
                         ordenProducto.setOrden(obtenerXID(orden.getIdOrden()));
                         ordenProducto.setProducto(producto);
                         return ordenProductoService.crear(ordenProducto);
                     })
-                    .toList());
+                    .toList();
             ordenExistente.setProductos(productos);
 
             return ResponseEntity.ok(ordenRepository.save(ordenExistente));
@@ -160,13 +173,34 @@ public class OrdenService {
         }
     }
 
+    /**
+     * Actualiza una orden existente en la base de datos.
+     * @param idOrden La orden con los datos actualizados.
+     * @return La orden actualizada.
+     */
     public Orden actualizar(Orden idOrden) {
         return ordenRepository.save(idOrden);
     }
 
+    /**
+     * Elimina una orden existente en la base de datos.
+     * @param idOrden ID de la orden a eliminar.
+     * @return Mensaje de éxito indicando que la orden fue eliminada.
+     */
     public String eliminarOrden(int idOrden) {
         ordenRepository.deleteById(idOrden);
         return "Orden eliminada con exito";
     }
 
+    public ResponseEntity<?> cambiarEstado(int idOrden, int valor){
+        try {
+            Orden orden = ordenRepository.findById(idOrden)
+                            .orElseThrow(() -> new RuntimeException("Error al cargar la orden" ));
+
+            EstadoOrdenFactory estadoOrden = new EstadoOrdenFactory();
+            return ResponseEntity.ok(ordenRepository.save(orden));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }

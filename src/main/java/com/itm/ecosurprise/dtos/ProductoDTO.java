@@ -2,6 +2,10 @@ package com.itm.ecosurprise.dtos;
 
 import lombok.Data;
 
+/**
+ * @Data crea automaticamente getters y setters
+ * entidad para traer datos selectos de los productos
+ */
 @Data
 public class ProductoDTO {
     private int id;

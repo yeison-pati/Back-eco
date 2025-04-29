@@ -33,6 +33,13 @@ public class ProductoService {
     @Autowired
     private HttpServletRequest request;
 
+    /**
+     * Obtiene todos los productos disponibles para un consumidor específico.
+     *
+     * @param idConsumidor El ID del consumidor.
+     * @return ResponseEntity con la lista de productos si se encuentra el consumidor, 
+     *         o un mensaje de error si no se encuentra.
+     */
     public ResponseEntity<?> obtenerTodos(int idConsumidor) {
         try {
             consumidorRepository.findById(idConsumidor)
@@ -43,11 +50,18 @@ public class ProductoService {
         }
     }
 
+    /**
+     * Obtiene un producto específico para un consumidor basado en el ID de la orden.
+     *
+     * @param idConsumidor El ID del consumidor.
+     * @param idProducto   El ID del producto a buscar.
+     * @return ResponseEntity con el producto si se encuentra, 
+     *         o un mensaje de error si no se encuentra.
+     */
     public ResponseEntity<?> obtenerXID(int idConsumidor, int idProducto) {
-
         try {
             consumidorRepository.findById(idConsumidor)
-                    .orElseThrow(() -> new RuntimeException("consumidor no encontrado"));
+                    .orElseThrow(() -> new RuntimeException("Consumidor no encontrado"));
             return ResponseEntity.ok(productoRepository.findById(idProducto)
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado, intente de nuevo")));
         } catch (Exception e) {
@@ -55,9 +69,18 @@ public class ProductoService {
         }
     }
 
+    /**
+     * Crea un nuevo producto y guarda la imagen asociada en el servidor.
+     *
+     * @param idComerciante El ID del comerciante que está creando el producto.
+     * @param producto      El objeto Producto a crear.
+     * @param imagen        El archivo de imagen del producto.
+     * @return El producto creado con la URL de la imagen asociada.
+     * @throws IOException Si ocurre un error al guardar la imagen en el servidor.
+     */
     public Producto crear(int idComerciante, Producto producto, MultipartFile imagen) throws IOException {
         Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado, intente de nuevo"));
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
 
         if (imagen != null && !imagen.isEmpty()) {
             // Generar nombre único para la imagen
@@ -86,22 +109,31 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
+    /**
+     * Actualiza la información de un producto existente.
+     *
+     * @param producto El producto con la nueva información.
+     * @return El producto actualizado.
+     */
     public Producto actualizar(Producto producto) {
-
         Producto productoExistente = productoRepository.findById(producto.getIdProducto())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado, intente de nuevo"));
         productoExistente.setNombre(producto.getNombre());
         productoExistente.setDescripcion(producto.getDescripcion());
         productoExistente.setPrecio(producto.getPrecio());
         Comerciante comerciante = comercianteRepository.findById(producto.getComerciante().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException(
-                        "Comerciante no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
         productoExistente.setComerciante(comerciante);
         productoExistente.setPuntuaciones(producto.getPuntuaciones());
         return productoRepository.save(producto);
-
     }
 
+    /**
+     * Elimina un producto dado su ID.
+     *
+     * @param id El ID del producto a eliminar.
+     * @return Un mensaje indicando que el producto fue eliminado con éxito.
+     */
     public String eliminar(int id) {
         productoRepository.deleteById(id);
         return "Producto eliminado con éxito";

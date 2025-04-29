@@ -14,6 +14,12 @@ import jakarta.persistence.Table;
 
 /*
  * @EqualsAndHashCode(callSuper = true) permite usar el constructor de la clase padre
+ * @Data crea automaticamente getters y setters
+ * @Entity indica que es una entidad de JPA
+ * @Table indica el nombre de la tabla en la base de datos
+ * @JsonIgnoreProperties se usa para evitar la recursividad infinita al obtener jsons
+ * @CascadeType.ALL indica que se aplicaran todas las operaciones de persistencia a los objetos relacionados
+ * @OneToMany indica que hay una relacion de uno a muchos entre las entidades
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

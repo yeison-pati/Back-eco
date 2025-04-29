@@ -7,17 +7,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /*
- * @Data genera metodos y contructores
- * @Entity indica que es una entidad de la base de datos
+ * @EqualsAndHashCode(callSuper = true) permite usar el constructor de la clase padre
+ * @Data crea automaticamente getters y setters
+ * @Entity indica que es una entidad de JPA
  * @Table indica el nombre de la tabla en la base de datos
- * @Column indica el nombre de la columna en la base de datos y si es nullable o unique
- * nullable indica la posibilidad de que el campo sea nulo
- * unique indica que el campo es unico
- * cascade = CascadeType.ALL: Indica que todas las operaciones 
- * (persist, merge, remove, etc.) realizadas en Usuario se propagarán 
- * automáticamente a las entidades relacionadas.
- * orphanRemoval = true: Si una entidad relacionada se elimina de la colección en comerciante,
- *      también se eliminará de la base de datos.
+ * @JsonIgnoreProperties se usa para evitar la recursividad infinita al obtener jsons
+ * @CascadeType.ALL indica que se aplicaran todas las operaciones de persistencia a los objetos relacionados
+ * @OneToMany indica que hay una relacion de uno a muchos entre las entidades
+ * @JsonIgnore se usa para evitar traer esos datos en el objeto json
+ * @OneToOne indica que hay una relacion de uno a uno entre las entidades
  */
 @Data
 @Entity

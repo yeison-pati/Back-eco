@@ -4,6 +4,11 @@ import com.itm.ecosurprise.enums.EstadoOrden;
 import com.itm.ecosurprise.interfaces.EstadoOrdenState;
 import com.itm.ecosurprise.models.Orden;
 
+
+/**
+ * clase que se encarga de obtener el estado de la orden y devolver la clase correspondiente
+ * para que se pueda realizar la acción correspondiente según el estado de la orden.
+ */
 public class EstadoOrdenFactory {
 
     public static EstadoOrdenState getEstado(Orden orden) {

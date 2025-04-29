@@ -23,6 +23,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Servicio para gestionar las operaciones relacionadas con los comerciantes,
+ * incluyendo creación, actualización, eliminación y consulta de comerciantes,
+ * productos, teléfonos, sedes y direcciones.
+ */
 @Service
 public class ComercianteService {
 
@@ -41,40 +46,42 @@ public class ComercianteService {
     @Autowired
     private HttpServletRequest request;
 
+    /**
+     * Crea un nuevo comerciante junto con su imagen asociada.
+     *
+     * @param comerciante El comerciante a registrar.
+     * @param imagen La imagen asociada al comerciante.
+     * @return ResponseEntity con el comerciante creado o un mensaje de error.
+     */
     public ResponseEntity<?> crear(Comerciante comerciante, MultipartFile imagen) {
         try {
-
             if (imagen != null && !imagen.isEmpty()) {
-                // Generar nombre único para la imagen
                 String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
-
-                // Ruta local donde se guardará
                 String carpeta = "src/main/resources/static/comerciantes/";
                 File directorio = new File(carpeta);
                 if (!directorio.exists()) directorio.mkdirs();
-
-                // Guardar archivo en disco
                 Path ruta = Paths.get(carpeta + nombreArchivo);
                 Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
 
-                // Construir URL pública de acceso
                 String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
                 String urlImagen = urlBase + "/comerciantes/" + nombreArchivo;
 
-                // Guardar solo la ruta o URL
                 comerciante.setImagen(urlImagen);
             } else {
                 throw new RuntimeException("Imagen vacía");
             }
-
             Comerciante nuevoComerciante = comercianteRepository.save(comerciante);
             return ResponseEntity.ok(nuevoComerciante);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    /**
+     * Obtiene la lista de todos los comerciantes registrados.
+     *
+     * @return ResponseEntity con la lista de comerciantes o mensaje de error.
+     */
     public ResponseEntity<?> obtenerTodos() {
         try {
             return ResponseEntity.ok(comercianteRepository.findAll());
@@ -83,6 +90,12 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Obtiene un comerciante por su ID.
+     *
+     * @param id ID del comerciante a buscar.
+     * @return ResponseEntity con el comerciante encontrado o mensaje de error.
+     */
     public ResponseEntity<?> obtenerXID(int id) {
         try {
             return ResponseEntity.ok(comercianteRepository.findById(id)
@@ -92,6 +105,12 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Elimina un comerciante por su ID.
+     *
+     * @param id ID del comerciante a eliminar.
+     * @return ResponseEntity confirmando la eliminación o mensaje de error.
+     */
     public ResponseEntity<?> eliminar(int id) {
         try {
             comercianteRepository.deleteById(id);
@@ -101,6 +120,13 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Actualiza la información de un comerciante existente.
+     *
+     * @param id ID del comerciante a actualizar.
+     * @param comerciante Datos actualizados del comerciante.
+     * @return ResponseEntity con el comerciante actualizado o mensaje de error.
+     */
     public ResponseEntity<?> actualizar(int id, Comerciante comerciante) {
         try {
             Comerciante comercianteExistente = comercianteRepository.findById(id)
@@ -112,6 +138,14 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Crea un producto asociado a un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @param producto Producto a registrar.
+     * @param imagen Imagen del producto.
+     * @return ResponseEntity con el producto creado o mensaje de error.
+     */
     public ResponseEntity<?> crearProducto(int idComerciante, Producto producto, MultipartFile imagen) {
         try {
             return ResponseEntity.ok(productoService.crear(idComerciante, producto, imagen));
@@ -120,6 +154,13 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Crea un teléfono asociado a un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @param telefono Teléfono a registrar.
+     * @return ResponseEntity con el teléfono creado o mensaje de error.
+     */
     public ResponseEntity<?> crearTelefono(int idComerciante, Telefono telefono) {
         try {
             return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
@@ -128,6 +169,13 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Crea una sede asociada a un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @param sede Sede a registrar.
+     * @return ResponseEntity con la sede creada o mensaje de error.
+     */
     public ResponseEntity<?> crearSede(int idComerciante, Sede sede) {
         try {
             return ResponseEntity.ok(sedeService.crear(idComerciante, sede));
@@ -136,8 +184,15 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Crea una dirección asociada a una sede de un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @param idSede ID de la sede.
+     * @param direccion Dirección a registrar.
+     * @return ResponseEntity con la sede actualizada o mensaje de error.
+     */
     public ResponseEntity<?> crearDireccion(int idComerciante, int idSede, Direccion direccion) {
-
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
@@ -150,9 +205,14 @@ public class ComercianteService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-
     }
 
+    /**
+     * Obtiene todos los productos asociados a un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @return ResponseEntity con la lista de productos o mensaje de error.
+     */
     public ResponseEntity<?> obtenerProductos(int idComerciante) {
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
@@ -164,6 +224,13 @@ public class ComercianteService {
         }
     }
 
+    /**
+     * Obtiene un producto específico asociado a un comerciante.
+     *
+     * @param idComerciante ID del comerciante.
+     * @param idProducto ID del producto.
+     * @return ResponseEntity con el producto encontrado o mensaje de error.
+     */
     public ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto) {
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
@@ -171,7 +238,7 @@ public class ComercianteService {
             Producto producto = comerciante.getProductos().stream()
                     .filter(p -> p.getIdProducto() == idProducto)
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("error al cargar el producto"));
+                    .orElseThrow(() -> new RuntimeException("Error al cargar el producto"));
             return ResponseEntity.ok(producto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

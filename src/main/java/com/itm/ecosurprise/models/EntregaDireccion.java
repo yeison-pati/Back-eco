@@ -3,6 +3,11 @@ package com.itm.ecosurprise.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/*
+ * @Data crea automaticamente getters y setters
+ * @Entity indica que es una entidad de JPA
+ * @Table indica el nombre de la tabla en la base de datos
+ */
 @Entity
 @Table(name = "entregaDireccion")
 @Data

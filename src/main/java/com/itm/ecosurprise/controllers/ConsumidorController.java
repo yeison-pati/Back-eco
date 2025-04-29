@@ -18,9 +18,24 @@ import com.itm.ecosurprise.services.ProductoService;
 import com.itm.ecosurprise.services.TelefonoService;
 import com.itm.ecosurprise.services.UsuarioDireccionService;
 
+
+/*
+ * @RestController indica que esta clase es un controlador REST que maneja solicitudes HTTP.
+ * @RequestMapping("/api/comerciantes") define la ruta base para todas las solicitudes de este controlador.
+ * @PathVariable se usa para extraer valores de la URL.
+ * @RequestBody se usa para extraer el cuerpo de la solicitud HTTP.
+ * @RequestParam se usa para extraer parámetros de la solicitud HTTP.
+ * @RequestPart se usa para extraer partes de una solicitud multipart/form-data.
+ * mediatype.MULTIPART_FORM_DATA_VALUE indica que el controlador acepta solicitudes con datos de formulario multipart.
+ */
 @RestController
 @RequestMapping("/api/consumidores")
 public class ConsumidorController {
+
+    /*
+     * @Autowired inyecta las dependencias de los servicios ComercianteService y OrdenService.
+     * Esto permite utilizar los métodos de estos servicios en el controlador.
+     */
 
     @Autowired
     private ConsumidorService consumidorService;

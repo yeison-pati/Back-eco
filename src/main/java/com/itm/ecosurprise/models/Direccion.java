@@ -3,12 +3,11 @@ package com.itm.ecosurprise.models;
 import jakarta.persistence.*;
 import lombok.Data;
 /*
- * @Data genera metodos y contructores
- * @Entity indica que es una entidad de la base de datos
+ * @EqualsAndHashCode(callSuper = true) permite usar el constructor de la clase padre
+ * @Data crea automaticamente getters y setters
+ * @Entity indica que es una entidad de JPA
  * @Table indica el nombre de la tabla en la base de datos
- * @Column indica el nombre de la columna en la base de datos y si es nullable o unique
- * nullable indica la posibilidad de que el campo sea nulo
- * 
+ * @Column indica el nombre de la columna en la base de datos 
  */
 @Data
 @Entity

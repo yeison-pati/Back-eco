@@ -7,6 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+
+/*
+ * @Data crea automaticamente getters y setters
+ * @Entity indica que es una entidad de JPA
+ * @Table indica el nombre de la tabla en la base de datos
+ */
+
 @Data
 @Entity
 @Table(name = "fecha")
