@@ -13,6 +13,10 @@ import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
 import com.itm.ecosurprise.services.OrdenService;
+import com.itm.ecosurprise.services.PreparacionOrdenes;
+import com.itm.ecosurprise.services.ProductoService;
+import com.itm.ecosurprise.services.SedeService;
+import com.itm.ecosurprise.services.TelefonoService;
 
 
 /*
@@ -33,10 +37,19 @@ public class ComercianteController {
      * Esto permite utilizar los métodos de estos servicios en el controlador.
      */
     @Autowired
+    private PreparacionOrdenes preparacionOrdenes;
+    @Autowired
     private ComercianteService comercianteService;
     @Autowired
     private OrdenService ordenService;
+    @Autowired
+    private TelefonoService telefonoService;
+    @Autowired
+    private SedeService sedeService;
+    @Autowired
+    private ProductoService productoService;
 
+    
     @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> crearComerciante(@RequestPart("comerciante") Comerciante comerciante,
                                               @RequestParam("imagen") MultipartFile imagen)
@@ -46,12 +59,12 @@ public class ComercianteController {
 
     @PostMapping("/{idComerciante}/crearTelefono")
     public ResponseEntity<?> crearTelefono(@PathVariable int idComerciante, @RequestBody Telefono telefono) {
-        return comercianteService.crearTelefono(idComerciante, telefono);
+        return telefonoService.crear(idComerciante, telefono);
     }
 
     @PostMapping("/{idComerciante}/crearSede")
     public ResponseEntity<?> crearSede(@PathVariable int idComerciante, @RequestBody Sede sede) {
-        return comercianteService.crearSede(idComerciante, sede);
+        return sedeService.crear(idComerciante, sede);
     }
 
     @PostMapping("/{idComerciante}/sede/{idSede}/crearDireccion")
@@ -59,10 +72,15 @@ public class ComercianteController {
         return comercianteService.crearDireccion(idComerciante, idSede, direccion);
     }
 
+
+
+
+
+
     @PostMapping(value = "/{idComerciante}/crearProducto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestPart("producto") Producto producto,
      @RequestParam("imagen") MultipartFile imagen) {
-        return comercianteService.crearProducto(idComerciante, producto, imagen);
+        return productoService.crear(idComerciante, producto, imagen);
     }
 
     @GetMapping("/todos")
@@ -87,13 +105,33 @@ public class ComercianteController {
 
     @GetMapping("/{idComerciante}/ordenes/todos")
     public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
-        return ordenService.obtenerTodos(idComerciante);
+        return ordenService.obtenerOrdenesConsumidor(idComerciante);
     }
 
     @GetMapping("/{idComerciante}/ordenes/{idOrden}")
     public ResponseEntity<?> obtenerOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
 
-        return ordenService.obtenerOrden(idComerciante, idOrden);
+        return ordenService.obtenerOrdeneConsumidor(idComerciante, idOrden);
     }
 
+    @PostMapping("/{idComerciante}/ordenes/{idOrden}/confirmar")
+    public ResponseEntity<?> confirmarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
+        return preparacionOrdenes.agregarOrden(idComerciante, idOrden);
+    }
+
+    @PostMapping("/{idComerciante}/ordenes/{idOrden}/cancelar")
+    public ResponseEntity<?> cancelarOrden(@PathVariable int idOrden){
+        return ordenService.cancelar(idOrden);
+    }
+
+    @PostMapping("/{idComerciante}/ordenes/preparacion")
+    public ResponseEntity<?> orenesPreparacion(@PathVariable int idComerciante){
+        return preparacionOrdenes.obtenerOrdenes(idComerciante);
+    }
+    
+    //obtener orden de la lista de ordenes en prep
+    @PostMapping("/{idComerciante}/ordenes/preparacion/{idOrden}")
+    public ResponseEntity<?> ordenPreparacion(@PathVariable int idComerciante, @PathVariable int idOrden){
+        return null;
+    }
 }

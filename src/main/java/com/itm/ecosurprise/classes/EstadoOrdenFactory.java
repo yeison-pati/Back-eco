@@ -11,7 +11,9 @@ import com.itm.ecosurprise.models.Orden;
  */
 public class EstadoOrdenFactory {
 
+    //cancelada
     public static EstadoOrdenState getEstado(Orden orden) {
+        //pendiente
         switch (EstadoOrden.valueOf(orden.getEstadoOrden())) {
             case pendiente:
                 return new EstadoPendiente();
@@ -26,4 +28,6 @@ public class EstadoOrdenFactory {
         }
     }
 }
+
+
 

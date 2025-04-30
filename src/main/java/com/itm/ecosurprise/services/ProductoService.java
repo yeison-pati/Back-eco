@@ -37,7 +37,8 @@ public class ProductoService {
      * Obtiene todos los productos disponibles para un consumidor específico.
      *
      * @param idConsumidor El ID del consumidor.
-     * @return ResponseEntity con la lista de productos si se encuentra el consumidor, 
+     * @return ResponseEntity con la lista de productos si se encuentra el
+     *         consumidor,
      *         o un mensaje de error si no se encuentra.
      */
     public ResponseEntity<?> obtenerTodos(int idConsumidor) {
@@ -51,11 +52,12 @@ public class ProductoService {
     }
 
     /**
-     * Obtiene un producto específico para un consumidor basado en el ID de la orden.
+     * Obtiene un producto específico para un consumidor basado en el ID de la
+     * orden.
      *
      * @param idConsumidor El ID del consumidor.
      * @param idProducto   El ID del producto a buscar.
-     * @return ResponseEntity con el producto si se encuentra, 
+     * @return ResponseEntity con el producto si se encuentra,
      *         o un mensaje de error si no se encuentra.
      */
     public ResponseEntity<?> obtenerXID(int idConsumidor, int idProducto) {
@@ -78,35 +80,44 @@ public class ProductoService {
      * @return El producto creado con la URL de la imagen asociada.
      * @throws IOException Si ocurre un error al guardar la imagen en el servidor.
      */
-    public Producto crear(int idComerciante, Producto producto, MultipartFile imagen) throws IOException {
-        Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+    public ResponseEntity<?> crear(int idComerciante, Producto producto, MultipartFile imagen) {
 
-        if (imagen != null && !imagen.isEmpty()) {
-            // Generar nombre único para la imagen
-            String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
+        try {
 
-            // Ruta local donde se guardará
-            String carpeta = "src/main/resources/static/productos/";
-            File directorio = new File(carpeta);
-            if (!directorio.exists()) directorio.mkdirs();
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
 
-            // Guardar archivo en disco
-            Path ruta = Paths.get(carpeta + nombreArchivo);
-            Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+            if (imagen != null && !imagen.isEmpty()) {
+                // Generar nombre único para la imagen
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
 
-            // Construir URL pública de acceso
-            String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-            String urlImagen = urlBase + "/productos/" + nombreArchivo;
+                // Ruta local donde se guardará
+                String carpeta = "src/main/resources/static/productos/";
+                File directorio = new File(carpeta);
+                if (!directorio.exists())
+                    directorio.mkdirs();
 
-            // Guardar solo la ruta o URL
-            producto.setImagen(urlImagen);
-        } else {
-            throw new RuntimeException("Imagen vacía");
+                // Guardar archivo en disco
+                Path ruta = Paths.get(carpeta + nombreArchivo);
+                Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+
+                // Construir URL pública de acceso
+                // HTTP://localhost:8080
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlImagen = urlBase + "/productos/" + nombreArchivo;
+
+                // Guardar solo la ruta o URL
+                producto.setImagen(urlImagen);
+            } else {
+                throw new RuntimeException("Imagen vacía");
+            }
+
+            producto.setComerciante(comerciante);
+
+            return ResponseEntity.ok(productoRepository.save(producto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-
-        producto.setComerciante(comerciante);
-        return productoRepository.save(producto);
     }
 
     /**

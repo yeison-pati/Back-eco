@@ -42,6 +42,13 @@ public class TelefonoService {
     }
 
     /**
+     * {head,
+     * body,
+     * others
+     * }
+     */
+
+    /**
      * Crea un nuevo teléfono y lo asocia a un usuario.
      *
      * @param idUsuario El ID del usuario al que se asignará el teléfono.

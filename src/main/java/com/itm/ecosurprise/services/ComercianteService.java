@@ -11,7 +11,6 @@ import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.models.Sede;
-import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.ISede;
 
@@ -34,13 +33,7 @@ public class ComercianteService {
     @Autowired
     private IComerciante comercianteRepository;
     @Autowired
-    private ProductoService productoService;
-    @Autowired
-    private TelefonoService telefonoService;
-    @Autowired
     private DireccionService direccionService;
-    @Autowired
-    private SedeService sedeService;
     @Autowired
     private ISede sedeRepository;
     @Autowired
@@ -133,52 +126,6 @@ public class ComercianteService {
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             comercianteExistente.setNombre(comerciante.getNombre());
             return ResponseEntity.ok(comercianteRepository.save(comercianteExistente));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    /**
-     * Crea un producto asociado a un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param producto Producto a registrar.
-     * @param imagen Imagen del producto.
-     * @return ResponseEntity con el producto creado o mensaje de error.
-     */
-    public ResponseEntity<?> crearProducto(int idComerciante, Producto producto, MultipartFile imagen) {
-        try {
-            return ResponseEntity.ok(productoService.crear(idComerciante, producto, imagen));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    /**
-     * Crea un teléfono asociado a un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param telefono Teléfono a registrar.
-     * @return ResponseEntity con el teléfono creado o mensaje de error.
-     */
-    public ResponseEntity<?> crearTelefono(int idComerciante, Telefono telefono) {
-        try {
-            return ResponseEntity.ok(telefonoService.crear(idComerciante, telefono));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    /**
-     * Crea una sede asociada a un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param sede Sede a registrar.
-     * @return ResponseEntity con la sede creada o mensaje de error.
-     */
-    public ResponseEntity<?> crearSede(int idComerciante, Sede sede) {
-        try {
-            return ResponseEntity.ok(sedeService.crear(idComerciante, sede));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

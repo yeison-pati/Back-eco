@@ -3,6 +3,8 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Comerciante;
@@ -45,15 +47,20 @@ public class SedeService {
      * Crea una nueva sede y la asocia a un comerciante.
      *
      * @param idComerciante El ID del comerciante al que se asignará la sede.
-     * @param sede El objeto `Sede` a crear.
+     * @param sede          El objeto `Sede` a crear.
      * @return El objeto `Sede` creado y guardado en la base de datos.
      * @throws RuntimeException Si no se encuentra el comerciante con el ID dado.
      */
-    public Sede crear(int idComerciante, Sede sede) {
-        Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
-        sede.setComerciante(comerciante);
-        return sedeRepository.save(sede);
+    public ResponseEntity<?> crear(int idComerciante, Sede sede) {
+        try {
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+            sede.setComerciante(comerciante);
+            return ResponseEntity.ok(sedeRepository.save(sede));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
     /**
@@ -66,7 +73,7 @@ public class SedeService {
     public Sede actualizar(Sede sede) {
         Sede sedeExistente = sedeRepository.findById(sede.getIdSede())
                 .orElseThrow(() -> new RuntimeException("Sede no encontrada con ID: " + sede.getIdSede()));
-        
+
         // Si la dirección de la sede ha cambiado, se actualiza.
         if (sede.getDireccion() != null) {
             direccionService.eliminar(sedeExistente.getDireccion().getIdDireccion());

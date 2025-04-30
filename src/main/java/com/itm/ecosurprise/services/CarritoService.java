@@ -21,16 +21,8 @@ import java.util.*;
  */
 @Service
 public class CarritoService {
-
-    /** 
-     * Repositorio para acceder a las operaciones de productos.
-     */
     @Autowired
     private IProducto productoRepository;
-
-    /**
-     * Repositorio para acceder a las operaciones de consumidores.
-     */
     @Autowired
     private IConsumidor consumidorRepository;
 
