@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /*
@@ -29,6 +30,7 @@ public class Pago {
     @JsonIgnoreProperties(value = {
 		"direccionEntrega", "productos", "estadoOrden", "pago"
 	  })
+    @EqualsAndHashCode.Exclude
     private Orden orden;
 
     @OneToOne

@@ -105,13 +105,13 @@ public class ComercianteController {
 
     @GetMapping("/{idComerciante}/ordenes/todos")
     public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
-        return ordenService.obtenerOrdenesConsumidor(idComerciante);
+        return ordenService.obtenerOrdenesComerciante(idComerciante);
     }
 
     @GetMapping("/{idComerciante}/ordenes/{idOrden}")
     public ResponseEntity<?> obtenerOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
 
-        return ordenService.obtenerOrdeneConsumidor(idComerciante, idOrden);
+        return ordenService.obtenerOrdenComerciante(idComerciante, idOrden);
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/confirmar")
@@ -120,18 +120,18 @@ public class ComercianteController {
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/cancelar")
-    public ResponseEntity<?> cancelarOrden(@PathVariable int idOrden){
-        return ordenService.cancelar(idOrden);
+    public ResponseEntity<?> cancelarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
+        return ordenService.cancelar(idComerciante, idOrden);
     }
 
-    @PostMapping("/{idComerciante}/ordenes/preparacion")
+    @GetMapping("/{idComerciante}/ordenes/preparacion")
     public ResponseEntity<?> orenesPreparacion(@PathVariable int idComerciante){
         return preparacionOrdenes.obtenerOrdenes(idComerciante);
     }
     
     //obtener orden de la lista de ordenes en prep
-    @PostMapping("/{idComerciante}/ordenes/preparacion/{idOrden}")
+    @GetMapping("/{idComerciante}/ordenes/preparacion/{idOrden}")
     public ResponseEntity<?> ordenPreparacion(@PathVariable int idComerciante, @PathVariable int idOrden){
-        return null;
+        return preparacionOrdenes.obtenerOrden(idComerciante, idOrden);
     }
 }

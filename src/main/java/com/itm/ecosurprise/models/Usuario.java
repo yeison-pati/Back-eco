@@ -2,6 +2,7 @@ package com.itm.ecosurprise.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*
  * @Inheritance indica que es una clase padre y se usara herencia
@@ -29,6 +30,7 @@ import lombok.Data;
     private String contrasena;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+   @EqualsAndHashCode.Exclude
     private Telefono telefono;
 
     private  String rol;

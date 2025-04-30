@@ -51,12 +51,25 @@ public class PreparacionOrdenes {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    
 
     public ResponseEntity<?> obtenerOrdenes(int idComerciante) {
         try {
             OrdenesPrepDTO ordenes = obtenerOrdenesPrep(idComerciante);
             return ResponseEntity.ok(ordenes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerOrden(int idComerciante, int idOrden) {
+        try {
+            OrdenesPrepDTO ordenes = obtenerOrdenesPrep(idComerciante);
+            Orden orden = ordenes.getOrdenes().stream()
+                    .filter(o -> o.getIdOrden() == idOrden)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Orden no encontrada o no pertenece al comerciante"));
+
+            return ResponseEntity.ok(orden);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

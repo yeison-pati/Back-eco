@@ -1,8 +1,10 @@
 package com.itm.ecosurprise.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -169,10 +171,6 @@ public class OrdenService {
                                 .orElseThrow(() -> new RuntimeException(
                                         "Producto no encontrado con ID: " + productoDTO.getId()));
                         producto.setStock(producto.getStock() - productoDTO.getCantidad());
-                        if (producto.getStock() < 0) {
-                            throw new RuntimeException(
-                                    "No hay suficiente stock para el producto: " + producto.getNombre());
-                        }
                         OrdenProducto ordenProducto = new OrdenProducto();
                         ordenProducto.setOrden(obtenerXID(orden.getIdOrden()));
                         ordenProducto.setProducto(producto);
@@ -215,25 +213,18 @@ public class OrdenService {
 
         EstadoOrdenState estadoActual = EstadoOrdenFactory.getEstado(orden);
         estadoActual.confirmar(orden); // Delegar la lógica de confirmación al estado actual
+
         return ordenRepository.save(orden); // Guardar el cambio de estado
     }
 
-    public ResponseEntity<?> cancelar(int idOrden) {
+    public ResponseEntity<?> cancelar(int idComerciante, int idOrden) {
         try {
-            Orden orden = ordenRepository.findById(idOrden)
+            Orden ordenExistente = ordenRepository.findById(idOrden)
                     .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
 
-            EstadoOrdenState estadoActual = EstadoOrdenFactory.getEstado(orden);
-            estadoActual.cancelar(orden); // Delegar la lógica de confirmación al estado actual
-            ordenRepository.save(orden); // Guardar el cambio de estado
-            return ResponseEntity.ok("Orden cancelada exitosamente.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> obtenerOrdenesConsumidor(int idComerciante) {
-        try {
+            EstadoOrdenState estadoActual = EstadoOrdenFactory.getEstado(ordenExistente);
+            estadoActual.cancelar(ordenExistente); // Delegar la lógica de confirmación al estado actual
+            ordenRepository.save(ordenExistente); // Guardar el cambio de estado
             comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
 
@@ -242,39 +233,69 @@ public class OrdenService {
             List<Orden> ordenesDelComerciante = ordenesProducto.stream()
                     .filter(op -> op.getProducto().getComerciante().getIdUsuario() == idComerciante)
                     .map(OrdenProducto::getOrden)
-                    .distinct() // Evita órdenes duplicadas
-                    .collect(Collectors.toList());
-
-        return ResponseEntity.ok(ordenesDelComerciante);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> obtenerOrdeneConsumidor(int idComerciante, int idOrden) {
-        try {
-            comercianteRepository.findById(idComerciante)
-                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
-    
-            List<OrdenProducto> ordenesProducto = ordenProductoRepository.findAll();
-    
-            // Filtrar las órdenes del comerciante
-            List<Orden> ordenesDelComerciante = ordenesProducto.stream()
-                    .filter(op -> op.getProducto().getComerciante().getIdUsuario() == idComerciante)
-                    .map(OrdenProducto::getOrden)
+                    .filter(orden -> orden != null && !"cancelada".equalsIgnoreCase(orden.getEstadoOrden()))
                     .distinct()
                     .collect(Collectors.toList());
-    
-            // Buscar una orden específica por ID
-            Orden orden = ordenesDelComerciante.stream()
-                    .filter(o -> o.getIdOrden() == idOrden)
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Orden no encontrada o no pertenece al comerciante"));
-    
+
+            return ResponseEntity.ok(ordenesDelComerciante);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerOrdenesComerciante(int idComerciante) {
+        try {
+            comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+
+            List<OrdenProducto> ordenesProducto = ordenProductoRepository.findAll();
+
+            // Agrupar productos por orden, pero solo si pertenecen al comerciante
+            Map<Orden, List<OrdenProducto>> ordenesAgrupadas = ordenesProducto.stream()
+                    .filter(op -> op.getProducto().getComerciante().getIdUsuario() == idComerciante)
+                    .filter(op -> op.getOrden() != null
+                            && !"cancelada".equalsIgnoreCase(op.getOrden().getEstadoOrden()))
+                    .collect(Collectors.groupingBy(OrdenProducto::getOrden));
+
+            // Asignar solo los productos del comerciante a cada orden
+            List<Orden> ordenesFiltradas = new ArrayList<>();
+            for (Map.Entry<Orden, List<OrdenProducto>> entry : ordenesAgrupadas.entrySet()) {
+                Orden orden = entry.getKey();
+                orden.setProductos(entry.getValue()); // Asegúrate de tener setOrdenProductos()
+                ordenesFiltradas.add(orden);
+            }
+
+            return ResponseEntity.ok(ordenesFiltradas);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> obtenerOrdenComerciante(int idComerciante, int idOrden) {
+        try {
+            comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+
+            List<OrdenProducto> ordenesProducto = ordenProductoRepository.findAll();
+
+            // Filtrar productos que correspondan al comerciante y a la orden específica
+            List<OrdenProducto> productosFiltrados = ordenesProducto.stream()
+                    .filter(op -> op.getProducto().getComerciante().getIdUsuario() == idComerciante)
+                    .filter(op -> op.getOrden() != null && op.getOrden().getIdOrden() == idOrden)
+                    .filter(op -> !"cancelada".equalsIgnoreCase(op.getOrden().getEstadoOrden()))
+                    .collect(Collectors.toList());
+
+            if (productosFiltrados.isEmpty()) {
+                throw new RuntimeException("Orden no encontrada o no tiene productos del comerciante");
+            }
+
+            Orden orden = productosFiltrados.get(0).getOrden(); // Es la misma orden en todos los productos
+            orden.setProductos(productosFiltrados); // Asigna solo los productos del comerciante
+
             return ResponseEntity.ok(orden);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    
+
 }

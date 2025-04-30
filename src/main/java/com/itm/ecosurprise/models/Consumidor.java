@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,9 +34,13 @@ public class Consumidor extends Usuario {
     private int puntos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value ={
+        "idUsuarioDireccion","usuario"
+    })
     private List<UsuarioDireccion> direcciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "consumidor", cascade = CascadeType.ALL)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private List<Orden> ordenes = new ArrayList<>();
 }

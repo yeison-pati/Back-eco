@@ -27,7 +27,7 @@ public class OrdenProducto {
     @ManyToOne
     @JoinColumn(name = "idOrden")
     @JsonIgnoreProperties(value = {
-		"fechaOrden", "direccionEntrega", "productos", "estadoOrden", "pago"
+		"fechaOrden", "direccionEntrega", "productos", "estadoOrden", "pago", "consumidor"
     })
     private Orden orden;
 
