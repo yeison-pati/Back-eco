@@ -1,6 +1,7 @@
 package com.itm.ecosurprise.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.classes.EstadoOrdenFactory;
 import com.itm.ecosurprise.dtos.CarritoDTO;
+import com.itm.ecosurprise.dtos.ProductoDTO;
 import com.itm.ecosurprise.enums.EstadoOrden;
 import com.itm.ecosurprise.interfaces.EstadoOrdenState;
 import com.itm.ecosurprise.models.Consumidor;
@@ -113,18 +115,21 @@ public class OrdenService {
             // Obtener carrito del consumidor
             CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
             if (carrito.getProductos().isEmpty()) {
-                throw new RuntimeException("El carrito está vacío. No se pueden agregar productos a la orden.");
+                return ResponseEntity.badRequest()
+                        .body("El carrito está vacío. No se pueden agregar productos a la orden.");
             }
 
             // Validar stock de los productos
-            carrito.getProductos().forEach(productoDTO -> {
+            for (ProductoDTO productoDTO : carrito.getProductos()) {
                 Producto producto = productoRepository.findById(productoDTO.getId())
-                        .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID"));
-                producto.setStock(producto.getStock() - productoDTO.getCantidad());
-                if (producto.getStock() < 0) {
-                    throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
+                        .orElseThrow(
+                                () -> new RuntimeException("Producto no encontrado con ID: " + productoDTO.getId()));
+
+                if (producto.getStock() < productoDTO.getCantidad()) {
+                    return ResponseEntity.badRequest()
+                            .body("No hay suficiente stock para el producto: " + producto.getNombre());
                 }
-            });
+            }
 
             // Obtener el consumidor
             Consumidor consumidor = consumidorRepository.findById(idConsumidor)
@@ -152,7 +157,9 @@ public class OrdenService {
             orden.setDireccionEntrega(direccion);
 
             // Guardar la orden y crear el pago
-            Orden ordenExistente = obtenerXID(ordenRepository.save(orden).getIdOrden());
+            Orden ordenExistente = ordenRepository.save(orden);
+            ordenExistente = obtenerXID(ordenExistente.getIdOrden());
+
             Pago nuevoPago = new Pago();
             nuevoPago.setMetodoPago(orden.getPago().getMetodoPago());
             nuevoPago.setEstadoPago(orden.getPago().getEstadoPago());
@@ -164,24 +171,39 @@ public class OrdenService {
             // Guardar la orden con el pago asignado
             ordenExistente = ordenRepository.save(ordenExistente);
 
-            // Asociar los productos con la orden
-            List<OrdenProducto> productos = carrito.getProductos().stream()
-                    .map(productoDTO -> {
-                        Producto producto = productoRepository.findById(productoDTO.getId())
-                                .orElseThrow(() -> new RuntimeException(
-                                        "Producto no encontrado con ID: " + productoDTO.getId()));
-                        producto.setStock(producto.getStock() - productoDTO.getCantidad());
-                        OrdenProducto ordenProducto = new OrdenProducto();
-                        ordenProducto.setOrden(obtenerXID(orden.getIdOrden()));
-                        ordenProducto.setProducto(producto);
-                        return ordenProductoService.crear(ordenProducto);
-                    })
-                    .toList();
+            // Asociar los productos con la orden y actualizar stock
+            List<OrdenProducto> productos = new ArrayList<>();
+            for (ProductoDTO productoDTO : carrito.getProductos()) {
+                Producto producto = productoRepository.findById(productoDTO.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "Producto no encontrado con ID: " + productoDTO.getId()));
+
+                // Actualizar stock
+                producto.setStock(producto.getStock() - productoDTO.getCantidad());
+                productoRepository.save(producto);
+
+                // Crear asociación orden-producto
+                OrdenProducto ordenProducto = new OrdenProducto();
+                ordenProducto.setOrden(ordenExistente);
+                ordenProducto.setProducto(producto);
+                productos.add(ordenProductoService.crear(ordenProducto));
+            }
             ordenExistente.setProductos(productos);
+
+            // Vaciar carrito después de procesar la orden
+            carritoService.limpiarCarrito(idConsumidor);
 
             return ResponseEntity.ok(ordenRepository.save(ordenExistente));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            // Loguear el error para diagnóstico
+            e.printStackTrace();
+
+            // Devolver respuesta de error con mensaje específico
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            error.put("causa", e.getCause() != null ? e.getCause().getMessage() : "Desconocida");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 
