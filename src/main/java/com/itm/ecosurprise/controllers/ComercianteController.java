@@ -7,17 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.models.Comerciante;
-import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Producto;
-import com.itm.ecosurprise.models.Sede;
-import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
 import com.itm.ecosurprise.services.OrdenService;
 import com.itm.ecosurprise.services.PreparacionOrdenes;
 import com.itm.ecosurprise.services.ProductoService;
-import com.itm.ecosurprise.services.SedeService;
-import com.itm.ecosurprise.services.TelefonoService;
-
 
 /*
  * @RestController indica que esta clase es un controlador REST que maneja solicitudes HTTP.
@@ -33,7 +27,8 @@ import com.itm.ecosurprise.services.TelefonoService;
 public class ComercianteController {
 
     /*
-     * @Autowired inyecta las dependencias de los servicios ComercianteService y OrdenService.
+     * @Autowired inyecta las dependencias de los servicios ComercianteService y
+     * OrdenService.
      * Esto permite utilizar los métodos de estos servicios en el controlador.
      */
     @Autowired
@@ -43,44 +38,20 @@ public class ComercianteController {
     @Autowired
     private OrdenService ordenService;
     @Autowired
-    private TelefonoService telefonoService;
-    @Autowired
-    private SedeService sedeService;
-    @Autowired
     private ProductoService productoService;
 
-    
     @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearComerciante(@RequestPart("comerciante") Comerciante comerciante,
-                                              @RequestParam("imagen") MultipartFile imagen)
-    {
-        return comercianteService.crear(comerciante, imagen);
+    public ResponseEntity<?> crearComerciante(@RequestPart("usuario") Comerciante comerciante,
+     @RequestPart("imagen") MultipartFile imagen, @RequestPart("rut") MultipartFile rut, @RequestPart("cc") MultipartFile cc) {
+        return comercianteService.crear(comerciante, imagen, rut, cc);
     }
-
-    @PostMapping("/{idComerciante}/crearTelefono")
-    public ResponseEntity<?> crearTelefono(@PathVariable int idComerciante, @RequestBody Telefono telefono) {
-        return telefonoService.crear(idComerciante, telefono);
-    }
-
-    @PostMapping("/{idComerciante}/crearSede")
-    public ResponseEntity<?> crearSede(@PathVariable int idComerciante, @RequestBody Sede sede) {
-        return sedeService.crear(idComerciante, sede);
-    }
-
-    @PostMapping("/{idComerciante}/sede/{idSede}/crearDireccion")
-    public ResponseEntity<?> crearDireccion(@PathVariable int idComerciante, @PathVariable int idSede, @RequestBody Direccion direccion) {
-        return comercianteService.crearDireccion(idComerciante, idSede, direccion);
-    }
-
-
-
-
-
 
     @PostMapping(value = "/{idComerciante}/crearProducto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestPart("producto") Producto producto,
-     @RequestParam("imagen") MultipartFile imagen) {
-        return productoService.crear(idComerciante, producto, imagen);
+    public ResponseEntity<?> crearProducto(
+            @PathVariable int idComerciante,
+            @RequestPart("producto") Producto producto,
+            @RequestParam("imagen") MultipartFile imagen) {
+            return productoService.crear(idComerciante, producto, imagen);
     }
 
     @GetMapping("/todos")
@@ -99,7 +70,7 @@ public class ComercianteController {
     }
 
     @GetMapping("/{idComerciante}/productos/{idProducto}")
-    public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante,@PathVariable int idProducto) {
+    public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante, @PathVariable int idProducto) {
         return comercianteService.obtenerProducto(idComerciante, idProducto);
     }
 
@@ -115,23 +86,23 @@ public class ComercianteController {
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/confirmar")
-    public ResponseEntity<?> confirmarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
+    public ResponseEntity<?> confirmarOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
         return preparacionOrdenes.agregarOrden(idComerciante, idOrden);
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/cancelar")
-    public ResponseEntity<?> cancelarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
+    public ResponseEntity<?> cancelarOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
         return ordenService.cancelar(idComerciante, idOrden);
     }
 
     @GetMapping("/{idComerciante}/ordenes/preparacion")
-    public ResponseEntity<?> orenesPreparacion(@PathVariable int idComerciante){
+    public ResponseEntity<?> orenesPreparacion(@PathVariable int idComerciante) {
         return preparacionOrdenes.obtenerOrdenes(idComerciante);
     }
-    
-    //obtener orden de la lista de ordenes en prep
+
+    // obtener orden de la lista de ordenes en prep
     @GetMapping("/{idComerciante}/ordenes/preparacion/{idOrden}")
-    public ResponseEntity<?> ordenPreparacion(@PathVariable int idComerciante, @PathVariable int idOrden){
+    public ResponseEntity<?> ordenPreparacion(@PathVariable int idComerciante, @PathVariable int idOrden) {
         return preparacionOrdenes.obtenerOrden(idComerciante, idOrden);
     }
 }

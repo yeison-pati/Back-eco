@@ -32,7 +32,7 @@ public class Orden {
     @ManyToOne
     @JoinColumn(name = "idUsuario")
     @JsonIgnoreProperties(value = {
-		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos"
 	  })
     private Consumidor consumidor;
 

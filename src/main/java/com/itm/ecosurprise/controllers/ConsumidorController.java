@@ -8,15 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.dtos.ProductoDTO;
 import com.itm.ecosurprise.models.Consumidor;
-import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Orden;
-import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.CarritoService;
 import com.itm.ecosurprise.services.ConsumidorService;
 import com.itm.ecosurprise.services.OrdenService;
 import com.itm.ecosurprise.services.ProductoService;
-import com.itm.ecosurprise.services.TelefonoService;
-import com.itm.ecosurprise.services.UsuarioDireccionService;
 
 
 /*
@@ -32,17 +28,8 @@ import com.itm.ecosurprise.services.UsuarioDireccionService;
 @RequestMapping("/api/consumidores")
 public class ConsumidorController {
 
-    /*
-     * @Autowired inyecta las dependencias de los servicios ComercianteService y OrdenService.
-     * Esto permite utilizar los métodos de estos servicios en el controlador.
-     */
-
     @Autowired
     private ConsumidorService consumidorService;
-    @Autowired
-    private TelefonoService telefonoService;
-    @Autowired
-    private UsuarioDireccionService usuarioDireccionService;
     @Autowired
     private ProductoService productoService;
     @Autowired
@@ -52,18 +39,9 @@ public class ConsumidorController {
 
 
     @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearComerciante(@RequestPart("consumidor") Consumidor consumidor, @RequestParam("imagen") MultipartFile imagen) {
+    public ResponseEntity<?> crearComerciante(@RequestPart("usuario") Consumidor consumidor, @RequestPart("imagen") MultipartFile imagen) {
+        System.out.println(imagen);
         return consumidorService.crear(consumidor, imagen);
-    }
-
-    @PostMapping("/{idConsumidor}/crearTelefono")
-    public ResponseEntity<?> crearTelefono(@PathVariable int idConsumidor, @RequestBody Telefono telefono) {
-        return telefonoService.crear(idConsumidor, telefono);
-    }
-
-    @PostMapping("/{idConsumidor}/crearDireccion")
-    public ResponseEntity<?> crearDireccion(@PathVariable int idConsumidor, @RequestBody Direccion direccion) {
-        return usuarioDireccionService.crear(idConsumidor, direccion);
     }
 
     @GetMapping("/todos")

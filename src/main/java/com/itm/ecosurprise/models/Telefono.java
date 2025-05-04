@@ -27,14 +27,13 @@ import lombok.EqualsAndHashCode;
      @GeneratedValue(strategy = GenerationType.IDENTITY)
      @Column(name = "idTelefono")
      private int idTelefono;
-     private int indicativo;
-     private int numero;
+     private String indicativo;
+     private String numero;
  
      @OneToOne
      @JoinColumn(name = "idUsuario")
      @JsonIgnoreProperties(value = {
-		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos",
-    "sedes", "direcciones", "puntos", "ordenes", "imagen", "tipo"
+		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "direcciones", "puntos", "ordenes", "imagen", "tipo"
 	  })
      @EqualsAndHashCode.Exclude
      private Usuario usuario;

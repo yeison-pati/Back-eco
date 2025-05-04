@@ -27,8 +27,9 @@ import jakarta.persistence.Table;
 @Table(name = "comerciantes")
 public class Comerciante extends Usuario {
 
-	private int nit;
-	private int rut;
+	private String nit;
+	private String rut;
+	private String cc;
 
 	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = {
@@ -36,9 +37,5 @@ public class Comerciante extends Usuario {
 	  })
 	private List<Producto> productos;
 
-	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value = {
-		"comerciante"
-	  })
-	private List<Sede> sedes;
+	private String horario;
 }

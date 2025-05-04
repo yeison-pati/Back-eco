@@ -28,11 +28,11 @@ public class UsuarioDireccion {
     @Column(name = "idUsuarioDireccion")
     private int idUsuarioDireccion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idUsuario")
     @JsonIgnoreProperties(value = {
 		"correo", "contrasena", "telefono", "rol", "nit", "rut",
-    "productos", "sedes", "direcciones", "puntos", "ordenes", "imagen", "tipo"
+    "productos","direcciones", "puntos", "ordenes", "imagen", "tipo"
 	  })
     private Usuario usuario;
 

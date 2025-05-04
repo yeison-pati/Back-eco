@@ -1,7 +1,5 @@
 package com.itm.ecosurprise.models;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -38,14 +36,7 @@ public class Producto {
   @ManyToOne
   @JoinColumn(name = "idUsuario")
   @JsonIgnoreProperties(value = {
-      "correo", "contrasena", "telefono", "rol", "nit", "rut", "productos", "sedes"
+      "correo", "contrasena", "telefono", "rol", "nit", "rut", "productos"
   })
   private Comerciante comerciante;
-
-  @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-  @JsonIgnoreProperties(value = {
-      "usuario", "producto"
-  })
-  private List<Puntuacion> puntuaciones;
-
 }

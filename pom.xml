@@ -70,6 +70,7 @@
 	<build>
 		<plugins>
 			<plugin>
+				<?m2e ignore?>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

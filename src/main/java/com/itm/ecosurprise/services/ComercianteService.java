@@ -10,71 +10,106 @@ import org.springframework.web.multipart.MultipartFile;
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Producto;
-import com.itm.ecosurprise.models.Sede;
+import com.itm.ecosurprise.models.Telefono;
+import com.itm.ecosurprise.models.UsuarioDireccion;
 import com.itm.ecosurprise.repositories.IComerciante;
-import com.itm.ecosurprise.repositories.ISede;
+import com.itm.ecosurprise.repositories.ITelefono;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Servicio para gestionar las operaciones relacionadas con los comerciantes,
- * incluyendo creación, actualización, eliminación y consulta de comerciantes,
- * productos, teléfonos, sedes y direcciones.
- */
 @Service
 public class ComercianteService {
 
     @Autowired
     private IComerciante comercianteRepository;
     @Autowired
-    private DireccionService direccionService;
-    @Autowired
-    private ISede sedeRepository;
-    @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ITelefono telefonoRepository;
+    @Autowired
+    private UsuarioDireccionService usuarioDireccionService;
 
-    /**
-     * Crea un nuevo comerciante junto con su imagen asociada.
-     *
-     * @param comerciante El comerciante a registrar.
-     * @param imagen La imagen asociada al comerciante.
-     * @return ResponseEntity con el comerciante creado o un mensaje de error.
-     */
-    public ResponseEntity<?> crear(Comerciante comerciante, MultipartFile imagen) {
+    public ResponseEntity<?> crear(Comerciante comerciante, MultipartFile imagen, MultipartFile rut, MultipartFile cc) {
         try {
             if (imagen != null && !imagen.isEmpty()) {
                 String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
-                String carpeta = "src/main/resources/static/comerciantes/";
+                String carpeta = "src/main/resources/static/comerciantes/imagenes";
                 File directorio = new File(carpeta);
-                if (!directorio.exists()) directorio.mkdirs();
+                if (!directorio.exists())
+                    directorio.mkdirs();
                 Path ruta = Paths.get(carpeta + nombreArchivo);
                 Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
 
                 String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-                String urlImagen = urlBase + "/comerciantes/" + nombreArchivo;
+                String urlImagen = urlBase + "/comerciantes/imagenes" + nombreArchivo;
 
                 comerciante.setImagen(urlImagen);
             } else {
                 throw new RuntimeException("Imagen vacía");
             }
-            Comerciante nuevoComerciante = comercianteRepository.save(comerciante);
-            return ResponseEntity.ok(nuevoComerciante);
+
+            if (rut != null && !rut.isEmpty()) {
+                String nombreArchivoRut = UUID.randomUUID().toString() + "_" + rut.getOriginalFilename();
+                String carpetaRut = "src/main/resources/static/comerciantes/documentos/";
+                File directorioRut = new File(carpetaRut);
+                if (!directorioRut.exists())
+                    directorioRut.mkdirs();
+                Path rutaRut = Paths.get(carpetaRut, nombreArchivoRut); 
+                Files.copy(rut.getInputStream(), rutaRut, StandardCopyOption.REPLACE_EXISTING);
+
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlRut = urlBase + "/comerciantes/documentos/" + nombreArchivoRut;
+
+                comerciante.setRut(urlRut);
+            } else {
+                throw new RuntimeException("error al subir el rut");
+            }
+
+            if (cc != null && !cc.isEmpty()) {
+                String nombreArchivoCc = UUID.randomUUID().toString() + "_" + cc.getOriginalFilename();
+                String carpetaCc = "src/main/resources/static/comerciantes/documentos/";
+                File directorioCc = new File(carpetaCc);
+                if (!directorioCc.exists())
+                    directorioCc.mkdirs();
+                Path rutaCc = Paths.get(carpetaCc, nombreArchivoCc); // Usar carpetaCc
+                Files.copy(cc.getInputStream(), rutaCc, StandardCopyOption.REPLACE_EXISTING);
+
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlCc = urlBase + "/comerciantes/documentos/" + nombreArchivoCc;
+
+                comerciante.setCc(urlCc);
+            } else {
+                throw new RuntimeException("error al subir la camara de comercio");
+            }
+
+            Comerciante comercianteExistente = comercianteRepository.save(comerciante);
+
+            // Aquí, crear y asignar el teléfono de forma bidireccional ANTES de guardar
+            Telefono telefono = comerciante.getTelefono();
+            telefono.setUsuario(comercianteExistente); // bidireccional
+            Telefono telefonoGuardado = telefonoRepository.save(telefono); // guardado directo
+            comercianteExistente.setTelefono(telefonoGuardado); // actualizar referencia
+
+            List<UsuarioDireccion> direcciones = new ArrayList<>();
+            comerciante.getDirecciones().forEach(d -> {
+                Direccion dir = new Direccion(); // Asigna valores aquí
+                direcciones.add(usuarioDireccionService.crear(comercianteExistente.getIdUsuario(), dir));
+            });
+            comercianteExistente.setDirecciones(direcciones);
+            System.out.println(comercianteExistente);
+            return ResponseEntity.ok(comercianteExistente);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    /**
-     * Obtiene la lista de todos los comerciantes registrados.
-     *
-     * @return ResponseEntity con la lista de comerciantes o mensaje de error.
-     */
     public ResponseEntity<?> obtenerTodos() {
         try {
             return ResponseEntity.ok(comercianteRepository.findAll());
@@ -83,12 +118,6 @@ public class ComercianteService {
         }
     }
 
-    /**
-     * Obtiene un comerciante por su ID.
-     *
-     * @param id ID del comerciante a buscar.
-     * @return ResponseEntity con el comerciante encontrado o mensaje de error.
-     */
     public ResponseEntity<?> obtenerXID(int id) {
         try {
             return ResponseEntity.ok(comercianteRepository.findById(id)
@@ -98,12 +127,6 @@ public class ComercianteService {
         }
     }
 
-    /**
-     * Elimina un comerciante por su ID.
-     *
-     * @param id ID del comerciante a eliminar.
-     * @return ResponseEntity confirmando la eliminación o mensaje de error.
-     */
     public ResponseEntity<?> eliminar(int id) {
         try {
             comercianteRepository.deleteById(id);
@@ -113,13 +136,6 @@ public class ComercianteService {
         }
     }
 
-    /**
-     * Actualiza la información de un comerciante existente.
-     *
-     * @param id ID del comerciante a actualizar.
-     * @param comerciante Datos actualizados del comerciante.
-     * @return ResponseEntity con el comerciante actualizado o mensaje de error.
-     */
     public ResponseEntity<?> actualizar(int id, Comerciante comerciante) {
         try {
             Comerciante comercianteExistente = comercianteRepository.findById(id)
@@ -131,35 +147,6 @@ public class ComercianteService {
         }
     }
 
-    /**
-     * Crea una dirección asociada a una sede de un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param idSede ID de la sede.
-     * @param direccion Dirección a registrar.
-     * @return ResponseEntity con la sede actualizada o mensaje de error.
-     */
-    public ResponseEntity<?> crearDireccion(int idComerciante, int idSede, Direccion direccion) {
-        try {
-            Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
-            Sede sede = comerciante.getSedes().stream()
-                    .filter(s -> s.getIdSede() == idSede)
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
-            sede.setDireccion(direccionService.crear(direccion));
-            return ResponseEntity.ok(sedeRepository.save(sede));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    /**
-     * Obtiene todos los productos asociados a un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @return ResponseEntity con la lista de productos o mensaje de error.
-     */
     public ResponseEntity<?> obtenerProductos(int idComerciante) {
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
@@ -171,13 +158,6 @@ public class ComercianteService {
         }
     }
 
-    /**
-     * Obtiene un producto específico asociado a un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param idProducto ID del producto.
-     * @return ResponseEntity con el producto encontrado o mensaje de error.
-     */
     public ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto) {
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)

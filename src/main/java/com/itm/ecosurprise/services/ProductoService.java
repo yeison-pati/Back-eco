@@ -135,7 +135,6 @@ public class ProductoService {
         Comerciante comerciante = comercianteRepository.findById(producto.getComerciante().getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
         productoExistente.setComerciante(comerciante);
-        productoExistente.setPuntuaciones(producto.getPuntuaciones());
         return productoRepository.save(producto);
     }
 

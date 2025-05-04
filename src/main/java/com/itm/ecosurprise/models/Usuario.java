@@ -1,8 +1,13 @@
 package com.itm.ecosurprise.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /*
  * @Inheritance indica que es una clase padre y se usara herencia
@@ -17,22 +22,27 @@ import lombok.EqualsAndHashCode;
  * @JoinColumn indica la columna de la tabla que se usara para la relacion
  */
 
- @Data
- @Entity
- @Inheritance(strategy = InheritanceType.JOINED)
- public abstract class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUsuario;
-    private String imagen;
-    private String nombre;
-    private String correo;
-    private String contrasena;
+@Data
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Usuario {
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private int idUsuario;
+   private String imagen;
+   private String nombre;
+   private String correo;
+   private String contrasena;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-   @EqualsAndHashCode.Exclude
-    private Telefono telefono;
+   @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+   @JsonIgnoreProperties(value = {"usuario"})
+   private Telefono telefono;
+   private String rol;
 
-    private  String rol;
- 
- }
+   @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value ={
+        "usuario"
+    })
+    private List<UsuarioDireccion> direcciones = new ArrayList<>();
+
+}

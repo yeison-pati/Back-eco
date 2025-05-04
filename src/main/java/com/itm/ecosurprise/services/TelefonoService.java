@@ -3,8 +3,6 @@ package com.itm.ecosurprise.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itm.ecosurprise.models.Telefono;
@@ -38,41 +36,21 @@ public class TelefonoService {
      */
     public Telefono obtenerXID(int idTelefono) {
         return telefonoRepository.findById(idTelefono)
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado con ID: " + idTelefono));
+                .orElseThrow(() -> new RuntimeException("Telefono no encontrado"));
     }
 
-    /**
-     * {head,
-     * body,
-     * others
-     * }
-     */
+    public Telefono crear(int idUsuario, Telefono telefono) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Error al obtener usuario"));
 
-    /**
-     * Crea un nuevo teléfono y lo asocia a un usuario.
-     *
-     * @param idUsuario El ID del usuario al que se asignará el teléfono.
-     * @param telefono El objeto `Telefono` a crear.
-     * @return Una respuesta HTTP con el teléfono creado, o un error si ya existe un teléfono asignado al usuario.
-     */
-    public ResponseEntity<?> crear(int idUsuario, Telefono telefono) {
-        try {
-            // Obtener el usuario por su ID
-            Usuario usuario = usuarioRepository.findById(idUsuario)
-                    .orElseThrow(() -> new RuntimeException("Error al obtener usuario"));
-            
-            // Verificar si el usuario ya tiene un teléfono asignado
-            if (usuario.getTelefono() != null) {
-                throw new RuntimeException("El " + usuario.getRol() + " ya tiene un teléfono asignado.");
-            }
-            
-            // Asociar el teléfono al usuario
-            telefono.setUsuario(usuario);
-            return ResponseEntity.ok(telefonoRepository.save(telefono));
-        } catch (Exception e) {
-            // Devolver error si ocurre alguna excepción
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        if (usuario.getTelefono() != null) {
+            throw new RuntimeException("El " + usuario.getRol() + " ya tiene un teléfono asignado.");
         }
+
+        // Asignar ambos lados
+        telefono.setUsuario(usuario);
+
+        return telefonoRepository.save(telefono);
     }
 
     /**
@@ -99,10 +77,10 @@ public class TelefonoService {
     /*
      * Ejemplo de uso de DTO (Data Transfer Object):
      * public Carrito obtenerCarrito(int id) {
-     *     Telefono telefono = telefonoRepository.findById(id);
-     *     Carrito carrito = new Carrito();
-     *     carrito.setNumero(telefono.getNumero());
-     *     return carrito;
+     * Telefono telefono = telefonoRepository.findById(id);
+     * Carrito carrito = new Carrito();
+     * carrito.setNumero(telefono.getNumero());
+     * return carrito;
      * }
      */
 }

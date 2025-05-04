@@ -22,7 +22,5 @@ public class Fecha {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFecha;
-    private int anio;
-    private int mes;
-    private int dia;
+    private String detalles;
 }
