@@ -12,7 +12,7 @@ import com.itm.ecosurprise.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
-public class UseriosController {
+public class UsuariosController {
     @Autowired
     private UsuarioService usuarioService;
 
