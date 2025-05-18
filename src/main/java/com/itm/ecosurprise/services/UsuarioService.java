@@ -52,6 +52,26 @@ public class UsuarioService {
             Usuario usuario = usuarioRepository.findById(idUsuario)
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+            // ... código de validación de token y usuario ...
+
+            // ELIMINAR IMAGEN ANTERIOR SI EXISTE
+            if (usuario.getImagen() != null && !usuario.getImagen().isEmpty()) {
+                try {
+                    // Extraer el nombre del archivo de la URL
+                    String urlImagenAnterior = usuario.getImagen();
+                    String nombreArchivoAnterior = urlImagenAnterior.substring(urlImagenAnterior.lastIndexOf("/") + 1);
+                    String rutaArchivoAnterior = "src/main/resources/static/usuarios/" + nombreArchivoAnterior;
+                    File archivoAnterior = new File(rutaArchivoAnterior);
+                    if (archivoAnterior.exists()) {
+                        boolean deleted = archivoAnterior.delete();
+                        System.out.println("Imagen anterior eliminada: " + deleted);
+                    }
+                } catch (Exception ex) {
+                    System.out.println("No se pudo eliminar la imagen anterior: " + ex.getMessage());
+                }
+            }
+
+            // ... código para guardar la nueva imagen ...
             if (imagen != null && !imagen.isEmpty()) {
                 // Generar nombre único para la imagen
                 String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();

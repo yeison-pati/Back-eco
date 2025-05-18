@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebfd9596-f3bc-4a13-905c-323ebd333ba9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/UsuarioService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" afterDir="false" />
     </list>
     <list id="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" name="Changes by User" comment="" />
@@ -111,7 +114,7 @@
       <workItem from="1746929700439" duration="1113000" />
       <workItem from="1747173571651" duration="1156000" />
       <workItem from="1747526157291" duration="8192000" />
-      <workItem from="1747571429499" duration="11059000" />
+      <workItem from="1747571429499" duration="13381000" />
     </task>
     <servers />
   </component>

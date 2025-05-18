@@ -45,9 +45,7 @@ public class ConsumidorController {
 
     
     @PostMapping(value = "/{id}/establecerImagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> establecerImagen(
-            @PathVariable("id") int idConsumidor,
-            @RequestParam("imagen") MultipartFile imagen,
+    public ResponseEntity<?> establecerImagen(@PathVariable("id") int idConsumidor, @RequestParam("imagen") MultipartFile imagen,
             @RequestHeader("Authorization") String authHeader) {
         
         // Extract token from Authorization header

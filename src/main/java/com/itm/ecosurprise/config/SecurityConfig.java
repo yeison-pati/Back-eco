@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // login y registro públicos
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/consumidores/**").hasAuthority("CONSUMIDOR")
                         .requestMatchers("/api/comerciantes/**").hasAuthority("COMERCIANTE")
                         .requestMatchers("/api/repartidores/**").hasAuthority("REPARTIDOR")

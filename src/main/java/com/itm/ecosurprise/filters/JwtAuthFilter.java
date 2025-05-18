@@ -29,51 +29,65 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private AuthService authService;
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         String path = request.getRequestURI();
         System.out.println("Request path: " + path);
-        
+
         // Permite acceso a rutas públicas sin validación
         if (path.startsWith("/api/auth/") || path.startsWith("/usuarios/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // temporal
+        String header = request.getHeader("Authorization");
+        System.out.println("Authorization header: " + header);
+
         // Extrae el token
         String token = extractToken(request);
-        
-        // Si no hay token o no es válido, continuamos la cadena sin establecer autenticación
+
+        // temporal
+        System.out.println("Token extraído: " + token);
+        if (token == null) {
+            System.out.println("NO HAY TOKEN EN LA PETICIÓN");
+        }
+
+        // Si no hay token o no es válido, continuamos la cadena sin establecer
+        // autenticación
         // Spring Security se encargará de rechazar accesos no autorizados
         if (token == null || !authService.validateToken(token)) {
+            System.out.println("Token inválido o expirado");
             filterChain.doFilter(request, response);
             return;
         }
+        // temporal
+        System.out.println("Token válido, autenticando usuario...");
 
         try {
             // Obtener información del token y establecer la autenticación
             String rol = authService.getRolFromToken(token);
             if (rol != null) {
                 rol = rol.toUpperCase(); // <--- Asegura que siempre sea mayúsculas
-                throw new RuntimeException("Rol no válido: " + rol);
             }
             int userId = authService.getIdFromToken(token);
-            
+
             // Crear autenticación y establecerla en el SecurityContext
-            UsernamePasswordAuthenticationToken authentication = 
-                new UsernamePasswordAuthenticationToken(userId, null, 
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null,
                     Collections.singletonList(new SimpleGrantedAuthority(rol)));
-            
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+            // temporal
+            System.out.println("Autenticación seteada en SecurityContextHolder: " + authentication);
+
         } catch (Exception e) {
             // En caso de error, limpiar el contexto de seguridad
             SecurityContextHolder.clearContext();
         }
-        
+
         // Continuar con la cadena de filtros
         filterChain.doFilter(request, response);
     }
