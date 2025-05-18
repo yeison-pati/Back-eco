@@ -56,6 +56,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             // Obtener información del token y establecer la autenticación
             String rol = authService.getRolFromToken(token);
+            if (rol != null) {
+                rol = rol.toUpperCase(); // <--- Asegura que siempre sea mayúsculas
+                throw new RuntimeException("Rol no válido: " + rol);
+            }
             int userId = authService.getIdFromToken(token);
             
             // Crear autenticación y establecerla en el SecurityContext
