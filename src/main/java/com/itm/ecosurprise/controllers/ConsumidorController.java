@@ -1,5 +1,6 @@
 package com.itm.ecosurprise.controllers;
 
+import com.itm.ecosurprise.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,17 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.dtos.ProductoDTO;
-import com.itm.ecosurprise.models.Consumidor;
 import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Orden;
 import com.itm.ecosurprise.models.Telefono;
-import com.itm.ecosurprise.services.CarritoService;
-import com.itm.ecosurprise.services.ConsumidorService;
-import com.itm.ecosurprise.services.OrdenService;
-import com.itm.ecosurprise.services.ProductoService;
-import com.itm.ecosurprise.services.TelefonoService;
-import com.itm.ecosurprise.services.UsuarioDireccionService;
-
 
 /*
  * @RestController indica que esta clase es un controlador REST que maneja solicitudes HTTP.
@@ -33,12 +26,10 @@ import com.itm.ecosurprise.services.UsuarioDireccionService;
 public class ConsumidorController {
 
     /*
-     * @Autowired inyecta las dependencias de los servicios ComercianteService y OrdenService.
+     * @Autowired inyecta las dependencias de los servicios ComercianteService y
+     * OrdenService.
      * Esto permite utilizar los métodos de estos servicios en el controlador.
      */
-
-    @Autowired
-    private ConsumidorService consumidorService;
     @Autowired
     private TelefonoService telefonoService;
     @Autowired
@@ -49,11 +40,23 @@ public class ConsumidorController {
     private CarritoService carritoService;
     @Autowired
     private OrdenService ordenService;
+    @Autowired
+    private UsuarioService usuarioService;
 
-
-    @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearComerciante(@RequestPart("consumidor") Consumidor consumidor, @RequestParam("imagen") MultipartFile imagen) {
-        return consumidorService.crear(consumidor, imagen);
+    
+    @PostMapping(value = "/{id}/establecerImagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> establecerImagen(
+            @PathVariable("id") int idConsumidor,
+            @RequestParam("imagen") MultipartFile imagen,
+            @RequestHeader("Authorization") String authHeader) {
+        
+        // Extract token from Authorization header
+        String token = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
+        
+        return usuarioService.setImagen(idConsumidor, imagen, token);
     }
 
     @PostMapping("/{idConsumidor}/crearTelefono")
@@ -66,29 +69,20 @@ public class ConsumidorController {
         return usuarioDireccionService.crear(idConsumidor, direccion);
     }
 
-    @GetMapping("/todos")
-    public ResponseEntity<?> obtenerTodos() {
-        return consumidorService.obtenerTodos();
-    }
-
-    @GetMapping("/{idConsumidor}")
-    public ResponseEntity<?> obtenerXID(@PathVariable int idConsumidor) {
-        return consumidorService.obtenerXID(idConsumidor);
-    }
-
     @GetMapping("/{idConsumidor}/productos/todos")
     public ResponseEntity<?> obtenerProductos(@PathVariable int idConsumidor) {
         return productoService.obtenerTodos(idConsumidor);
     }
 
     @GetMapping("/{idConsumidor}/productos/{idProducto}")
-    public ResponseEntity<?> obtenerProducto(@PathVariable int idConsumidor,@PathVariable int idProducto) {
+    public ResponseEntity<?> obtenerProductoPorId(@PathVariable int idConsumidor, @PathVariable int idProducto) {
         return productoService.obtenerXID(idConsumidor, idProducto);
     }
 
-    //agregar al carrito
+    // agregar al carrito
     @PostMapping("/{idConsumidor}/productos/{idProducto}/agregar")
-    public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor,@PathVariable int idProducto, @RequestBody ProductoDTO productoCantidad) {
+    public ResponseEntity<?> agregarAlCarrito(@PathVariable int idConsumidor, @PathVariable int idProducto,
+            @RequestBody ProductoDTO productoCantidad) {
         return carritoService.agregarProducto(idConsumidor, idProducto, productoCantidad.getCantidad());
     }
 
@@ -96,14 +90,15 @@ public class ConsumidorController {
     public ResponseEntity<?> verCarrito(@PathVariable int idConsumidor) {
         return carritoService.obtenerProductos(idConsumidor);
     }
-    
+
     @GetMapping("/{idConsumidor}/carrito/{productoId}/eliminar")
     public ResponseEntity<?> eliminarProductoCarrito(@PathVariable int idConsumidor, @PathVariable int productoId) {
         return carritoService.eliminarProducto(idConsumidor, productoId);
     }
 
     @GetMapping("/{idConsumidor}/carrito/{idProducto}/cambiarCantidad")
-    public ResponseEntity<?> cambiarCatidadProducto(@PathVariable int idConsumidor,@PathVariable int idProducto, @RequestBody ProductoDTO productoCantidad) {
+    public ResponseEntity<?> cambiarCatidadProducto(@PathVariable int idConsumidor, @PathVariable int idProducto,
+            @RequestBody ProductoDTO productoCantidad) {
         return carritoService.cambiarCantidadProducto(idConsumidor, idProducto, productoCantidad.getCantidad());
     }
 
@@ -113,7 +108,7 @@ public class ConsumidorController {
     }
 
     @PostMapping("/{idConsumidor}/carrito/ordenar")
-    public ResponseEntity<?> crearOrden(@PathVariable int idConsumidor, @RequestBody Orden orden){
+    public ResponseEntity<?> crearOrden(@PathVariable int idConsumidor, @RequestBody Orden orden) {
         return ordenService.crear(idConsumidor, orden);
     }
 }

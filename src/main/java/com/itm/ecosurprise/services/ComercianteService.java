@@ -1,26 +1,15 @@
 package com.itm.ecosurprise.services;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.itm.ecosurprise.models.Comerciante;
-import com.itm.ecosurprise.models.Direccion;
 import com.itm.ecosurprise.models.Producto;
-import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.repositories.IComerciante;
-import com.itm.ecosurprise.repositories.ISede;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Servicio para gestionar las operaciones relacionadas con los comerciantes,
@@ -32,43 +21,6 @@ public class ComercianteService {
 
     @Autowired
     private IComerciante comercianteRepository;
-    @Autowired
-    private DireccionService direccionService;
-    @Autowired
-    private ISede sedeRepository;
-    @Autowired
-    private HttpServletRequest request;
-
-    /**
-     * Crea un nuevo comerciante junto con su imagen asociada.
-     *
-     * @param comerciante El comerciante a registrar.
-     * @param imagen La imagen asociada al comerciante.
-     * @return ResponseEntity con el comerciante creado o un mensaje de error.
-     */
-    public ResponseEntity<?> crear(Comerciante comerciante, MultipartFile imagen) {
-        try {
-            if (imagen != null && !imagen.isEmpty()) {
-                String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
-                String carpeta = "src/main/resources/static/comerciantes/";
-                File directorio = new File(carpeta);
-                if (!directorio.exists()) directorio.mkdirs();
-                Path ruta = Paths.get(carpeta + nombreArchivo);
-                Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
-
-                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-                String urlImagen = urlBase + "/comerciantes/" + nombreArchivo;
-
-                comerciante.setImagen(urlImagen);
-            } else {
-                throw new RuntimeException("Imagen vacía");
-            }
-            Comerciante nuevoComerciante = comercianteRepository.save(comerciante);
-            return ResponseEntity.ok(nuevoComerciante);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
     /**
      * Obtiene la lista de todos los comerciantes registrados.
@@ -132,29 +84,6 @@ public class ComercianteService {
     }
 
     /**
-     * Crea una dirección asociada a una sede de un comerciante.
-     *
-     * @param idComerciante ID del comerciante.
-     * @param idSede ID de la sede.
-     * @param direccion Dirección a registrar.
-     * @return ResponseEntity con la sede actualizada o mensaje de error.
-     */
-    public ResponseEntity<?> crearDireccion(int idComerciante, int idSede, Direccion direccion) {
-        try {
-            Comerciante comerciante = comercianteRepository.findById(idComerciante)
-                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
-            Sede sede = comerciante.getSedes().stream()
-                    .filter(s -> s.getIdSede() == idSede)
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Sede no encontrada"));
-            sede.setDireccion(direccionService.crear(direccion));
-            return ResponseEntity.ok(sedeRepository.save(sede));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    /**
      * Obtiene todos los productos asociados a un comerciante.
      *
      * @param idComerciante ID del comerciante.
@@ -178,7 +107,7 @@ public class ComercianteService {
      * @param idProducto ID del producto.
      * @return ResponseEntity con el producto encontrado o mensaje de error.
      */
-    public ResponseEntity<?> obtenerProducto(int idComerciante, int idProducto) {
+    public ResponseEntity<?> obtenerProductoPorId(int idComerciante, int idProducto) {
         try {
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));

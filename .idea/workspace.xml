@@ -5,10 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebfd9596-f3bc-4a13-905c-323ebd333ba9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/AdminController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/UsuarioService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Comerciante.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Comerciante.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Direccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Direccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Repartidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Repartidor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Sede.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Telefono.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Telefono.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/models/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/repositories/ISede.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/repositories/IUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/repositories/IUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ComercianteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ConsumidorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/SedeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/EcoSurprise-0.0.1-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/EcoSurprise-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Comerciante.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Comerciante.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Producto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Producto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Direccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Direccion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Repartidor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Repartidor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Sede.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Telefono.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Telefono.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/models/Usuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/ISede.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/repositories/IUsuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ComercianteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ComercianteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ConsumidorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ConsumidorService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/SedeService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.itm.ecosurprise.EcoSurpriseApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.itm.ecosurprise.EcoSurpriseApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.itm.ecosurprise.EcoSurpriseApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.itm.ecosurprise.EcoSurpriseApplicationTests.txt" afterDir="false" />
     </list>
     <list id="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" name="Changes by User" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +89,8 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Maven.EcoSurprise [org.springframework.boot:spring-boot-maven-plugin:3.4.4:build-image].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.EcoSurprise [org.springframework.boot:spring-boot-maven-plugin:3.4.4:start].executor&quot;: &quot;Run&quot;,
     &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;Database connection parameters found&quot;,
     &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
@@ -107,6 +152,10 @@
       <workItem from="1745552267101" duration="346000" />
       <workItem from="1745595034263" duration="12910000" />
       <workItem from="1745617052637" duration="3723000" />
+      <workItem from="1746929700439" duration="1113000" />
+      <workItem from="1747173571651" duration="1156000" />
+      <workItem from="1747526157291" duration="8192000" />
+      <workItem from="1747571429499" duration="10647000" />
     </task>
     <servers />
   </component>

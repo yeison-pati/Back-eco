@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 public class Repartidor extends Usuario {
 
 	private String placa;
-	private long soat;
-	private long licencia;
-	private long tecno;
+	private String soat;
+	private String licencia;
+	private String tecno;
 }

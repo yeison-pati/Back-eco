@@ -265,7 +265,7 @@ public class OrdenService {
         }
     }
 
-    public ResponseEntity<?> obtenerOrdenesComerciante(int idComerciante) {
+    public ResponseEntity<?> obtenerOrdenesPorComerciante(int idComerciante) {
         try {
             comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
@@ -293,7 +293,7 @@ public class OrdenService {
         }
     }
 
-    public ResponseEntity<?> obtenerOrdenComerciante(int idComerciante, int idOrden) {
+    public ResponseEntity<?> obtenerOrdenPorIdAndComerciante(int idComerciante, int idOrden) {
         try {
             comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));

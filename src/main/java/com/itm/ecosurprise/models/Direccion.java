@@ -20,12 +20,5 @@ public class Direccion {
     private int idDireccion;
 
     private String nombre;
-    /*@OneToOne
-    @JoinColumn(name = "idUsuarioDireccion")
-    private UsuarioDireccion usuarioDireccion;
-    */
-    private String departamento;
-    private String calle;
-    private String numero;
-    private String complemento;
+    private String domicilio;
 }

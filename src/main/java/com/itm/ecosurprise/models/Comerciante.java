@@ -2,7 +2,9 @@ package com.itm.ecosurprise.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,9 +38,7 @@ public class Comerciante extends Usuario {
 	  })
 	private List<Producto> productos;
 
-	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value = {
-		"comerciante"
-	  })
-	private List<Sede> sedes;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idDireccion")
+	private Direccion direccion;
 }

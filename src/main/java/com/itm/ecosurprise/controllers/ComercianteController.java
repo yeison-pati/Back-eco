@@ -6,17 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.itm.ecosurprise.models.Comerciante;
-import com.itm.ecosurprise.models.Direccion;
+
 import com.itm.ecosurprise.models.Producto;
-import com.itm.ecosurprise.models.Sede;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
 import com.itm.ecosurprise.services.OrdenService;
 import com.itm.ecosurprise.services.PreparacionOrdenes;
 import com.itm.ecosurprise.services.ProductoService;
-import com.itm.ecosurprise.services.SedeService;
 import com.itm.ecosurprise.services.TelefonoService;
+import com.itm.ecosurprise.services.UsuarioService;
 
 
 /*
@@ -45,16 +43,19 @@ public class ComercianteController {
     @Autowired
     private TelefonoService telefonoService;
     @Autowired
-    private SedeService sedeService;
-    @Autowired
     private ProductoService productoService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     
-    @PostMapping(value = "/crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearComerciante(@RequestPart("comerciante") Comerciante comerciante,
-                                              @RequestParam("imagen") MultipartFile imagen)
-    {
-        return comercianteService.crear(comerciante, imagen);
+    @PostMapping(value = "/{idComerciante}/establecerImagen", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> setImagen(
+            @PathVariable int idComerciante,
+            @RequestParam("imagen") MultipartFile imagen,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        // Extraer el token del header Authorization
+        String token = authorizationHeader.replace("Bearer ", "");
+        return usuarioService.setImagen(idComerciante, imagen, token);
     }
 
     @PostMapping("/{idComerciante}/crearTelefono")
@@ -62,35 +63,10 @@ public class ComercianteController {
         return telefonoService.crear(idComerciante, telefono);
     }
 
-    @PostMapping("/{idComerciante}/crearSede")
-    public ResponseEntity<?> crearSede(@PathVariable int idComerciante, @RequestBody Sede sede) {
-        return sedeService.crear(idComerciante, sede);
-    }
-
-    @PostMapping("/{idComerciante}/sede/{idSede}/crearDireccion")
-    public ResponseEntity<?> crearDireccion(@PathVariable int idComerciante, @PathVariable int idSede, @RequestBody Direccion direccion) {
-        return comercianteService.crearDireccion(idComerciante, idSede, direccion);
-    }
-
-
-
-
-
-
     @PostMapping(value = "/{idComerciante}/crearProducto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestPart("producto") Producto producto,
      @RequestParam("imagen") MultipartFile imagen) {
         return productoService.crear(idComerciante, producto, imagen);
-    }
-
-    @GetMapping("/todos")
-    public ResponseEntity<?> obtenerTodos() {
-        return comercianteService.obtenerTodos();
-    }
-
-    @GetMapping("/{idComerciante}")
-    public ResponseEntity<?> obtenerXID(@PathVariable int idComerciante) {
-        return comercianteService.obtenerXID(idComerciante);
     }
 
     @GetMapping("/{idComerciante}/productos/todos")
@@ -99,29 +75,24 @@ public class ComercianteController {
     }
 
     @GetMapping("/{idComerciante}/productos/{idProducto}")
-    public ResponseEntity<?> obtenerProducto(@PathVariable int idComerciante,@PathVariable int idProducto) {
-        return comercianteService.obtenerProducto(idComerciante, idProducto);
+    public ResponseEntity<?> obtenerProductoPorId(@PathVariable int idComerciante,@PathVariable int idProducto) {
+        return comercianteService.obtenerProductoPorId(idComerciante, idProducto);
     }
 
     @GetMapping("/{idComerciante}/ordenes/todos")
     public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
-        return ordenService.obtenerOrdenesComerciante(idComerciante);
+        return ordenService.obtenerOrdenesPorComerciante(idComerciante);
     }
 
     @GetMapping("/{idComerciante}/ordenes/{idOrden}")
     public ResponseEntity<?> obtenerOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
 
-        return ordenService.obtenerOrdenComerciante(idComerciante, idOrden);
+        return ordenService.obtenerOrdenPorIdAndComerciante(idComerciante, idOrden);
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/confirmar")
     public ResponseEntity<?> confirmarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
         return preparacionOrdenes.agregarOrden(idComerciante, idOrden);
-    }
-
-    @PostMapping("/{idComerciante}/ordenes/{idOrden}/cancelar")
-    public ResponseEntity<?> cancelarOrden(@PathVariable int idComerciante, @PathVariable int idOrden){
-        return ordenService.cancelar(idComerciante, idOrden);
     }
 
     @GetMapping("/{idComerciante}/ordenes/preparacion")
