@@ -81,13 +81,13 @@ public class ComercianteController {
 
     @GetMapping("/{idComerciante}/ordenes/todos")
     public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
-        return ordenService.obtenerOrdenesPorComerciante(idComerciante);
+        return ordenService.obtenerTodosPorComerciante(idComerciante);
     }
 
     @GetMapping("/{idComerciante}/ordenes/{idOrden}")
     public ResponseEntity<?> obtenerOrden(@PathVariable int idComerciante, @PathVariable int idOrden) {
 
-        return ordenService.obtenerOrdenPorIdAndComerciante(idComerciante, idOrden);
+        return ordenService.productosPorIdAndComerciante(idComerciante, idOrden);
     }
 
     @PostMapping("/{idComerciante}/ordenes/{idOrden}/confirmar")

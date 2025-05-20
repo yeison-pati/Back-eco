@@ -109,4 +109,9 @@ public class ConsumidorController {
     public ResponseEntity<?> crearOrden(@PathVariable int idConsumidor, @RequestBody Orden orden) {
         return ordenService.crear(idConsumidor, orden);
     }
+
+    @PostMapping("/{idConsumidor}/ordenes/{idOrden}/cancelar")
+    public ResponseEntity<?> cancelarOrden(@PathVariable int idConsumidor, @PathVariable int idOrden) {
+        return ordenService.cancelar(idConsumidor, idOrden);
+    }
 }
