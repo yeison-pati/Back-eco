@@ -24,16 +24,23 @@ import java.util.Collections;
  * 3. Extrae y valida el token JWT
  * 4. Establece la autenticación en el SecurityContext
  */
+
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private AuthService authService;
 
-    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        // Agregar manejo explícito para solicitudes OPTIONS
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            // No hacer nada, solo permitir que la solicitud continúe
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String path = request.getRequestURI();
         System.out.println("Request path: " + path);
@@ -44,35 +51,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // temporal
-        String header = request.getHeader("Authorization");
-        System.out.println("Authorization header: " + header);
-
         // Extrae el token
         String token = extractToken(request);
-
-        // temporal
         System.out.println("Token extraído: " + token);
-        if (token == null) {
-            System.out.println("NO HAY TOKEN EN LA PETICIÓN");
-        }
 
-        // Si no hay token o no es válido, continuamos la cadena sin establecer
-        // autenticación
-        // Spring Security se encargará de rechazar accesos no autorizados
+        // Si no hay token o no es válido, continuamos la cadena sin autenticación
         if (token == null || !authService.validateToken(token)) {
             System.out.println("Token inválido o expirado");
             filterChain.doFilter(request, response);
             return;
         }
-        // temporal
-        System.out.println("Token válido, autenticando usuario...");
 
         try {
             // Obtener información del token y establecer la autenticación
             String rol = authService.getRolFromToken(token);
             if (rol != null) {
-                rol = rol.toUpperCase(); // <--- Asegura que siempre sea mayúsculas
+                rol = rol.toUpperCase();
             }
             int userId = authService.getIdFromToken(token);
 
@@ -81,7 +75,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     Collections.singletonList(new SimpleGrantedAuthority(rol)));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            // temporal
             System.out.println("Autenticación seteada en SecurityContextHolder: " + authentication);
 
         } catch (Exception e) {
@@ -93,10 +86,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * Extrae el token JWT del header Authorization
-     * Formato esperado: "Bearer token"
-     */
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {

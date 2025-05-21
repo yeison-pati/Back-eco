@@ -104,7 +104,7 @@ public class ComercianteController {
         return preparacionOrdenes.obtenerOrden(idComerciante, idOrden);
     }
 
-    @PostMapping("/{id}/completar-registro")
+    @PostMapping("/{id}/completarRegistro")
     public ResponseEntity<?> completarRegistro(
             @PathVariable int id,
             @RequestParam("nit") String nit,

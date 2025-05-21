@@ -136,9 +136,11 @@ public class AuthService {
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("rol", usuario.getRol());
-            response.put("id", usuario.getIdUsuario());
+            response.put("idUsuario", usuario.getIdUsuario());
             response.put("correo", usuario.getCorreo());
             response.put("nombre", usuario.getNombre());
+            response.put("telefono", usuario.getTelefono());
+            response.put("imagen", usuario.getImagen());
             response.put("message", "Login exitoso");
 
             System.out.println("=== Login exitoso ===");

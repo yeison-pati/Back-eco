@@ -1,6 +1,6 @@
 package com.itm.ecosurprise.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -32,10 +32,14 @@ import lombok.EqualsAndHashCode;
  
      @OneToOne
      @JoinColumn(name = "idUsuario")
-     @JsonIgnoreProperties(value = {
+     @JsonIgnore
+     @EqualsAndHashCode.Exclude
+     private Usuario usuario;
+
+     /*
+      * Properties(value = {
 		"correo", "contrasena", "telefono", "rol", "nit", "rut", "productos",
     "sedes", "direcciones", "puntos", "ordenes", "imagen", "tipo"
 	  })
-     @EqualsAndHashCode.Exclude
-     private Usuario usuario;
+      */
  }

@@ -2,6 +2,7 @@ package com.itm.ecosurprise.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,20 +51,25 @@ public class SecurityConfig {
      * 5. Configura sesiones sin estado (STATELESS)
      * 6. Agrega el filtro JWT antes del filtro de autenticación
      */
-    @Bean
+
+     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll() // login y registro públicos
-                        .requestMatchers("/api/auth/validate-token").authenticated() // validación de token requiere autenticación
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/consumidores/**").hasAuthority("CONSUMIDOR")
-                        .requestMatchers("/api/comerciantes/**").hasAuthority("COMERCIANTE")
-                        .requestMatchers("/api/repartidores/**").hasAuthority("REPARTIDOR")
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                // Permitir OPTIONS para todas las rutas - esto es crucial para CORS
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // Rutas públicas
+                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/validate-token").permitAll()
+                .requestMatchers("/error").permitAll()
+                // Rutas por rol
+                .requestMatchers("/api/consumidores/**").hasAuthority("CONSUMIDOR")
+                .requestMatchers("/api/comerciantes/**").hasAuthority("COMERCIANTE")
+                .requestMatchers("/api/repartidores/**").hasAuthority("REPARTIDOR")
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -8,25 +8,36 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
-
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
-        // Permitir orígenes específicos en lugar de wildcard para soportar credenciales
-        config.addAllowedOriginPattern("*");
-        // Permitir las cabeceras comunes
+        // Orígenes específicos autorizados - mejor práctica para producción
+        config.addAllowedOrigin("http://localhost:8081");
+        config.addAllowedOrigin("http://192.168.176.189:8081");
+        
+        // También puedes agregar otros orígenes específicos si los necesitas
+        // config.addAllowedOrigin("https://tudominio.com");
+        
+        // Permitir todos los encabezados
         config.addAllowedHeader("*");
-        // Permitir todos los métodos HTTP necesarios
+        
+        // Permitir métodos específicos (explícitamente)
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("OPTIONS");
         
-        // Habilitar credenciales
+        // Permitir cookies y credenciales
         config.setAllowCredentials(true);
+        
+        // Exponer encabezados específicos al cliente
+        config.addExposedHeader("Authorization");
+        
+        // Caché de preflight durante 1 hora
+        config.setMaxAge(3600L);
         
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
