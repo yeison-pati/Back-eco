@@ -20,13 +20,31 @@ public class AuthController {
     }
     
     @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-    System.out.println("Login request: " + credentials);
-    return authService.login(credentials.get("correo"), credentials.get("contrasena"));
-}
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        System.out.println("Login request: " + credentials);
+        return authService.login(credentials.get("correo"), credentials.get("contrasena"));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, Object> userData) {
         return authService.register(userData);
+    }
+
+    @PostMapping("/validate-token")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            boolean isValid = authService.validateToken(token);
+            
+            if (isValid) {
+                // Si el token es válido, generar uno nuevo
+                String newToken = authService.renewToken(token);
+                return ResponseEntity.ok(Map.of(
+                    "valid", true,
+                    "token", newToken
+                ));
+            }
+        }
+        return ResponseEntity.ok(Map.of("valid", false));
     }
 } 

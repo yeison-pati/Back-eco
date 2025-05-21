@@ -56,7 +56,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // login y registro públicos
+                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll() // login y registro públicos
+                        .requestMatchers("/api/auth/validate-token").authenticated() // validación de token requiere autenticación
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/consumidores/**").hasAuthority("CONSUMIDOR")
                         .requestMatchers("/api/comerciantes/**").hasAuthority("COMERCIANTE")

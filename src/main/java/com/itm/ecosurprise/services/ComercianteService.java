@@ -1,11 +1,20 @@
 package com.itm.ecosurprise.services;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import jakarta.servlet.http.HttpServletRequest;
 
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Producto;
@@ -21,6 +30,8 @@ public class ComercianteService {
 
     @Autowired
     private IComerciante comercianteRepository;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * Obtiene la lista de todos los comerciantes registrados.
@@ -68,7 +79,7 @@ public class ComercianteService {
     /**
      * Actualiza la información de un comerciante existente.
      *
-     * @param id ID del comerciante a actualizar.
+     * @param id          ID del comerciante a actualizar.
      * @param comerciante Datos actualizados del comerciante.
      * @return ResponseEntity con el comerciante actualizado o mensaje de error.
      */
@@ -104,7 +115,7 @@ public class ComercianteService {
      * Obtiene un producto específico asociado a un comerciante.
      *
      * @param idComerciante ID del comerciante.
-     * @param idProducto ID del producto.
+     * @param idProducto    ID del producto.
      * @return ResponseEntity con el producto encontrado o mensaje de error.
      */
     public ResponseEntity<?> obtenerProductoPorId(int idComerciante, int idProducto) {
@@ -119,5 +130,46 @@ public class ComercianteService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    public ResponseEntity<?> completarRegistro(int id, String nit, MultipartFile camaraComercio, MultipartFile rut) {
+        Optional<Comerciante> comercianteOpt = comercianteRepository.findById(id);
+        if (comercianteOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comerciante no encontrado");
+        }
+        Comerciante comerciante = comercianteOpt.get();
+        comerciante.setNit(nit);
+        // Lógica para guardar los PDFs y setear las fileas en el modelo
+        String ccPath = guardarArchivo(camaraComercio, "camaraComercio", id);
+        String rutPath = guardarArchivo(rut, "file", id);
+        comerciante.setCamaraComercio(ccPath);
+        comerciante.setRut(rutPath);
+        comercianteRepository.save(comerciante);
+        return ResponseEntity.ok("Registro de comerciante completado");
+    }
+
+    private String guardarArchivo(MultipartFile file, String tipo, int id) {
+        try {
+
+            if (file != null && !file.isEmpty()) {
+                String nombreArchivofile = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                String carpetaFile = "src/main/resources/static/usuarios/documentos/";
+                File directorioFile = new File(carpetaFile);
+                if (!directorioFile.exists())
+                    directorioFile.mkdirs();
+                Path rutaFile = Paths.get(carpetaFile, nombreArchivofile);
+                Files.copy(file.getInputStream(), rutaFile, StandardCopyOption.REPLACE_EXISTING);
+
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlfile = urlBase + "/usuarios/documentos/" + nombreArchivofile;
+
+                return urlfile;
+            } else {
+                throw new RuntimeException("error al subir el file");
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 }

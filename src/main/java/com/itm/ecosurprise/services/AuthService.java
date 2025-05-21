@@ -59,8 +59,8 @@ public class AuthService {
     private IUsuario usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
-    // Tiempo de expiración del token (24 horas por defecto)
-    @Value("${jwt.expiration:86400000}")
+    // Tiempo de expiración del token (30 días)
+    @Value("${jwt.expiration:2592000000}")
     private long jwtExpiration;
 
     // Clave secreta para firmar los tokens JWT
@@ -328,6 +328,38 @@ public class AuthService {
             return claims.get("id", Integer.class);
         } catch (Exception e) {
             throw new RuntimeException("Error al extraer ID del token: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Renueva un token JWT válido
+     * 
+     * @param oldToken Token JWT actual
+     * @return Nuevo token JWT con nueva fecha de expiración
+     */
+    public String renewToken(String oldToken) {
+        try {
+            byte[] keyBytes = SECRET_KEY.getBytes();
+            
+            // Extraer claims del token actual
+            Claims claims = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(keyBytes))
+                .build()
+                .parseClaimsJws(oldToken)
+                .getBody();
+            
+            // Generar nuevo token con los mismos claims pero nueva fecha de expiración
+            return Jwts.builder()
+                    .setSubject(claims.getSubject())
+                    .claim("rol", claims.get("rol"))
+                    .claim("id", claims.get("id"))
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                    .signWith(Keys.hmacShaKeyFor(keyBytes), SignatureAlgorithm.HS512)
+                    .compact();
+        } catch (Exception e) {
+            System.err.println("Error al renovar token: " + e.getMessage());
+            throw new RuntimeException("Error al renovar el token JWT: " + e.getMessage());
         }
     }
 } 

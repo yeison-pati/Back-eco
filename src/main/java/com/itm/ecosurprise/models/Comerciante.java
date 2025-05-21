@@ -29,9 +29,10 @@ import jakarta.persistence.Table;
 @Table(name = "comerciantes")
 public class Comerciante extends Usuario {
 
-	private int nit;
-	private int rut;
-
+	private String nit;
+	private String rut;
+	private String camaraComercio;
+	
 	@OneToMany(mappedBy = "comerciante", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = {
 		"comerciante", "puntuaciones"
