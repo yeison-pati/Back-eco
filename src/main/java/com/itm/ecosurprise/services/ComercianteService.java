@@ -144,8 +144,7 @@ public class ComercianteService {
         String rutPath = guardarArchivo(rut, "file", id);
         comerciante.setCamaraComercio(ccPath);
         comerciante.setRut(rutPath);
-        comercianteRepository.save(comerciante);
-        return ResponseEntity.ok("Registro de comerciante completado");
+        return ResponseEntity.ok(comercianteRepository.save(comerciante));
     }
 
     private String guardarArchivo(MultipartFile file, String tipo, int id) {

@@ -5,6 +5,7 @@ import com.itm.ecosurprise.models.Consumidor;
 import com.itm.ecosurprise.models.Comerciante;
 import com.itm.ecosurprise.models.Repartidor;
 import com.itm.ecosurprise.models.Telefono;
+import com.itm.ecosurprise.repositories.IComerciante;
 import com.itm.ecosurprise.repositories.ITelefono;
 import com.itm.ecosurprise.repositories.IUsuario;
 import io.jsonwebtoken.Claims;
@@ -54,7 +55,8 @@ public class AuthService {
 
     @Autowired
     private ITelefono telefonoRepository;
-
+    @Autowired
+    private IComerciante comercianteRepository;
     @Autowired
     private IUsuario usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -142,6 +144,19 @@ public class AuthService {
             response.put("telefono", usuario.getTelefono());
             response.put("imagen", usuario.getImagen());
             response.put("message", "Login exitoso");
+            if(usuario.getRol().contentEquals("COMERCIANTE")){
+                try {
+                    Comerciante comerciante = comercianteRepository.findById(usuario.getIdUsuario()).get();
+                    response.put("nit", comerciante.getNit());
+                } catch (Exception e) {
+                    System.err.println("Error en login de comerciante: " + e.getMessage());
+                    e.printStackTrace();
+                    Map<String, String> error = new HashMap<>();
+                    error.put("error", "Error interno del servidor");
+                    error.put("message", e.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+                }
+            }
 
             System.out.println("=== Login exitoso ===");
             return ResponseEntity.ok(response);
