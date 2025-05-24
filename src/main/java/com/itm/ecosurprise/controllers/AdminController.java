@@ -25,7 +25,7 @@ public class AdminController {
 
     @GetMapping("/consumidores/{idConsumidor}")
     public ResponseEntity<?> obtenerConsumidoresPorId(@PathVariable int idConsumidor) {
-        return consumidorService.obtenerXID(idConsumidor);
+        return consumidorService.obtenerPorId(idConsumidor);
     }
 
     @GetMapping("/comerciantes/todos")
@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping("/comerciantes/{idComerciante}")
     public ResponseEntity<?> obtenerXID(@PathVariable int idComerciante) {
-        return comercianteService.obtenerXID(idComerciante);
+        return comercianteService.obtenerPorId(idComerciante);
     }
 
 

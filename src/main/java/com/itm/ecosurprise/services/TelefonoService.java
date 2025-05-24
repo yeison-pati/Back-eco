@@ -42,13 +42,6 @@ public class TelefonoService {
     }
 
     /**
-     * {head,
-     * body,
-     * others
-     * }
-     */
-
-    /**
      * Crea un nuevo teléfono y lo asocia a un usuario.
      *
      * @param idUsuario El ID del usuario al que se asignará el teléfono.
@@ -60,18 +53,24 @@ public class TelefonoService {
             // Obtener el usuario por su ID
             Usuario usuario = usuarioRepository.findById(idUsuario)
                     .orElseThrow(() -> new RuntimeException("Error al obtener usuario"));
-            
+
             // Verificar si el usuario ya tiene un teléfono asignado
             if (usuario.getTelefono() != null) {
-                throw new RuntimeException("El " + usuario.getRol() + " ya tiene un teléfono asignado.");
+                // Cambiado a 409 Conflict - es más apropiado para recursos que ya existen
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("El " + usuario.getRol() + " ya tiene un teléfono asignado.");
             }
-            
+
             // Asociar el teléfono al usuario
             telefono.setUsuario(usuario);
-            return ResponseEntity.ok(telefonoRepository.save(telefono));
+            // Para creaciones exitosas se recomienda usar 201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(telefonoRepository.save(telefono));
         } catch (Exception e) {
-            // Devolver error si ocurre alguna excepción
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            // Diferenciamos entre "no encontrado" y otros errores
+            if (e.getMessage().contains("obtener usuario")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -95,14 +94,4 @@ public class TelefonoService {
         telefonoRepository.deleteById(id);
         return "Teléfono eliminado con éxito";
     }
-
-    /*
-     * Ejemplo de uso de DTO (Data Transfer Object):
-     * public Carrito obtenerCarrito(int id) {
-     *     Telefono telefono = telefonoRepository.findById(id);
-     *     Carrito carrito = new Carrito();
-     *     carrito.setNumero(telefono.getNumero());
-     *     return carrito;
-     * }
-     */
 }

@@ -26,29 +26,6 @@ import java.util.Optional;
 
 /**
  * Servicio de Autenticación y Autorización
- * 
- * Este servicio maneja todo el proceso de autenticación y autorización de la aplicación:
- * 
- * 1. Registro de Usuarios:
- *    - Crea nuevos usuarios según su rol (Consumidor, Comerciante, Repartidor)
- *    - Valida que el correo no esté duplicado
- *    - Encripta la contraseña de forma segura
- * 
- * 2. Autenticación (Login):
- *    - Verifica credenciales (correo y contraseña)
- *    - Genera token JWT si las credenciales son válidas
- *    - Devuelve información del usuario y su token
- * 
- * 3. Gestión de Tokens JWT:
- *    - Generación: Crea tokens con información del usuario y su rol
- *    - Validación: Verifica que los tokens sean válidos y no hayan expirado
- *    - Extracción: Obtiene información (como el rol) de tokens válidos
- * 
- * Flujo típico de uso:
- * 1. Usuario se registra -> register()
- * 2. Usuario hace login -> login() -> recibe token
- * 3. Usuario usa token para acceder a rutas protegidas
- * 4. Sistema valida token -> validateToken() y getRolFromToken()
  */
 @Service
 public class AuthService {
@@ -60,81 +37,64 @@ public class AuthService {
     @Autowired
     private IUsuario usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
-    // Tiempo de expiración del token (30 días)
+
     @Value("${jwt.expiration:2592000000}")
     private long jwtExpiration;
 
-    // Clave secreta para firmar los tokens JWT
     private static final String SECRET_KEY = "ecosurprise_secret_key_2024_super_secure_key_that_is_64_bytes_long!";
 
-    /**
-     * Autentica un usuario y genera su token JWT
-     * 
-     * Proceso:
-     * 1. Busca el usuario por su correo
-     * 2. Verifica que la contraseña coincida
-     * 3. Genera un token JWT con la información del usuario
-     * 4. Devuelve el token y datos básicos del usuario
-     * 
-     * @param correo Email del usuario
-     * @param contrasena Contraseña del usuario
-     * @return ResponseEntity con:
-     *         - Token JWT
-     *         - Rol del usuario
-     *         - ID del usuario
-     *         - Correo del usuario
-     *         O mensaje de error si las credenciales son inválidas
-     */
-    
     public ResponseEntity<?> login(String correo, String contrasena) {
         try {
             System.out.println("=== Iniciando proceso de login ===");
             System.out.println("Buscando usuario con correo: " + correo);
-            
+
             if (correo == null || correo.trim().isEmpty()) {
                 System.out.println("Error: Correo vacío o nulo");
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Credenciales inválidas");
                 error.put("message", "El correo no puede estar vacío");
+                // BAD_REQUEST es correcto para datos de entrada inválidos
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
             Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo.trim());
-            
+
             if (usuarioOpt.isEmpty()) {
                 System.out.println("Usuario no encontrado para correo: " + correo);
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Credenciales inválidas");
                 error.put("message", "El correo no está registrado");
+                // UNAUTHORIZED es correcto para credenciales inválidas
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
             Usuario usuario = usuarioOpt.get();
             System.out.println("Usuario encontrado: " + usuario.getNombre());
             System.out.println("Rol del usuario: " + usuario.getRol());
-            
+
             if (contrasena == null || contrasena.trim().isEmpty()) {
                 System.out.println("Error: Contraseña vacía o nula");
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Credenciales inválidas");
                 error.put("message", "La contraseña no puede estar vacía");
+                // BAD_REQUEST es correcto para datos de entrada inválidos
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
 
             boolean passwordMatches = passwordEncoder.matches(contrasena.trim(), usuario.getContrasena());
             System.out.println("¿Las contraseñas coinciden?: " + passwordMatches);
-            
+
             if (!passwordMatches) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Credenciales inválidas");
                 error.put("message", "La contraseña es incorrecta");
+                // UNAUTHORIZED es correcto para credenciales inválidas
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
             String token = generateToken(usuario);
             System.out.println("Token generado exitosamente");
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("rol", usuario.getRol());
@@ -154,6 +114,7 @@ public class AuthService {
                     Map<String, String> error = new HashMap<>();
                     error.put("error", "Error interno del servidor");
                     error.put("message", e.getMessage());
+                    // INTERNAL_SERVER_ERROR es correcto para errores de servidor
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
                 }
             }
@@ -166,27 +127,11 @@ public class AuthService {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Error interno del servidor");
             error.put("message", e.getMessage());
+            // INTERNAL_SERVER_ERROR es correcto para errores inesperados
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 
-    /**
-     * Registra un nuevo usuario en el sistema
-     * 
-     * Proceso:
-     * 1. Valida el rol del usuario
-     * 2. Crea la instancia correcta según el rol
-     * 3. Verifica que el correo no esté duplicado
-     * 4. Encripta la contraseña
-     * 5. Guarda el usuario en la base de datos
-     * 
-     * @param userData Mapa con los datos del usuario:
-     *                 - nombre: Nombre completo
-     *                 - correo: Email único
-     *                 - contrasena: Contraseña en texto plano
-     *                 - rol: CONSUMIDOR, COMERCIANTE o REPARTIDOR
-     * @return ResponseEntity con mensaje de éxito o error
-     */
     public ResponseEntity<?> register(Map<String, Object> userData) {
         try {
             String rol = (String) userData.get("rol");
@@ -203,11 +148,20 @@ public class AuthService {
                     usuario = new Repartidor();
                     break;
                 default:
-                    return ResponseEntity.badRequest().body("Rol no válido");
+                    // BAD_REQUEST es correcto para datos de entrada inválidos
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Rol no válido");
             }
 
             if (usuarioRepository.findByCorreo((String) userData.get("correo")).isPresent()) {
-                return ResponseEntity.badRequest().body("El correo ya está registrado");
+                // CONFLICT es mejor para recursos que ya existen
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo ingresado se encuentra en uso");
+
+            }
+
+            Map<String, String> telefonotoVer = (Map<String, String>) userData.get("telefono");
+            if (telefonotoVer != null && usuarioRepository.findByNumero(telefonotoVer.get("numero")).isPresent()) {
+                // CONFLICT es mejor para recursos que ya existen
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El teléfono ingresado se encuentra en uso");
             }
 
             usuario.setNombre((String) userData.get("nombre"));
@@ -215,41 +169,38 @@ public class AuthService {
             usuario.setContrasena(passwordEncoder.encode((String) userData.get("contrasena")));
             usuario.setRol(rol);
 
-            // Guardamos primero el usuario para obtener su ID
             usuario = usuarioRepository.save(usuario);
 
-            // Procesamos la información del teléfono desde el mapa
             Map<String, String> telefonoData = (Map<String, String>) userData.get("telefono");
             if (telefonoData != null) {
                 String indicativo = telefonoData.get("indicativo");
                 String numero = telefonoData.get("numero");
 
                 if (numero != null && !numero.isEmpty() && indicativo != null && !indicativo.isEmpty()) {
-                    // Crear objeto Telefono correctamente
                     Telefono telefono = new Telefono();
                     telefono.setNumero(numero);
                     telefono.setIndicativo(indicativo);
-                    telefono.setUsuario(usuario); // relación bidireccional
+                    telefono.setUsuario(usuario);
 
-                    // Guardar el teléfono
                     Telefono telefonoGuardado = telefonoRepository.save(telefono);
 
-                    // Actualizar la referencia en el usuario
                     usuario.setTelefono(telefonoGuardado);
-                    usuario = usuarioRepository.save(usuario); // Actualizar usuario con la referencia al teléfono
+                    usuario = usuarioRepository.save(usuario);
                 }
             }
 
-            return ResponseEntity.ok(usuario);
+            // CREATED es mejor para recursos creados exitosamente
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
         } catch (Exception e) {
             e.printStackTrace();
+            // INTERNAL_SERVER_ERROR es correcto para errores inesperados
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al registrar usuario: " + e.getMessage());
         }
     }
     /**
      * Genera un token JWT para un usuario
-     * 
+     *
      * El token incluye:
      * - Subject: Email del usuario
      * - Claims:
@@ -257,7 +208,7 @@ public class AuthService {
      *   - id: ID del usuario
      * - Fecha de emisión
      * - Fecha de expiración (24 horas por defecto)
-     * 
+     *
      * @param usuario Usuario para el cual generar el token
      * @return Token JWT firmado
      */
@@ -265,7 +216,7 @@ public class AuthService {
         try {
             System.out.println("Generando token para usuario: " + usuario.getCorreo());
             byte[] keyBytes = SECRET_KEY.getBytes();
-            
+
             String token = Jwts.builder()
                     .setSubject(usuario.getCorreo())
                     .claim("rol", usuario.getRol())
@@ -274,7 +225,7 @@ public class AuthService {
                     .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                     .signWith(Keys.hmacShaKeyFor(keyBytes), SignatureAlgorithm.HS512)
                     .compact();
-            
+
             System.out.println("Token generado exitosamente");
             return token;
         } catch (Exception e) {

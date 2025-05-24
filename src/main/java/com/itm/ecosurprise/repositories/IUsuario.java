@@ -14,5 +14,6 @@ public interface IUsuario extends JpaRepository<Usuario, Integer> {
     @Query("SELECT u FROM Usuario u WHERE u.correo = :correo")
     Optional<Usuario> findByCorreo(String correo);
 
-    // Aquí puedes agregar métodos personalizados si es necesario
+    @Query("SELECT u FROM Usuario u WHERE u.telefono.numero = :numero")
+    Optional<Usuario> findByNumero(String numero);
 }

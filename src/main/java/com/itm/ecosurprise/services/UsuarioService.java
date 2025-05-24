@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,25 +21,18 @@ import jakarta.servlet.http.HttpServletRequest;
 @Service
 public class UsuarioService {
     @Autowired
-    private IUsuario usuarioRepository; // Repositorio para gestionar la entidad Usuario
+    private IUsuario usuarioRepository;
     @Autowired
     private AuthService authService;
     @Autowired
-    private HttpServletRequest request; // Para obtener la URL base del servidor
+    private HttpServletRequest request;
 
-    /**
-     * Crea un nuevo consumidor y guarda su imagen asociada en el sistema de
-     * archivos.
-     * 
-     * @param imagen Archivo de imagen para asociar al consumidor.
-     * @return ResponseEntity con el consumidor guardado o el error si ocurre una
-     *         excepción.
-     */// ... existing code ...
     public ResponseEntity<?> setImagen(int idUsuario, MultipartFile imagen, String token) {
         try {
             // Validar el token y obtener el ID del usuario autenticado
             if (token == null || !authService.validateToken(token)) {
-                return ResponseEntity.status(401).body("Token inválido o expirado");
+                // UNAUTHORIZED es correcto para tokens inválidos
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado");
             }
 
             // Obtener el ID del usuario del token
@@ -46,13 +40,12 @@ public class UsuarioService {
 
             // Verificar que el usuario autenticado sea el mismo que intenta modificar
             if (idUsuarioAutenticado != idUsuario) {
-                return ResponseEntity.status(403).body("No tienes permiso para modificar la imagen de otro usuario");
+                // FORBIDDEN es correcto para permisos insuficientes
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para modificar la imagen de otro usuario");
             }
 
             Usuario usuario = usuarioRepository.findById(idUsuario)
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-            // ... código de validación de token y usuario ...
 
             // ELIMINAR IMAGEN ANTERIOR SI EXISTE
             if (usuario.getImagen() != null && !usuario.getImagen().isEmpty()) {
@@ -71,7 +64,6 @@ public class UsuarioService {
                 }
             }
 
-            // ... código para guardar la nueva imagen ...
             if (imagen != null && !imagen.isEmpty()) {
                 // Generar nombre único para la imagen
                 String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
@@ -96,10 +88,16 @@ public class UsuarioService {
                 // Guardar el usuario actualizado
                 return ResponseEntity.ok(usuarioRepository.save(usuario));
             } else {
-                throw new RuntimeException("Imagen vacía");
+                // BAD_REQUEST es correcto para datos de entrada inválidos
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Imagen vacía");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            // Diferenciar entre "no encontrado" y otros errores
+            if (e.getMessage().contains("no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            // INTERNAL_SERVER_ERROR para otros errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

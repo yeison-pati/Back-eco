@@ -32,8 +32,6 @@ import com.itm.ecosurprise.repositories.IProducto;
 @Service
 public class OrdenService {
 
-    // @Autowired
-    // private EstadoOrdenFactory estadoOrdenFactory ;
     @Autowired
     private IOrden ordenRepository;
     @Autowired
@@ -51,13 +49,6 @@ public class OrdenService {
     @Autowired
     private OrdenProductoService ordenProductoService;
 
-    /**
-     * Obtiene una orden específica dada la ID del comerciante y la ID de la orden.
-     * 
-     * @param idComerciante ID del comerciante asociado.
-     * @param idOrden       ID de la orden a obtener.
-     * @return ResponseEntity con la orden solicitada o un mensaje de error.
-     */
     public ResponseEntity<?> obtenerPorId(int idComerciante, int idOrden) {
         try {
             if (!ordenRepository.existsById(idComerciante)) {
@@ -65,54 +56,37 @@ public class OrdenService {
             }
             return ResponseEntity.ok(obtenerXID(idOrden));
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            // NOT_FOUND es correcto para recursos no encontrados
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    /**
-     * Obtiene todas las órdenes asociadas a un comerciante específico.
-     * 
-     * @param idComerciante ID del comerciante.
-     * @return ResponseEntity con la lista de órdenes o un mensaje de error.
-     */
     public ResponseEntity<?> obtenerTodos(int idComerciante) {
         try {
             comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
             return ResponseEntity.ok(ordenRepository.findAll());
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            if (e.getMessage().contains("no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            // INTERNAL_SERVER_ERROR para otros errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    /**
-     * Obtiene una orden específica mediante su ID.
-     * 
-     * @param idOrden ID de la orden.
-     * @return La orden encontrada.
-     */
     public Orden obtenerXID(int idOrden) {
         return ordenRepository.findById(idOrden)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOrden));
     }
 
-    /**
-     * Crea una nueva orden, valida el carrito de compras del consumidor, asigna
-     * fecha,
-     * calcula el total, asigna estado de la orden, y guarda la orden junto con los
-     * productos.
-     * 
-     * @param idConsumidor ID del consumidor que realiza la orden.
-     * @param orden        Objeto de la orden que contiene los detalles de la
-     *                     compra.
-     * @return ResponseEntity con la orden creada o un mensaje de error.
-     */
     public ResponseEntity<?> crear(int idConsumidor, Orden orden) {
         try {
             // Obtener carrito del consumidor
             CarritoDTO carrito = carritoService.obtenerCarrito(idConsumidor);
             if (carrito.getProductos().isEmpty()) {
-                return ResponseEntity.badRequest()
+                // BAD_REQUEST es correcto para datos de entrada inválidos
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("El carrito está vacío. No se pueden agregar productos a la orden.");
             }
 
@@ -123,7 +97,8 @@ public class OrdenService {
                                 () -> new RuntimeException("Producto no encontrado con ID: " + productoDTO.getId()));
 
                 if (producto.getStock() < productoDTO.getCantidad()) {
-                    return ResponseEntity.badRequest()
+                    // BAD_REQUEST es correcto para datos de entrada inválidos
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body("No hay suficiente stock para el producto: " + producto.getNombre());
                 }
             }
@@ -190,7 +165,8 @@ public class OrdenService {
             // Vaciar carrito después de procesar la orden
             carritoService.limpiarCarrito(idConsumidor);
 
-            return ResponseEntity.ok(ordenRepository.save(ordenExistente));
+            // CREATED es más apropiado para recursos creados
+            return ResponseEntity.status(HttpStatus.CREATED).body(ordenRepository.save(ordenExistente));
         } catch (Exception e) {
             // Loguear el error para diagnóstico
             e.printStackTrace();
@@ -200,33 +176,25 @@ public class OrdenService {
             error.put("mensaje", e.getMessage());
             error.put("causa", e.getCause() != null ? e.getCause().getMessage() : "Desconocida");
 
+            // Diferenciar entre tipos de errores
+            if (e.getMessage().contains("no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            }
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
 
-    /**
-     * Actualiza una orden existente en la base de datos.
-     * 
-     * @param idOrden La orden con los datos actualizados.
-     * @return La orden actualizada.
-     */
     public Orden actualizar(Orden idOrden) {
         return ordenRepository.save(idOrden);
     }
 
-    /**
-     * Elimina una orden existente en la base de datos.
-     * 
-     * @param idOrden ID de la orden a eliminar.
-     * @return Mensaje de éxito indicando que la orden fue eliminada.
-     */
     public String eliminarOrden(int idOrden) {
         ordenRepository.deleteById(idOrden);
         return "Orden eliminada con exito";
     }
 
     public Orden confirmar(int idOrden) {
-
         Orden orden = ordenRepository.findById(idOrden)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
@@ -245,13 +213,17 @@ public class OrdenService {
             estadoActual.cancelar(ordenExistente); // Delegar la lógica de confirmación al estado actual
             ordenRepository.save(ordenExistente); // Guardar el cambio de estado
 
+            // OK es correcto para operaciones exitosas con información
             return ResponseEntity.ok("Orden cancelada con exito");
         } catch (Exception e) {
+            if (e.getMessage().contains("no encontrada")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            // INTERNAL_SERVER_ERROR para otros errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    
     public ResponseEntity<?> obtenerTodosPorComerciante(int idComerciante) {
         try {
             comercianteRepository.findById(idComerciante)
@@ -259,8 +231,13 @@ public class OrdenService {
 
             List<Orden> ordenes = ordenRepository.findAllByIdComerciante(idComerciante);
 
+            // Para listas vacías, es mejor retornar 200 con lista vacía en lugar de 404
             return ResponseEntity.ok(ordenes);
         } catch (Exception e) {
+            if (e.getMessage().contains("no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            // INTERNAL_SERVER_ERROR para otros errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -275,15 +252,21 @@ public class OrdenService {
             List<OrdenProducto> productosFiltrados = orden.getProductos().stream()
                     .filter(o -> o.getProducto().getComerciante().getIdUsuario() == idComerciante)
                     .collect(Collectors.toList());
-                    
+
             if (productosFiltrados.isEmpty()) {
-                throw new RuntimeException("Orden no encontrada o no tiene productos del comerciante");
+                // NOT_FOUND es apropiado cuando no se encuentran recursos específicos
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Orden no encontrada o no tiene productos del comerciante");
             }
 
             return ResponseEntity.ok(productosFiltrados);
         } catch (Exception e) {
+            if (e.getMessage() != null && (e.getMessage().contains("no encontrado") ||
+                    e.getMessage().contains("no encontrada"))) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            // INTERNAL_SERVER_ERROR para otros errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
 }

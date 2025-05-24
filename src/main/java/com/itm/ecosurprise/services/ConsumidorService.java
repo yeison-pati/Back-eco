@@ -23,7 +23,8 @@ public class ConsumidorService {
         try {
             return ResponseEntity.ok(consumidorRepository.findAll());
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage()); // Manejo de errores
+            // Cambiado de 404 a 500 porque es un error interno del servidor, no "no encontrado"
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -32,12 +33,13 @@ public class ConsumidorService {
      * @param idConsumidor ID del consumidor a buscar.
      * @return ResponseEntity con el consumidor encontrado o el error si no se encuentra.
      */
-    public ResponseEntity<?> obtenerXID(int idConsumidor){
+    public ResponseEntity<?> obtenerPorId(int idConsumidor){
         try {
             return ResponseEntity.ok(consumidorRepository.findById(idConsumidor)
-            .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor)));
+                    .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + idConsumidor)));
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage()); // Manejo de errores
+            // 404 es correcto aquí porque estamos buscando un recurso específico
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -48,10 +50,16 @@ public class ConsumidorService {
      */
     public ResponseEntity<?> eliminar(int id) {
         try {
+            // Verificar primero si existe el consumidor
+            if (!consumidorRepository.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consumidor no encontrado con ID: " + id);
+            }
             consumidorRepository.deleteById(id);
-            return ResponseEntity.ok("Comerciante eliminado con éxito");
+            // Para eliminaciones exitosas, se recomienda usar 204 No Content
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Manejo de errores
+            // Si ocurre otro tipo de error, es mejor usar 500
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -64,12 +72,15 @@ public class ConsumidorService {
     public ResponseEntity<?> actualizar(int id, Consumidor consumidor) {
         try {
             Consumidor consumidorexistente = consumidorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
+                    .orElseThrow(() -> new RuntimeException("Consumidor no encontrado con ID: " + id));
             consumidorexistente.setNombre(consumidor.getNombre()); // Actualizar el nombre del consumidor
             return ResponseEntity.ok(consumidorRepository.save(consumidorexistente)); // Guardar el consumidor actualizado
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // Manejo de errores
+            // Si no se encuentra, es 404, pero otros errores deberían ser 500
+            if (e.getMessage().contains("no encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
 }
