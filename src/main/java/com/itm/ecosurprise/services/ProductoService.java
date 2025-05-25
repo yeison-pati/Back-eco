@@ -6,8 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,9 +83,19 @@ public class ProductoService {
      * @return El producto creado con la URL de la imagen asociada.
      * @throws IOException Si ocurre un error al guardar la imagen en el servidor.
      */
-    public ResponseEntity<?> crear(int idComerciante, Producto producto, MultipartFile imagen) {
+    public ResponseEntity<?> crear(int idComerciante, String producto, MultipartFile imagen) {
 
         try {
+            Map<String, Object> productoMap;
+            // Parsear JSON string a Map manualmente
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                productoMap = objectMapper.readValue(producto, Map.class);
+
+            } catch (JsonProcessingException e) {
+                return ResponseEntity.badRequest().body("Error parsing JSON: " + e.getMessage());
+            }
+            Producto productoAux = new Producto();
 
             Comerciante comerciante = comercianteRepository.findById(idComerciante)
                     .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
@@ -107,14 +120,32 @@ public class ProductoService {
                 String urlImagen = urlBase + "/productos/" + nombreArchivo;
 
                 // Guardar solo la ruta o URL
-                producto.setImagen(urlImagen);
+                productoAux.setImagen(urlImagen);
             } else {
                 throw new RuntimeException("Imagen vacía");
             }
 
-            producto.setComerciante(comerciante);
+            productoAux.setComerciante(comerciante);
+            productoAux.setNombre((String) productoMap.get("nombre"));
+            productoAux.setDescripcion((String) productoMap.get("descripcion"));
+            productoAux.setTipo((String) productoMap.get("tipo"));
 
-            return ResponseEntity.ok(productoRepository.save(producto));
+            Object precioObj = productoMap.get("precio");
+            Object stockObj = productoMap.get("stock");
+
+// Manejar tanto Integer como String
+            int precio = precioObj instanceof Integer ?
+                    (Integer) precioObj :
+                    Integer.parseInt(precioObj.toString());
+
+            int stock = stockObj instanceof Integer ?
+                    (Integer) stockObj :
+                    Integer.parseInt(stockObj.toString());
+
+            productoAux.setPrecio(precio);
+            productoAux.setStock(stock);
+
+            return ResponseEntity.ok(productoRepository.save(productoAux));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

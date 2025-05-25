@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.itm.ecosurprise.models.Producto;
 import com.itm.ecosurprise.models.Telefono;
 import com.itm.ecosurprise.services.ComercianteService;
 import com.itm.ecosurprise.services.OrdenService;
@@ -62,7 +61,9 @@ public class ComercianteController {
     }
 
     @PostMapping(value = "/{idComerciante}/crearProducto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearProducto(@PathVariable int idComerciante, @RequestPart("producto") Producto producto,
+    public ResponseEntity<?> crearProducto(
+            @PathVariable int idComerciante,
+            @RequestParam("producto") String producto,  // <-- String, no Map
             @RequestParam("imagen") MultipartFile imagen) {
         return productoService.crear(idComerciante, producto, imagen);
     }

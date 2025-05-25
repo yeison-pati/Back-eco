@@ -63,7 +63,9 @@ public class SecurityConfig {
                 // Rutas públicas
                 .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/validate-token").permitAll()
-                .requestMatchers("/error").permitAll()
+                .requestMatchers("/productos/**").permitAll()
+                .requestMatchers("/usuarios/**").permitAll()
+                .requestMatchers("/api/error").permitAll()
                 // Rutas por rol
                 .requestMatchers("/api/consumidores/**").hasAuthority("CONSUMIDOR")
                 .requestMatchers("/api/comerciantes/**").hasAuthority("COMERCIANTE")
