@@ -110,6 +110,11 @@ public class ConsumidorController {
         return ordenService.crear(idConsumidor, orden);
     }
 
+    @GetMapping("/{idConsumidor}/ordenes/{idOrden}")
+    public ResponseEntity<?> obtenerOrden(@PathVariable int idConsumidor, @PathVariable int idOrden) {
+        return ordenService.obtenerPorId(idConsumidor, idOrden);
+    }
+
     @PostMapping("/{idConsumidor}/ordenes/{idOrden}/cancelar")
     public ResponseEntity<?> cancelarOrden(@PathVariable int idConsumidor, @PathVariable int idOrden) {
         return ordenService.cancelar(idConsumidor, idOrden);

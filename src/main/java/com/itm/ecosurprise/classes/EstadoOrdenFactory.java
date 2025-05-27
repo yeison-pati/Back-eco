@@ -11,6 +11,9 @@ import com.itm.ecosurprise.models.Orden;
  */
 public class EstadoOrdenFactory {
 
+    public static void inicializarEstadoPendiente(Orden orden) {
+        orden.setEstadoOrden(EstadoOrden.pendiente.name());
+    }
     //cancelada
     public static EstadoOrdenState getEstado(Orden orden) {
         //pendiente
