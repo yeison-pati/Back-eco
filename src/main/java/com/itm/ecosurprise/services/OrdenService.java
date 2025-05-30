@@ -162,8 +162,8 @@ public class OrdenService {
 
             System.out.println("6. Asignando estado inicial...");
             // Asignar estado inicial a la orden
-            orden.setEstadoOrden(EstadoOrden.pendiente.name());
-            System.out.println("Estado asignado: " + EstadoOrden.pendiente.name());
+            orden.setEstadoOrden(EstadoOrden.PENDIENTE.name());
+            System.out.println("Estado asignado: " + EstadoOrden.PENDIENTE.name());
 
             System.out.println("7. Procesando dirección de entrega...");
             // Asignar dirección de entrega

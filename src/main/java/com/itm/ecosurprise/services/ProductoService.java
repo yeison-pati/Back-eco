@@ -157,17 +157,77 @@ public class ProductoService {
      * @param producto El producto con la nueva información.
      * @return El producto actualizado.
      */
-    public Producto actualizar(Producto producto) {
-        Producto productoExistente = productoRepository.findById(producto.getIdProducto())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado, intente de nuevo"));
-        productoExistente.setNombre(producto.getNombre());
-        productoExistente.setDescripcion(producto.getDescripcion());
-        productoExistente.setPrecio(producto.getPrecio());
-        Comerciante comerciante = comercianteRepository.findById(producto.getComerciante().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
-        productoExistente.setComerciante(comerciante);
-        productoExistente.setPuntuaciones(producto.getPuntuaciones());
-        return productoRepository.save(producto);
+    public ResponseEntity<?> actualizar(int idComerciante, int idProducto, String producto, MultipartFile imagen) {
+
+
+        try {
+
+            Producto productoExistente = productoRepository.findById(idProducto)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado, intente de nuevo"));
+
+            Comerciante comerciante = comercianteRepository.findById(idComerciante)
+                    .orElseThrow(() -> new RuntimeException("Comerciante no encontrado"));
+
+            Map<String, Object> productoMap;
+            // Parsear JSON string a Map manualmente
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                productoMap = objectMapper.readValue(producto, Map.class);
+
+            } catch (JsonProcessingException e) {
+                return ResponseEntity.badRequest().body("Error parsing JSON: " + e.getMessage());
+            }
+            Producto productoAux = new Producto();
+
+            if (imagen != null && !imagen.isEmpty()) {
+                // Generar nombre único para la imagen
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + imagen.getOriginalFilename();
+
+                // Ruta local donde se guardará
+                String carpeta = "src/main/resources/static/productos/";
+                File directorio = new File(carpeta);
+                if (!directorio.exists())
+                    directorio.mkdirs();
+
+                // Guardar archivo en disco
+                Path ruta = Paths.get(carpeta + nombreArchivo);
+                Files.copy(imagen.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+
+                // Construir URL pública de acceso
+                // HTTP://localhost:8080
+                String urlBase = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                String urlImagen = urlBase + "/productos/" + nombreArchivo;
+
+                // Guardar solo la ruta o URL
+                productoAux.setImagen(urlImagen);
+            } else {
+                throw new RuntimeException("Imagen vacía");
+            }
+
+            productoAux.setComerciante(comerciante);
+            productoAux.setNombre((String) productoMap.get("nombre"));
+            productoAux.setDescripcion((String) productoMap.get("descripcion"));
+            productoAux.setTipo((String) productoMap.get("tipo"));
+
+            Object precioObj = productoMap.get("precio");
+            Object stockObj = productoMap.get("stock");
+
+// Manejar tanto Integer como String
+            int precio = precioObj instanceof Integer ?
+                    (Integer) precioObj :
+                    Integer.parseInt(precioObj.toString());
+
+            int stock = stockObj instanceof Integer ?
+                    (Integer) stockObj :
+                    Integer.parseInt(stockObj.toString());
+
+            productoAux.setPrecio(precio);
+            productoAux.setStock(stock);
+
+            return ResponseEntity.ok(productoRepository.save(productoAux));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     /**

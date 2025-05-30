@@ -18,11 +18,11 @@ public class EstadoConfirmada implements EstadoOrdenState {
 
     @Override
     public void cancelar(Orden orden) {
-        orden.setEstadoOrden(EstadoOrden.cancelada.name());
+        orden.setEstadoOrden(EstadoOrden.CANCELADA.name());
     }
 
     @Override
     public void reembolsar(Orden orden) {
-        orden.setEstadoOrden(EstadoOrden.reembolsada.name());
+        orden.setEstadoOrden(EstadoOrden.REEMBOLSADA.name());
     }
 }

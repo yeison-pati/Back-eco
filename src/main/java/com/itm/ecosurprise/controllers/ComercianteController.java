@@ -78,6 +78,15 @@ public class ComercianteController {
         return comercianteService.obtenerProductoPorId(idComerciante, idProducto);
     }
 
+    @PostMapping("/{idComerciante}/actualizarProducto/{idProducto}")
+    public ResponseEntity<?> actualizarProducto(
+            @PathVariable int idComerciante,
+            @PathVariable int idProducto,
+            @RequestParam("producto") String producto,  // <-- String, no Map
+            @RequestParam("imagen") MultipartFile imagen) {
+        return productoService.actualizar(idComerciante, idProducto, producto, imagen);
+    }
+
     @GetMapping("/{idComerciante}/ordenes/todos")
     public ResponseEntity<?> obtenerOrdenes(@PathVariable int idComerciante) {
         return ordenService.obtenerTodosPorComerciante(idComerciante);

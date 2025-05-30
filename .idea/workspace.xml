@@ -6,13 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="ebfd9596-f3bc-4a13-905c-323ebd333ba9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoConfirmada.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoConfirmada.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoOrdenFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoOrdenFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ConsumidorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoPendiente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/classes/EstadoPendiente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/controllers/ComercianteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/enums/EstadoOrden.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/enums/EstadoOrden.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/filters/JwtAuthFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/OrdenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/itm/ecosurprise/services/ProductoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ConsumidorController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/controllers/ComercianteController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoOrden.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/enums/EstadoOrden.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/OrdenService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ProductoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/itm/ecosurprise/services/ProductoService.class" afterDir="false" />
     </list>
     <list id="3b4cb000-08e3-4ff6-8e8b-6480d075bc91" name="Changes by User" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -131,6 +138,12 @@
       <workItem from="1748143016373" duration="8212000" />
       <workItem from="1748178013020" duration="18630000" />
       <workItem from="1748371001316" duration="11650000" />
+      <workItem from="1748386182371" duration="6378000" />
+      <workItem from="1748564477142" duration="96000" />
+      <workItem from="1748564682802" duration="201000" />
+      <workItem from="1748573662537" duration="2143000" />
+      <workItem from="1748580345757" duration="828000" />
+      <workItem from="1748615001558" duration="4594000" />
     </task>
     <servers />
   </component>

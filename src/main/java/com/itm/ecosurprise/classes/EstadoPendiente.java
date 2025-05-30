@@ -13,12 +13,12 @@ import com.itm.ecosurprise.models.Orden;
 public class EstadoPendiente implements EstadoOrdenState {
     @Override
     public void confirmar(Orden orden) {
-        orden.setEstadoOrden(EstadoOrden.comfirmada.name());
+        orden.setEstadoOrden(EstadoOrden.CONFIRMADA.name());
     }
 
     @Override
     public void cancelar(Orden orden) {
-        orden.setEstadoOrden(EstadoOrden.cancelada.name());
+        orden.setEstadoOrden(EstadoOrden.CANCELADA.name());
     }
 
     @Override

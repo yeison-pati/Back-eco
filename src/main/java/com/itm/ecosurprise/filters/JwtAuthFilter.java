@@ -61,7 +61,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
+        
         try {
             // Obtener información del token y establecer la autenticación
             String rol = authService.getRolFromToken(token);
