@@ -1,3 +1,4 @@
+# .github/workflows/ci-cd-pipeline.yml
 name: CI/CD Pipeline
 
 on:
@@ -32,10 +33,13 @@ jobs:
     - name: Run tests
       run: ./mvnw test
       env:
-        DATABASE_URL: jdbc:h2:mem:testdb
+        # Estas variables de entorno ahora serán leídas por el perfil 'test'
+        # o, en caso de no tener un perfil activo, por la configuración por defecto
+        DATABASE_URL: jdbc:h2:mem:testdb 
         DATABASE_USERNAME: sa
         DATABASE_PASSWORD: 
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        SPRING_PROFILES_ACTIVE: test # <-- ¡Añade esta línea!
 
   deploy:
     needs: test
