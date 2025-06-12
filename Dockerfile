@@ -1,27 +1,17 @@
-# Usar una imagen base con Java 21
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-jre-slim
 
-# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de configuración de Maven
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
+RUN chmod +x ./mvnw && ./mvnw dependency:go-offline
 
-# Dar permisos de ejecución al wrapper de Maven
-RUN chmod +x ./mvnw
-
-# Descargar dependencias (esto se cachea si el pom.xml no cambia)
-RUN ./mvnw dependency:go-offline
-
-# Copiar el código fuente
 COPY src ./src
-
-# Construir la aplicación
 RUN ./mvnw clean package -DskipTests
 
-# Exponer el puerto
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación (sin -Dserver.port)
-CMD ["java", "-jar", "target/EcoSurprise-0.0.1-SNAPSHOT.jar"]
+# JVM optimizada para 250MB máximo
+ENV JAVA_OPTS="-Xms32m -Xmx200m -XX:MaxMetaspaceSize=64m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -XX:+UseCompressedOops -Djava.security.egd=file:/dev/./urandom"
+
+CMD ["sh", "-c", "java $JAVA_OPTS -jar target/EcoSurprise-0.0.1-SNAPSHOT.jar"]

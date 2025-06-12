@@ -38,10 +38,11 @@ public class AuthService {
     private IUsuario usuarioRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Value("${jwt.expiration:2592000000}")
+    @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    private static final String SECRET_KEY = "ecosurprise_secret_key_2024_super_secure_key_that_is_64_bytes_long!";
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     public ResponseEntity<?> login(String correo, String contrasena) {
         try {
@@ -215,7 +216,7 @@ public class AuthService {
     private String generateToken(Usuario usuario) {
         try {
             System.out.println("Generando token para usuario: " + usuario.getCorreo());
-            byte[] keyBytes = SECRET_KEY.getBytes();
+            byte[] keyBytes = jwtSecret.getBytes();
 
             String token = Jwts.builder()
                     .setSubject(usuario.getCorreo())
@@ -248,7 +249,7 @@ public class AuthService {
      */
     public boolean validateToken(String token) {
         try {
-            byte[] keyBytes = SECRET_KEY.getBytes();
+            byte[] keyBytes = jwtSecret.getBytes();
             
             Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(keyBytes))
@@ -270,7 +271,7 @@ public class AuthService {
      */
     public String getRolFromToken(String token) {
         try {
-            byte[] keyBytes = SECRET_KEY.getBytes();
+            byte[] keyBytes = jwtSecret.getBytes();
             
             Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(keyBytes))
@@ -286,7 +287,7 @@ public class AuthService {
 
     public int getIdFromToken(String token) {
         try {
-            byte[] keyBytes = SECRET_KEY.getBytes();
+            byte[] keyBytes = jwtSecret.getBytes();
             Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(keyBytes))
                 .build()
@@ -307,7 +308,7 @@ public class AuthService {
      */
     public String renewToken(String oldToken) {
         try {
-            byte[] keyBytes = SECRET_KEY.getBytes();
+            byte[] keyBytes = jwtSecret.getBytes();
             
             // Extraer claims del token actual
             Claims claims = Jwts.parserBuilder()

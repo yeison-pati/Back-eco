@@ -42,3 +42,6 @@ build/
 
 # Asegurarse de incluir application.properties
 !src/main/resources/application.properties
+
+# Ignorar archivos de configuración de Maven
+.mvn/
