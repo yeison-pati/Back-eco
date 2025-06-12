@@ -31,16 +31,16 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
         
     - name: Run tests
-      run: ./mvnw test
+      run: ./mvnw test -Dspring.profiles.active=test
       env:
         # Estas variables de entorno ahora serán leídas por el perfil 'test'
         # o, en caso de no tener un perfil activo, por la configuración por defecto
         DATABASE_URL: jdbc:h2:mem:testdb 
         DATABASE_USERNAME: sa
-        DATABASE_PASSWORD: 
+        DATABASE_PASSWORD:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         SPRING_PROFILES_ACTIVE: test # <-- ¡Añade esta línea!
-
+        
   deploy:
     needs: test
     runs-on: ubuntu-latest
