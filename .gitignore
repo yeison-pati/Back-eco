@@ -34,7 +34,10 @@ build/
 .vscode/
 
 # Ignorar archivos de entorno
+# Variables de entorno
 .env
+.env.local
+.env.production
 .gitignore
 
 # Asegurarse de incluir application.properties

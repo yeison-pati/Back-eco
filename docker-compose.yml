@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Base de datos MySQL
+  mysql-db:
+    image: mysql:8.0
+    container_name: ecosurprise-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-Dev1045417325.}
+      MYSQL_DATABASE: ${DB_NAME:-ecosurprise}
+      MYSQL_USER: ${DB_USER:-ecosurprise_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-Dev1045417325.}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecosurprise-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Aplicación Spring Boot
+  ecosurprise-app:
+    build: .
+    container_name: ecosurprise-backend
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      # Variables de base de datos
+      DB_HOST: mysql-db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-ecosurprise}
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Dev1045417325.}
+      
+      # Variables de la aplicación
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      APP_IP: ${APP_IP:-0.0.0.0}
+      
+      # Variables JWT
+      JWT_SECRET: ${JWT_SECRET:-ecosurprise_secret_key_2024_secure_and_long_enough_for_hs512}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      
+      # Variables de Spring
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+    ports:
+      - "8080:8080"
+    networks:
+      - ecosurprise-network
+    volumes:
+      - app_uploads:/app/uploads
+
+volumes:
+  mysql_data:
+    driver: local
+  app_uploads:
+    driver: local
+
+networks:
+  ecosurprise-network:
+    driver: bridge
