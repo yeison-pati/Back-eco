@@ -20,8 +20,8 @@ COPY src ./src
 # Construir la aplicación
 RUN ./mvnw clean package -DskipTests
 
-# Exponer el puerto (Railway usa la variable PORT)
-EXPOSE $PORT
+# Exponer el puerto
+EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-Dserver.port=$PORT", "-jar", "target/EcoSurprise-0.0.1-SNAPSHOT.jar"]
+# Comando para ejecutar la aplicación (sin -Dserver.port)
+CMD ["java", "-jar", "target/EcoSurprise-0.0.1-SNAPSHOT.jar"]
