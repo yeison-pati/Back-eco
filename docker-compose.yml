@@ -21,7 +21,9 @@ services:
         limits:
           memory: 300M
           cpus: "0.3"
-    command: --max-connections=50 --innodb-buffer-pool-size=128M
+    command: >
+      --max-connections=40
+      --innodb-buffer-pool-size=128M
 
   ecosurprise-app:
     build: .
@@ -41,6 +43,7 @@ services:
       DATABASE_URL: jdbc:mysql://mysql-db:3306/${DB_NAME:-ecosurprise}?useSSL=false&serverTimezone=UTC
       DATABASE_USERNAME: ${DB_USER:-root}
       DATABASE_PASSWORD: ${DB_PASSWORD:-Dev1045417325.}
+      JAVA_OPTS: "-Xmx192m -XX:MaxMetaspaceSize=64m"
     ports:
       - "8080:8080"
     networks:
@@ -48,10 +51,11 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
-          cpus: "0.25"
+          memory: 256M
+          cpus: "0.2"
 
 volumes:
   mysql_data:
+
 networks:
   ecosurprise-network:
