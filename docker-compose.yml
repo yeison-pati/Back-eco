@@ -15,25 +15,19 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - ecosurprise-network
-    # --- -----------------------
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 300M
-    #       cpus: "0.3"
-    
-    #command: >
-      #--max-connections=40
-      #--innodb-buffer-pool-size=128M
-    # -----------------------------
+      - ecosurprise-networks
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   ecosurprise-app:
     build: .
     container_name: ecosurprise-backend
     restart: unless-stopped
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     environment:
       DB_HOST: mysql-db
       DB_PORT: 3306
@@ -43,23 +37,10 @@ services:
       SERVER_PORT: 8080
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRATION: 3600000
-      DATABASE_URL: jdbc:mysql://mysql-db:3306/${DB_NAME:-ecosurprise}?useSSL=false&serverTimezone=UTC
-      DATABASE_USERNAME: ${DB_USER:-root}
-      DATABASE_PASSWORD: ${DB_PASSWORD:-Dev1045417325.}
-      # --- ELIMINAR ESTA LÍNEA (JAVA_OPTS se manejará en Dockerfile) ---
-      # JAVA_OPTS: "-Xmx192m -XX:MaxMetaspaceSize=64m"
-      # -----------------------------------------------------------------
     ports:
       - "8080:8080"
     networks:
       - ecosurprise-network
-    # --- -------------------- ---
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 256M
-    #       cpus: "0.2"
-    # -----------------------------
 
 volumes:
   mysql_data:
