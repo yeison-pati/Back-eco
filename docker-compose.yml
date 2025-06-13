@@ -9,9 +9,8 @@ services:
       DATABASE_URL: ${DATABASE_URL:-jdbc:mysql://localhost:3306/ecosurprise?useSSL=false&serverTimezone=UTC}
       DATABASE_USERNAME: ${DATABASE_USERNAME:-root}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-tu_password}
-      APP_IP: ${APP_IP:-0.0.0.0}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      JWT_SECRET: ${JWT_SECRET:-ecosurprise_secret_key_2024_secure_and_long_enough_for_hs512}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
     ports:
       - "8080:8080"
     volumes:
