@@ -1,6 +1,6 @@
 package com.itm.ecosurprise.interfaces;
 
-import com.itm.ecosurprise.models.Orden;
+import com.itm.ecosurprise.domain.model.Orden;
 
 
 /**

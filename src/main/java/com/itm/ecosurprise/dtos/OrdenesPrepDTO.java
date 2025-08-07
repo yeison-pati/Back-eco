@@ -3,7 +3,7 @@ package com.itm.ecosurprise.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.itm.ecosurprise.models.Orden;
+import com.itm.ecosurprise.domain.model.Orden;
 
 import lombok.Data;
 

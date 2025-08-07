@@ -2,7 +2,7 @@ package com.itm.ecosurprise.classes;
 
 import com.itm.ecosurprise.enums.EstadoOrden;
 import com.itm.ecosurprise.interfaces.EstadoOrdenState;
-import com.itm.ecosurprise.models.Orden;
+import com.itm.ecosurprise.domain.model.Orden;
 
 
 /**
