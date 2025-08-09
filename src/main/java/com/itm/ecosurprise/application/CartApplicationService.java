@@ -6,6 +6,9 @@ import com.itm.ecosurprise.domain.model.Producto;
 import com.itm.ecosurprise.domain.port.in.CartUseCase;
 import com.itm.ecosurprise.domain.port.out.ConsumidorRepository;
 import com.itm.ecosurprise.domain.port.out.ProductoRepository;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,18 +16,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ArrayList;
 
+//auto bean y auto inyeccion de dependencias con service
 @Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class CartApplicationService implements CartUseCase {
 
     private final Map<Integer, Cart> carts = new HashMap<>();
     private final ConsumidorRepository consumidorRepository;
     private final ProductoRepository productoRepository;
-
-    public CartApplicationService(ConsumidorRepository consumidorRepository, ProductoRepository productoRepository) {
-        this.consumidorRepository = consumidorRepository;
-        this.productoRepository = productoRepository;
-    }
-
+    
     @Override
     public Cart getCart(int idConsumidor) {
         consumidorRepository.findById(idConsumidor)

@@ -4,17 +4,21 @@ import com.itm.ecosurprise.domain.model.Repartidor;
 import com.itm.ecosurprise.domain.port.in.RepartidorUseCase;
 import com.itm.ecosurprise.domain.port.out.RepartidorRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class RepartidorApplicationService implements RepartidorUseCase {
 
     private final RepartidorRepository repartidorRepository;
-
-    public RepartidorApplicationService(RepartidorRepository repartidorRepository) {
-        this.repartidorRepository = repartidorRepository;
-    }
-
+    
     @Override
     public List<Repartidor> getAll() {
         return repartidorRepository.findAll();

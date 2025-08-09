@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
+
+//auto bean y auto inyeccion de dependencias con service
 @Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class PreparationOrdersApplicationService implements PreparationOrdersUseCase {
 
     private final Map<Integer, PreparationOrders> preparationOrders = new HashMap<>();
     private final ComercianteRepository comercianteRepository;
     private final OrderUseCase orderUseCase;
-
-    public PreparationOrdersApplicationService(ComercianteRepository comercianteRepository, OrderUseCase orderUseCase) {
-        this.comercianteRepository = comercianteRepository;
-        this.orderUseCase = orderUseCase;
-    }
 
     @Override
     public PreparationOrders getPreparationOrders(int idComerciante) {

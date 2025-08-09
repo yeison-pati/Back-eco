@@ -7,20 +7,22 @@ import com.itm.ecosurprise.domain.port.in.ProductUseCase;
 import com.itm.ecosurprise.domain.port.out.ComercianteRepository;
 import com.itm.ecosurprise.domain.port.out.ProductoRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class ProductApplicationService implements ProductUseCase {
 
     private final ProductoRepository productoRepository;
     private final ComercianteRepository comercianteRepository;
     private final FileStorageService fileStorageService;
-
-    public ProductApplicationService(ProductoRepository productoRepository, ComercianteRepository comercianteRepository, FileStorageService fileStorageService) {
-        this.productoRepository = productoRepository;
-        this.comercianteRepository = comercianteRepository;
-        this.fileStorageService = fileStorageService;
-    }
 
     @Override
     public List<Producto> getAllProducts() {

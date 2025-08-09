@@ -14,23 +14,23 @@ import com.itm.ecosurprise.domain.model.Producto;
 import com.itm.ecosurprise.classes.EstadoOrdenFactory;
 import com.itm.ecosurprise.interfaces.EstadoOrdenState;
 
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class OrdenApplicationService implements OrderUseCase {
 
     private final OrdenRepository ordenRepository;
     private final ConsumidorRepository consumidorRepository;
     private final ProductoRepository productoRepository;
     private final CartUseCase cartUseCase;
-
-    public OrdenApplicationService(OrdenRepository ordenRepository, ConsumidorRepository consumidorRepository, ProductoRepository productoRepository, CartUseCase cartUseCase) {
-        this.ordenRepository = ordenRepository;
-        this.consumidorRepository = consumidorRepository;
-        this.productoRepository = productoRepository;
-        this.cartUseCase = cartUseCase;
-    }
 
     @Override
     public Optional<Orden> getById(int id) {

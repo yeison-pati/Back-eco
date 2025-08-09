@@ -5,23 +5,22 @@ import com.itm.ecosurprise.domain.model.Producto;
 import com.itm.ecosurprise.domain.port.in.ComercianteUseCase;
 import com.itm.ecosurprise.domain.port.in.FileStorageService;
 import com.itm.ecosurprise.domain.port.out.ComercianteRepository;
-import com.itm.ecosurprise.domain.port.out.ProductoRepository;
+
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class ComercianteApplicationService implements ComercianteUseCase {
 
     private final ComercianteRepository comercianteRepository;
-    private final ProductoRepository productoRepository;
     private final FileStorageService fileStorageService;
-
-
-    public ComercianteApplicationService(ComercianteRepository comercianteRepository, ProductoRepository productoRepository, FileStorageService fileStorageService) {
-        this.comercianteRepository = comercianteRepository;
-        this.productoRepository = productoRepository;
-        this.fileStorageService = fileStorageService;
-    }
 
     @Override
     public List<Comerciante> getAll() {

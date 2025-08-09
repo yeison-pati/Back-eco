@@ -5,15 +5,19 @@ import com.itm.ecosurprise.domain.port.in.FileStorageService;
 import com.itm.ecosurprise.domain.port.in.SetUserImageUseCase;
 import com.itm.ecosurprise.domain.port.out.UsuarioRepository;
 
+
+import lombok.AllArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class UserApplicationService implements SetUserImageUseCase {
 
     private final UsuarioRepository usuarioRepository;
     private final FileStorageService fileStorageService;
-
-    public UserApplicationService(UsuarioRepository usuarioRepository, FileStorageService fileStorageService) {
-        this.usuarioRepository = usuarioRepository;
-        this.fileStorageService = fileStorageService;
-    }
 
     @Override
     public Usuario setImagen(int idUsuario, byte[] imagen, String fileName) {

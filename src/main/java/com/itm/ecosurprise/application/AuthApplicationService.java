@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+//se deja sin services porque implementa mas de una interfaz
 public class AuthApplicationService implements LoginUseCase, RegisterUserUseCase {
 
     private final UsuarioRepository usuarioRepository;

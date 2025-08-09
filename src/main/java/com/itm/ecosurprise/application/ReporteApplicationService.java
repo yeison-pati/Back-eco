@@ -4,16 +4,20 @@ import com.itm.ecosurprise.domain.model.Reporte;
 import com.itm.ecosurprise.domain.port.in.ReporteUseCase;
 import com.itm.ecosurprise.domain.port.out.ReporteRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class ReporteApplicationService implements ReporteUseCase {
 
     private final ReporteRepository reporteRepository;
-
-    public ReporteApplicationService(ReporteRepository reporteRepository) {
-        this.reporteRepository = reporteRepository;
-    }
 
     @Override
     public List<Reporte> getAll() {

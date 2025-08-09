@@ -4,16 +4,20 @@ import com.itm.ecosurprise.domain.model.Puntuacion;
 import com.itm.ecosurprise.domain.port.in.PuntuacionUseCase;
 import com.itm.ecosurprise.domain.port.out.PuntuacionRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class PuntuacionApplicationService implements PuntuacionUseCase {
 
     private final PuntuacionRepository puntuacionRepository;
-
-    public PuntuacionApplicationService(PuntuacionRepository puntuacionRepository) {
-        this.puntuacionRepository = puntuacionRepository;
-    }
 
     @Override
     public List<Puntuacion> getAll() {

@@ -4,16 +4,20 @@ import com.itm.ecosurprise.domain.model.Entrega;
 import com.itm.ecosurprise.domain.port.in.EntregaUseCase;
 import com.itm.ecosurprise.domain.port.out.EntregaRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class EntregaApplicationService implements EntregaUseCase {
 
     private final EntregaRepository entregaRepository;
-
-    public EntregaApplicationService(EntregaRepository entregaRepository) {
-        this.entregaRepository = entregaRepository;
-    }
 
     @Override
     public List<Entrega> getAll() {

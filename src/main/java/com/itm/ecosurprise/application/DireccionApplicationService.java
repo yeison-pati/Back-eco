@@ -4,16 +4,20 @@ import com.itm.ecosurprise.domain.model.Direccion;
 import com.itm.ecosurprise.domain.port.in.DireccionUseCase;
 import com.itm.ecosurprise.domain.port.out.DireccionRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class DireccionApplicationService implements DireccionUseCase {
 
     private final DireccionRepository direccionRepository;
-
-    public DireccionApplicationService(DireccionRepository direccionRepository) {
-        this.direccionRepository = direccionRepository;
-    }
 
     @Override
     public List<Direccion> getAll() {

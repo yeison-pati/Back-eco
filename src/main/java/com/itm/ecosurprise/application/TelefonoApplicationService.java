@@ -4,16 +4,20 @@ import com.itm.ecosurprise.domain.model.Telefono;
 import com.itm.ecosurprise.domain.port.in.TelefonoUseCase;
 import com.itm.ecosurprise.domain.port.out.TelefonoRepository;
 
+import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class TelefonoApplicationService implements TelefonoUseCase {
 
     private final TelefonoRepository telefonoRepository;
-
-    public TelefonoApplicationService(TelefonoRepository telefonoRepository) {
-        this.telefonoRepository = telefonoRepository;
-    }
 
     @Override
     public List<Telefono> getAll() {

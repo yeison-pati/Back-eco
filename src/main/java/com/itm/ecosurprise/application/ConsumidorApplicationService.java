@@ -7,13 +7,17 @@ import com.itm.ecosurprise.domain.port.out.ConsumidorRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+
+//auto bean y auto inyeccion de dependencias con service
+@Service
+//es para crear el constructor con todos los atributos
+@AllArgsConstructor
 public class ConsumidorApplicationService implements ConsumidorUseCase {
 
     private final ConsumidorRepository consumidorRepository;
-
-    public ConsumidorApplicationService(ConsumidorRepository consumidorRepository) {
-        this.consumidorRepository = consumidorRepository;
-    }
 
     @Override
     public List<Consumidor> getAll() {
